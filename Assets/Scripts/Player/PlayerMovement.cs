@@ -53,7 +53,7 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
     [Header("Dashing")]
     [SerializeField] private float dashSpeed = 40f;
     [SerializeField] private float dashBetweenCooldown = 0.2f;
-    [SerializeField] private float dashRecoveryCooldown = 2f;
+    [SerializeField] private float dashRecoveryCooldown = 0.3f;
     [SerializeField] private int maxDashes = 2;
     [SerializeField] private int dashes = 2;
 
@@ -250,15 +250,16 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
 
 
 
-                var currentPlanarVelocity = Vector3.ProjectOnPlane
-                (
-                    vector: currentVelocity,
-                    planeNormal: motor.CharacterUp
-                );
-                var currentPlanarSpeed = currentPlanarVelocity.magnitude;
-                var targetPlanarSpeed = Mathf.Max(currentPlanarSpeed, dashSpeed);
+                var dashDirection = _requestedMovement.normalized;
 
-                currentVelocity += motor.CharacterForward * (targetPlanarSpeed - currentPlanarSpeed);
+                if (dashDirection.sqrMagnitude == 0f)
+                {
+                    dashDirection = Vector3.ProjectOnPlane(root.forward, motor.CharacterUp).normalized;
+                }
+
+                var dashVelocity = dashDirection * dashSpeed;
+
+                currentVelocity = new Vector3(dashVelocity.x, currentVelocity.y, dashVelocity.z);
             }
             else
             {
