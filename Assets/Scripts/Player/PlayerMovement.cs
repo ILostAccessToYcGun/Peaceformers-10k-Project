@@ -16,6 +16,7 @@ public struct CharacterInput
     public bool Jump;
     public bool JumpSustain;
     public bool Dash;
+    public bool Sprint;
 }
 
 public class PlayerMovement : MonoBehaviour, ICharacterController
@@ -41,6 +42,9 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
     [SerializeField] private float airSpeed = 15f;
     [SerializeField] private float airAcceleration = 90f;
     [Space]
+    [Range(1f,2f)]
+    [SerializeField] private float sprintMultiplier = 1.3f;
+    [SerializeField] private float boostCapacity = 100f;
 
     [Header("Jumping")]
     [SerializeField] private float jumpSpeed = 20f;
@@ -70,6 +74,8 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
     private bool _requestedSustainedJump;
 
     private bool _requestedDash;
+
+    private bool _requestedSprint;
 
     private float _timeSinceUngrounded;
     private float _timeSinceJumpRequest;
@@ -107,6 +113,8 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
         _requestedSustainedJump = input.JumpSustain;
 
         _requestedDash = _requestedDash || input.Dash;
+
+        _requestedSprint = input.Sprint;
 
     }
 
@@ -154,6 +162,9 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
             //THE SCHMOVEMENT. THE HE. THE SCHMOVER.
             var targetVelocity = groundedMovement * walkSpeed;
 
+            //if sprinting
+            targetVelocity *= _requestedSprint ? sprintMultiplier : 1f;
+
             var moveVelocity = Vector3.Lerp
             (
                 a: currentVelocity,
@@ -190,6 +201,9 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
                 //calculate movement force
                 var movementForce = planarMovement * airAcceleration * deltaTime;
                 var targetPlanarVelocity = currentPlanarVelocity + movementForce;
+
+                //if sprinting
+                targetPlanarVelocity *= _requestedSprint ? sprintMultiplier : 1f;
 
                 targetPlanarVelocity = Vector3.ClampMagnitude(targetPlanarVelocity, airSpeed);
 
