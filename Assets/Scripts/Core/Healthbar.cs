@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class Healthbar : MonoBehaviour
 {
+    [SerializeField] private RectTransform mainBar;
     [SerializeField] private Image healthbarFill;
     [SerializeField] private Image healthbarLoss;
     [SerializeField] private float lossLerpSpeed = 2f; 
@@ -19,6 +20,9 @@ public class Healthbar : MonoBehaviour
 
     void Start()
     {
+        float newScaleX = maxHealth * 0.0022f;
+        mainBar.localScale = new Vector3(newScaleX, mainBar.localScale.y, mainBar.localScale.z);
+
         currentHealth = maxHealth;
         UpdateHealthbar();
     }
