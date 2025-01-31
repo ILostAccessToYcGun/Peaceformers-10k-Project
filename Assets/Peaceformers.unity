@@ -546,7 +546,7 @@ MonoBehaviour:
   maxAmmo: 100
   currentAmmo: 0
   baseDmg: 7
-  range: 100
+  range: 20
   timeBetweenShots: 0.11
   reloadTime: 1.5
   muzzlePoint: {fileID: 1093982059}
@@ -1191,7 +1191,7 @@ GameObject:
   - component: {fileID: 1561360687}
   m_Layer: 0
   m_Name: Dummy
-  m_TagString: Untagged
+  m_TagString: Target
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1215,7 +1215,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 1.73
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}

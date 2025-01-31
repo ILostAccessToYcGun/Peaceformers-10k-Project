@@ -13,6 +13,7 @@ public class PlayerGun : MonoBehaviour
     [SerializeField] private Transform playerRoot;
     [SerializeField] private Camera playerCamera;
     [SerializeField] private float rotationSpeed = 10f;
+    private Transform currentTarget;
     private Vector2 lookInput;
     [Space]
     [Header("Shooting")]
@@ -52,16 +53,25 @@ public class PlayerGun : MonoBehaviour
         Ray ray = playerCamera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            Vector3 targetPoint = hit.point;
-
-            Vector3 direction = (targetPoint - playerRoot.position).normalized;
-            direction.y = 0f;
-
-            if (direction != Vector3.zero)
+            if (hit.transform.CompareTag("Target"))
             {
-                Quaternion targetRotation = Quaternion.LookRotation(direction);
-                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+                print("Locked onto " + hit.transform.name);
+                currentTarget = hit.transform;
             }
+            else
+            {
+                currentTarget = null;
+            }
+        }
+
+        Vector3 targetPoint = currentTarget ? currentTarget.position : ray.GetPoint(range);
+        Vector3 direction = (targetPoint - playerRoot.position).normalized;
+        direction.y = 0f;
+
+        if (direction != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
         }
     }
 
@@ -84,14 +94,13 @@ public class PlayerGun : MonoBehaviour
 
     IEnumerator ContinuousFire()
     {
-        isFiring = true; 
+        isFiring = true;
 
-        while (_requestedShoot) 
+        while (_requestedShoot)
         {
             if (currentAmmo > 0)
             {
                 GameObject m = Instantiate(muzzleFlash, muzzlePoint.position, muzzlePoint.rotation);
-                m.transform.parent = muzzlePoint;
                 Destroy(m, 0.05f);
 
                 FireBullet();
@@ -110,29 +119,15 @@ public class PlayerGun : MonoBehaviour
 
     private void FireBullet()
     {
+        if (currentTarget == null) return;
 
-        int rayCount = 10;
-        float yOffsetStep = 0.2f;
-        bool hitSomething = false;
-
-        for (int i = 0; i < rayCount; i++)
+        Healthbar hp = currentTarget.GetComponentInChildren<Healthbar>();
+        if (hp != null)
         {
-            float yOffset = Mathf.Lerp(-10f, 10f, (float)i / (rayCount - 1));
-
-            Vector3 rayOrigin = shootingPoint.position + shootingPoint.up * yOffset;
-
-            if (Physics.Raycast(rayOrigin, shootingPoint.forward, out RaycastHit hit, range))
-            {
-                //Debug.Log("Hit: " + hit.transform.name + " at " + hit.point);
-
-                Healthbar hp = FindHealthbarInChildren(hit.transform);
-                if (hp != null)
-                {
-                    hp.LoseHealth(baseDmg);
-                }
-            }
+            hp.LoseHealth(baseDmg);
         }
     }
+
 
     Healthbar FindHealthbarInChildren(Transform parent)
     {
