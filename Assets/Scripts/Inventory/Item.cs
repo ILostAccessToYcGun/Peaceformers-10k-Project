@@ -188,11 +188,13 @@ public class Item : MonoBehaviour, IPointerClickHandler
             currentInventorySlot = nearestInventorySlot;
             transform.position = currentInventorySlot.transform.position;
             currentInventorySlot.currentHeldItem = this; //need to do more with this
+            currentInventorySlot.SetHeldItem(this);
 
             if (isStacking)
             {
                 stackingItem.IncreaseStackAmount(stackAmount);
                 stackingItem.UpdateStackText();
+                currentInventorySlot.SetHeldItem(stackingItem);
                 Destroy(this.gameObject);
             }
         }
