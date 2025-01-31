@@ -16,10 +16,14 @@ public class PlayerGun : MonoBehaviour
         {
             Vector3 targetPoint = hit.point;
 
-            Vector3 direction = -(targetPoint - playerRoot.position).normalized;
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            Vector3 direction = (targetPoint - playerRoot.position).normalized;
+            direction.y = 0f;
 
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+            if (direction != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+            }
         }
     }
 }
