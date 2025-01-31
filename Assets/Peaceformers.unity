@@ -1354,16 +1354,16 @@ MonoBehaviour:
   motor: {fileID: 1678360444}
   root: {fileID: 833486679}
   cameraTarget: {fileID: 159832065}
-  walkSpeed: 20
-  walkResponse: 25
+  walkSpeed: 16
+  walkResponse: 4
   airSpeed: 15
-  airAcceleration: 90
-  sprintMultiplier: 1.4
+  airAcceleration: 45
+  sprintMultiplier: 1.6
   boostCapacity: 100
   jumpSpeed: 20
   coyoteTime: 0.2
-  jumpSustainGravity: 0.4
-  gravity: -90
+  jumpSustainGravity: 0.25
+  gravity: -150
   dashSpeed: 100
   dashBetweenCooldown: 0.2
   dashRecoveryCooldown: 0.3
