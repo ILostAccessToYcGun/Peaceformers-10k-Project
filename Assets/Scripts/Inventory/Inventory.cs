@@ -12,6 +12,7 @@ public class Inventory : MonoBehaviour
     [Space]
     public Image inventoryPanel;
     public GameObject inventorySlot;
+    public Item SetupItem;
 
     public List<List<Item>> inventory = new List<List<Item>>(); //lists because later we will change the size
 
@@ -32,16 +33,17 @@ public class Inventory : MonoBehaviour
         inventory.Capacity = height;
 
         //Adding an Item, so the inner parts of the inventory can be reached
+
         List<Item> origin = new List<Item>();
-        origin.Add(new Item());
+        origin.Add(SetupItem);
         inventory.Add(origin);
 
         for (int i = 0; i < inventory.Count; i++)
         {
             inventory[i].Capacity = width;
-            Debug.Log("here");
+            Debug.Log(inventory[i].Capacity);
         }
-        inventory.Remove(origin);
+        
 
 
         #endregion
@@ -52,12 +54,13 @@ public class Inventory : MonoBehaviour
         {
             for (int x = 0; x < inventory[0].Capacity; x++)
             {
-                
-                Vector3 slotLocation = inventoryPanel.transform.position + new Vector3(-150 + 80 * x , 150 - 80 * y, inventoryPanel.transform.position.z);
+                Vector3 slotLocation = inventoryPanel.transform.position + new Vector3(-150 + 80 * x, 150 - 80 * y, inventoryPanel.transform.position.z);
                 Instantiate(inventorySlot, slotLocation, inventoryPanel.transform.rotation, inventoryPanel.transform);
             }
+            
+                
         }
-
+        inventory.Remove(origin);
         #endregion
     }
 

@@ -2,10 +2,16 @@ using UnityEngine;
 
 public class InventorySlot : MonoBehaviour
 {
-    public bool isOccupied;
+    public Item currentHeldItem = null;
 
-    public void OccupiedToggle(bool toggle)
+    public Item GetHeldItem() { return currentHeldItem; }
+    public void SetHeldItem(Item item)
     {
-        isOccupied = toggle;
+        currentHeldItem = item;
     }
+    public void ClearHeldItem()
+    {
+        currentHeldItem = null;
+    }
+
 }
