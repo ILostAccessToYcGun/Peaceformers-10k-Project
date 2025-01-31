@@ -34,10 +34,11 @@ public class PlayerGun : MonoBehaviour
     private float currentReloadTime;
 
     private bool _requestedShoot;
+    private bool isFiring = false;
 
     private bool _requestedReload;
-
-    private bool isFiring = false;
+    private bool isReloading = false;
+    
 
     void Start()
     {
@@ -66,13 +67,18 @@ public class PlayerGun : MonoBehaviour
 
     public void UseWeapon(CombatInput input)
     {
-        _requestedShoot = input.Shoot;
+        _requestedShoot = input.Shoot && !isReloading;
 
-        _requestedReload = _requestedReload || input.Reload;
+        _requestedReload = input.Reload;
 
-        if (_requestedShoot && !isFiring)
+        if (_requestedShoot && !isFiring && !isReloading)
         {
             StartCoroutine(ContinuousFire());
+        }
+
+        if (_requestedReload && !isReloading)
+        {
+            StartCoroutine(Reload());
         }
     }
 
@@ -84,6 +90,10 @@ public class PlayerGun : MonoBehaviour
         {
             if (currentAmmo > 0)
             {
+                GameObject m = Instantiate(muzzleFlash, muzzlePoint.position, muzzlePoint.rotation);
+                m.transform.parent = muzzlePoint;
+                Destroy(m, 0.05f);
+
                 FireBullet();
                 currentAmmo--;
             }
@@ -100,15 +110,26 @@ public class PlayerGun : MonoBehaviour
 
     private void FireBullet()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(shootingPoint.position, shootingPoint.forward, out hit, range))
-        {
-            Debug.Log("Hit: " + hit.transform.name);
 
-            Healthbar hp = FindHealthbarInChildren(hit.transform);
-            if (hp != null)
+        int rayCount = 10;
+        float yOffsetStep = 0.2f;
+        bool hitSomething = false;
+
+        for (int i = 0; i < rayCount; i++)
+        {
+            float yOffset = Mathf.Lerp(-10f, 10f, (float)i / (rayCount - 1));
+
+            Vector3 rayOrigin = shootingPoint.position + shootingPoint.up * yOffset;
+
+            if (Physics.Raycast(rayOrigin, shootingPoint.forward, out RaycastHit hit, range))
             {
-                hp.LoseHealth(baseDmg);
+                //Debug.Log("Hit: " + hit.transform.name + " at " + hit.point);
+
+                Healthbar hp = FindHealthbarInChildren(hit.transform);
+                if (hp != null)
+                {
+                    hp.LoseHealth(baseDmg);
+                }
             }
         }
     }
@@ -127,5 +148,15 @@ public class PlayerGun : MonoBehaviour
         }
 
         return null;
+    }
+
+    IEnumerator Reload()
+    {
+        Debug.Log("Reloading...");
+        isReloading = true;
+        yield return new WaitForSeconds(reloadTime);
+        currentAmmo = maxAmmo;
+        isReloading = false;
+        Debug.Log("Done Reloading.");
     }
 }

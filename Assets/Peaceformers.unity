@@ -455,6 +455,9 @@ MonoBehaviour:
   range: 100
   timeBetweenShots: 0.11
   reloadTime: 1.5
+  muzzlePoint: {fileID: 1093982059}
+  muzzleFlash: {fileID: 100008, guid: 9058260c08717d340aa6d4f552e69e27, type: 3}
+  hitVfx: {fileID: 0}
 --- !u!1 &985516350
 GameObject:
   m_ObjectHideFlags: 0
@@ -579,13 +582,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1093982058}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.472, y: 2.054, z: 0.631}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -0.472, y: 2.054, z: 1.223}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 833486679}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1 &1297807821
 GameObject:
   m_ObjectHideFlags: 0
