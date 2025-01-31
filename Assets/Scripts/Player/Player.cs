@@ -50,7 +50,13 @@ public class Player : MonoBehaviour
         playerCharacter.UpdateInput(characterInput);
         playerCharacter.UpdateBody(deltaTime);
 
+        var combatInput = new CombatInput
+        {
+            Shoot = input.Attack.IsPressed(),
+            Reload = input.Reload.WasPressedThisFrame()
+        };
         playerGun.RotateGunTowardsMouse();
+        playerGun.UseWeapon(combatInput);
     }
 
     void LateUpdate()

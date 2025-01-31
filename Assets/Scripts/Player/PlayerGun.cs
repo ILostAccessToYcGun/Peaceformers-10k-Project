@@ -1,11 +1,48 @@
+using System.Collections;
 using UnityEngine;
+
+public struct CombatInput
+{
+    public bool Shoot;
+    public bool Reload;
+}
 
 public class PlayerGun : MonoBehaviour
 {
+    [Header("Aiming")]
     [SerializeField] private Transform playerRoot;
     [SerializeField] private Camera playerCamera;
     [SerializeField] private float rotationSpeed = 10f;
     private Vector2 lookInput;
+    [Space]
+    [Header("Shooting")]
+    [SerializeField] private Transform shootingPoint;
+    [Space]
+    [Header("Current Weapon")]
+    [SerializeField] private int maxAmmo = 100;
+    [SerializeField] private int currentAmmo;
+    [SerializeField] private int baseDmg = 8;
+    [SerializeField] private float range = 100f;
+    [SerializeField] private float timeBetweenShots = 0.04f;
+    [SerializeField] private float reloadTime = 1.5f;
+    [Space]
+    [Header("Visuals")]
+    [SerializeField] private Transform muzzlePoint;
+    [SerializeField] private GameObject muzzleFlash;
+    [SerializeField] private GameObject hitVfx;
+
+    private float currentReloadTime;
+
+    private bool _requestedShoot;
+
+    private bool _requestedReload;
+
+    private bool isFiring = false;
+
+    void Start()
+    {
+        currentAmmo = maxAmmo;
+    }
 
     public void RotateGunTowardsMouse()
     {
@@ -25,5 +62,70 @@ public class PlayerGun : MonoBehaviour
                 transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
             }
         }
+    }
+
+    public void UseWeapon(CombatInput input)
+    {
+        _requestedShoot = input.Shoot;
+
+        _requestedReload = _requestedReload || input.Reload;
+
+        if (_requestedShoot && !isFiring)
+        {
+            StartCoroutine(ContinuousFire());
+        }
+    }
+
+    IEnumerator ContinuousFire()
+    {
+        isFiring = true; 
+
+        while (_requestedShoot) 
+        {
+            if (currentAmmo > 0)
+            {
+                FireBullet();
+                currentAmmo--;
+            }
+            else
+            {
+                _requestedShoot = false;
+            }
+
+            yield return new WaitForSeconds(timeBetweenShots);
+        }
+
+        isFiring = false;
+    }
+
+    private void FireBullet()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(shootingPoint.position, shootingPoint.forward, out hit, range))
+        {
+            Debug.Log("Hit: " + hit.transform.name);
+
+            Healthbar hp = FindHealthbarInChildren(hit.transform);
+            if (hp != null)
+            {
+                hp.LoseHealth(baseDmg);
+            }
+        }
+    }
+
+    Healthbar FindHealthbarInChildren(Transform parent)
+    {
+        foreach (Transform child in parent)
+        {
+            Healthbar health = child.GetComponent<Healthbar>();
+            if (health != null)
+                return health;
+
+            health = FindHealthbarInChildren(child);
+            if (health != null)
+                return health;
+        }
+
+        return null;
     }
 }
