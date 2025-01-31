@@ -4,6 +4,7 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private PlayerMovement playerCharacter;
     [SerializeField] private PlayerCamera playerCamera;
+    [SerializeField] private PlayerGun playerGun;
     [Space]
     [SerializeField] private CameraSpring cameraSpring;
     [SerializeField] private CameraLean cameraLean;
@@ -48,6 +49,8 @@ public class Player : MonoBehaviour
         };
         playerCharacter.UpdateInput(characterInput);
         playerCharacter.UpdateBody(deltaTime);
+
+        playerGun.RotateGunTowardsMouse();
     }
 
     void LateUpdate()
