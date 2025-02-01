@@ -55,8 +55,10 @@ public class PlayerGun : MonoBehaviour
         {
             if (hit.transform.CompareTag("Target"))
             {
-                //print("Locked onto " + hit.transform.name);
-                currentTarget = hit.transform;
+                if (Vector3.Distance(transform.position, hit.transform.position) <= range)
+                    currentTarget = hit.transform;
+                else
+                    currentTarget = null;
             }
             else
             {

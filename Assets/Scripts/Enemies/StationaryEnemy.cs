@@ -35,14 +35,12 @@ public class StationaryEnemy : MonoBehaviour
     {
         if (Vector3.Distance(transform.position, target.position) <= detectionRange)
         {
-            //can target be seen (not on other side of a wall for instance)?
             RaycastHit hitInfo;
             if (Physics.Linecast(new Vector3(transform.position.x, (transform.position.y + 1.5f), transform.position.z),
                 new Vector3(target.position.x, (target.position.y + 1.5f),
                     target.position.z), out hitInfo))
             {
 
-                //can see target and met all other criteria so add to agro list
                 if (hitInfo.transform == target) 
                 {
                     //requesting fire
