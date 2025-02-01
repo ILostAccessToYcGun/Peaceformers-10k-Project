@@ -40,7 +40,8 @@ public class Item : MonoBehaviour, IPointerClickHandler
                 {
                     DecreaseStackAmount(1);
                     UpdateStackText();
-                    GameObject dropped = Instantiate(this.gameObject);
+                    GameObject dropped = Instantiate(this.gameObject, this.transform.position, this.transform.rotation, parent.transform);
+                    dropped.transform.localScale = Vector3.one;
                     Item droppedItem = dropped.GetComponent<Item>();
                     droppedItem.SetStackAmount(1);
                     droppedItem.UpdateStackText();
@@ -58,13 +59,18 @@ public class Item : MonoBehaviour, IPointerClickHandler
                         SetStackAmount(equalAmounts);
                     UpdateStackText();
 
+                    PickUpItemInInventory();
+
                     GameObject dropped = Instantiate(this.gameObject, this.transform.position, this.transform.rotation, parent.transform);
                     dropped.transform.localScale = Vector3.one;
                     Item droppedItem = dropped.GetComponent<Item>();
                     droppedItem.SetStackAmount(equalAmounts);
                     droppedItem.UpdateStackText();
+                    droppedItem.SearchAndMoveToNearestInventorySlot();
 
-                    PickUpItemInInventory();
+                    this.transform.SetAsLastSibling();
+
+                    Debug.Log("uhhhh");
                 }
             }
             else
@@ -94,12 +100,14 @@ public class Item : MonoBehaviour, IPointerClickHandler
         if (itemIsPickedUpByMouse)
         {
             if (currentInventorySlot != null)
+            {
                 currentInventorySlot.ClearHeldItem();
+                Debug.Log("Clear Item");
+            }
+                ;
         }
         else
-        {
             SearchAndMoveToNearestInventorySlot();
-        }
     }
 
     public void MoveToMouse()
@@ -148,33 +156,82 @@ public class Item : MonoBehaviour, IPointerClickHandler
         if (inventorySlots.Length < 1) { return; }
 
         InventorySlot nearestInventorySlot = inventorySlots[0]; ////
-        float nearestDistance = (inventorySlots[0].transform.position - transform.position).magnitude;////
+        float nearestDistance = 200f;////
 
         bool isStacking = false;///
+        bool isKeepHolding = false;
         Item stackingItem = inventorySlots[0].GetHeldItem();///
 
         if (inventorySlots.Length > 1) //if there is more than one inventory slot on screen, find the closest
         {
             float compareDistance;
             foreach (InventorySlot slot in inventorySlots)
-            {
-                compareDistance = (slot.transform.position - transform.position).magnitude;
+            { 
+                compareDistance = (slot.transform.position - this.transform.position).magnitude;
                 if (compareDistance < nearestDistance)
                 {
-                    if (slot.GetHeldItem() == null)
+                    if (slot.GetHeldItem() == null) //if the slot isnt holding anything
                     {
-                        Debug.Log("hur");
+                        isStacking = false;
+                        isKeepHolding = false;
                         nearestDistance = compareDistance;
                         nearestInventorySlot = slot;
+                        stackingItem = null;
+                        Debug.Log("empty " + nearestDistance);
                     }
-                    else if (slot.GetHeldItem().itemName == itemName)
-                    {
-                        Debug.Log("mergeee");
-                        nearestDistance = compareDistance;
-                        nearestInventorySlot = slot;
-                        isStacking = true;
-                        stackingItem = slot.GetHeldItem();
+                    else if (slot.GetHeldItem().itemName == itemName) //if the slot is holding another of the same item
+                    {  
+                        if (slot.GetHeldItem().stackAmount < slot.GetHeldItem().stackLimit && stackAmount < stackLimit) //if 
+                        {
+                            if (slot.GetHeldItem().stackAmount + stackAmount > slot.GetHeldItem().stackLimit)
+                            {
+                                //if the item we are holding is not full and we are wanting to merge into a not full item,
+                                //and merging the items would cause the stack to excede the limit
+                                //we transfer some into the item on the ground, but dont stack, keep holding onto the item
+                                isStacking = false;
+                                isKeepHolding = true;
+                                stackingItem = slot.GetHeldItem();
+
+                                DecreaseStackAmount(stackingItem.stackLimit - stackingItem.stackAmount);
+                                UpdateStackText();
+
+                                stackingItem.SetStackAmount(stackingItem.stackLimit);
+                                stackingItem.UpdateStackText();
+                                Debug.Log("top up " + nearestDistance);
+                            }
+                            else
+                            {
+                                isStacking = true;
+                                isKeepHolding = false;
+                                nearestDistance = compareDistance;
+                                nearestInventorySlot = slot;
+                                stackingItem = slot.GetHeldItem();
+                                Debug.Log("merge " + nearestDistance);
+                            }
+                            
+                        }
+                        else if (slot.GetHeldItem().stackAmount < slot.GetHeldItem().stackLimit && stackAmount == stackLimit)
+                        {
+                            //if the item we are holding is full and we are wanting to merge into a not full item,
+                            //swap the values
+
+
+                            isStacking = false;
+                            isKeepHolding = true;
+                            stackingItem = slot.GetHeldItem();
+                            int tempHold = stackingItem.stackAmount;
+
+                            stackingItem.SetStackAmount(stackAmount);
+                            SetStackAmount(tempHold);
+
+                            stackingItem.UpdateStackText();
+                            UpdateStackText();
+
+                            Debug.Log("swap" + nearestDistance);
+                        }
+                            
                     }
+                    
                 }
             }
         }
@@ -184,7 +241,6 @@ public class Item : MonoBehaviour, IPointerClickHandler
             return;
         else
         {
-            
             currentInventorySlot = nearestInventorySlot;
             transform.position = currentInventorySlot.transform.position;
             currentInventorySlot.currentHeldItem = this; //need to do more with this
@@ -192,10 +248,15 @@ public class Item : MonoBehaviour, IPointerClickHandler
 
             if (isStacking)
             {
+                Debug.Log("au haifliausdkjfn");
                 stackingItem.IncreaseStackAmount(stackAmount);
                 stackingItem.UpdateStackText();
                 currentInventorySlot.SetHeldItem(stackingItem);
                 Destroy(this.gameObject);
+            }
+            else if (isKeepHolding)
+            {
+                PickUpItemInInventory();
             }
         }
     }
@@ -220,6 +281,8 @@ public class Item : MonoBehaviour, IPointerClickHandler
     }
     #endregion
 
+
+    //TODO: Add item decrease / item increase methods (maybe in the stack)
 
     private void Awake()
     {
