@@ -393,10 +393,6 @@ public class Item : MonoBehaviour, IPointerClickHandler
         stackAmount = 1;
         SetStackLimit(5);
         UpdateStackText();
-        if (unitIsOrigin)
-        {
-            GenerateItem();
-        }
     }
 
 
