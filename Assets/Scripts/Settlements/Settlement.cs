@@ -11,6 +11,8 @@ public class Settlement : MonoBehaviour
     [SerializeField] private float lossRate;
     [Space]
     [SerializeField] private float stayTime = 3f; //for when you drop off supplies
+    private bool stationary = false;
+    private float currentStayTime = 0;
 
     [Space]
     [Header("UI")]
@@ -28,7 +30,20 @@ public class Settlement : MonoBehaviour
 
     void Update()
     {
-        currentUpkeep -= lossRate * Time.deltaTime;
+        if (!stationary) 
+        {
+            currentStayTime = 0;
+            currentUpkeep -= lossRate * Time.deltaTime;
+        }
+        else
+        { 
+            currentStayTime += Time.deltaTime;
+            if(currentStayTime >= stayTime)
+            {
+                stationary = false;
+            }
+        }
+
         currentUpkeep = Mathf.Clamp(currentUpkeep, 0, maxUpkeep);
         Upkeepbar();
     }
@@ -50,19 +65,21 @@ public class Settlement : MonoBehaviour
     public void GainMeter(float value)
     {
         currentUpkeep = Mathf.Clamp(currentUpkeep + value, 0, maxUpkeep);
+        stationary = true;
     }
 
     public void LoseMeter(float value)
     {
         currentUpkeep = Mathf.Clamp(currentUpkeep - value, 0, maxUpkeep);
+        stationary = true;
     }
 
+    //temp collection
     void OnTriggerEnter(Collider col)
     {
-        print("Collision");
         if(col.gameObject.CompareTag("Player"))
         {
-            currentUpkeep += 20;
+            GainMeter(20);
         }
     }
 }
