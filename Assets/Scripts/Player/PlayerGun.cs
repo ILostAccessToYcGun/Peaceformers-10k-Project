@@ -55,7 +55,7 @@ public class PlayerGun : MonoBehaviour
         {
             if (hit.transform.CompareTag("Target"))
             {
-                print("Locked onto " + hit.transform.name);
+                //print("Locked onto " + hit.transform.name);
                 currentTarget = hit.transform;
             }
             else
@@ -101,6 +101,7 @@ public class PlayerGun : MonoBehaviour
             if (currentAmmo > 0)
             {
                 GameObject m = Instantiate(muzzleFlash, muzzlePoint.position, muzzlePoint.rotation);
+                m.transform.parent = muzzlePoint;
                 Destroy(m, 0.05f);
 
                 FireBullet();
