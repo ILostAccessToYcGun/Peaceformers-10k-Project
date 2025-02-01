@@ -35,6 +35,7 @@ public class StationaryEnemy : MonoBehaviour
     {
         if (Vector3.Distance(transform.position, target.position) <= detectionRange)
         {
+
             RaycastHit hitInfo;
             if (Physics.Linecast(new Vector3(transform.position.x, (transform.position.y + 1.5f), transform.position.z),
                 new Vector3(target.position.x, (target.position.y + 1.5f),
