@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Settlement : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class Settlement : MonoBehaviour
     [Space]
     [Header("UI")]
     [SerializeField] private Image upkeepMeter;
+    [SerializeField] private TextMeshProUGUI nametag;
     [Space]
     [SerializeField] private Color goodHealthColor;
     [SerializeField] private Color watchOutColor;
@@ -24,6 +26,7 @@ public class Settlement : MonoBehaviour
 
     void Start()
     {
+        nametag.text = settlementName;
         transform.name = settlementName;
         currentUpkeep = maxUpkeep;
     }
