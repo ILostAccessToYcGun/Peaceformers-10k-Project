@@ -15,72 +15,145 @@ public class Item : MonoBehaviour, IPointerClickHandler
     public enum Name { Wood };
     public Name itemName = Name.Wood;
     [Space]
-    public List<List<bool>> itemShape;
-    public List<Item> itemComponents;
+    public int itemWidth; //we NOT doing Ls
+    public int itemHeight;
     public bool unitIsOrigin = false;
-    
+    public List<Item> itemComponents = new List<Item>();
+
     [Space]
     public InventorySlot currentInventorySlot;
     public GameObject parent;
     #region _Item_Pickup_in_Menu_
-
     private bool itemIsPickedUpByMouse;
 
     public void OnPointerClick(PointerEventData pointerEventData)
     {
+        
         if (pointerEventData.button == PointerEventData.InputButton.Left)
         {
-            PickUpItemInInventory();
-        }
-        if (pointerEventData.button == PointerEventData.InputButton.Right)
-        {
-            if (stackAmount > 1)
+            if (!unitIsOrigin)
             {
-                if (itemIsPickedUpByMouse) //if we right click with item in hand
+                Item origin = this;
+                foreach (Item component in itemComponents)
                 {
-                    DecreaseStackAmount(1);
-                    UpdateStackText();
-                    GameObject dropped = Instantiate(this.gameObject, this.transform.position, this.transform.rotation, parent.transform);
-                    dropped.transform.localScale = Vector3.one;
-                    Item droppedItem = dropped.GetComponent<Item>();
-                    droppedItem.SetStackAmount(1);
-                    droppedItem.UpdateStackText();
-                    if (droppedItem.SearchForNearestValidInventorySlot())
+                    if (component.unitIsOrigin)
                     {
-                        droppedItem.SearchAndMoveToNearestInventorySlot();
+                        origin = component;
                     }
                 }
-                else //if we right click without item in hand
-                {
-                    int equalAmounts = stackAmount / 2;
-                    if (stackAmount % 2 == 1) //Handles odd numbers
-                        SetStackAmount(equalAmounts + 1);
-                    else
-                        SetStackAmount(equalAmounts);
-                    UpdateStackText();
-
-                    PickUpItemInInventory();
-
-                    GameObject dropped = Instantiate(this.gameObject, this.transform.position, this.transform.rotation, parent.transform);
-                    dropped.transform.localScale = Vector3.one;
-                    Item droppedItem = dropped.GetComponent<Item>();
-                    droppedItem.SetStackAmount(equalAmounts);
-                    droppedItem.UpdateStackText();
-                    droppedItem.SearchAndMoveToNearestInventorySlot();
-
-                    this.transform.SetAsLastSibling();
-
-                    Debug.Log("uhhhh");
-                }
+                origin.PickUpItemInInventory();
             }
             else
             {
                 PickUpItemInInventory();
             }
+        }
+        if (pointerEventData.button == PointerEventData.InputButton.Right)
+        {
+            if (!unitIsOrigin)
+            {
+                Item origin = this;
+                foreach (Item component in itemComponents)
+                {
+                    if (component.unitIsOrigin)
+                    {
+                        origin = component;
+                    }
+                }
+                
+                if (stackAmount > 1)
+                {
+                    if (itemIsPickedUpByMouse) //if we right click with item in hand
+                    {
+                        origin.DecreaseStackAmount(1);
+                        origin.UpdateStackText();
+                        GameObject dropped = Instantiate(origin.gameObject, origin.transform.position, origin.transform.rotation, parent.transform);
+                        dropped.transform.localScale = Vector3.one;
+                        Item droppedItem = dropped.GetComponent<Item>();
+                        droppedItem.SetStackAmount(1);
+                        droppedItem.UpdateStackText();
+                        if (droppedItem.SearchForNearestValidInventorySlot())
+                            droppedItem.SearchAndMoveToNearestInventorySlot();
+                        origin.ItemComponentSetSiblingLast();
+                    }
+                    else //if we right click without item in hand
+                    {
+                        int equalAmounts = stackAmount / 2;
+                        if (stackAmount % 2 == 1) //Handles odd numbers
+                            origin.SetStackAmount(equalAmounts + 1);
+                        else
+                            origin.SetStackAmount(equalAmounts);
+                        origin.UpdateStackText();
+
+                        origin.PickUpItemInInventory();
+
+                        GameObject dropped = Instantiate(origin.gameObject, origin.transform.position, origin.transform.rotation, parent.transform);
+                        dropped.transform.localScale = Vector3.one;
+                        Item droppedItem = dropped.GetComponent<Item>();
+                        droppedItem.SetStackAmount(equalAmounts);
+                        droppedItem.UpdateStackText();
+                        droppedItem.SearchAndMoveToNearestInventorySlot();
+
+                        origin.ItemComponentSetSiblingLast();
+
+                        Debug.Log("uhhhh");
+                    }
+                }
+                else
+                {
+                    origin.PickUpItemInInventory();
+                }
+            }
+            else
+            {
+                if (stackAmount > 1)
+                {
+                    if (itemIsPickedUpByMouse) //if we right click with item in hand
+                    {
+                        DecreaseStackAmount(1);
+                        UpdateStackText();
+                        GameObject dropped = Instantiate(this.gameObject, this.transform.position, this.transform.rotation, parent.transform);
+                        dropped.transform.localScale = Vector3.one;
+                        Item droppedItem = dropped.GetComponent<Item>();
+                        droppedItem.SetStackAmount(1);
+                        droppedItem.UpdateStackText();
+                        if (droppedItem.SearchForNearestValidInventorySlot())
+                            droppedItem.SearchAndMoveToNearestInventorySlot();
+                        this.ItemComponentSetSiblingLast();
+                    }
+                    else //if we right click without item in hand
+                    {
+                        int equalAmounts = stackAmount / 2;
+                        if (stackAmount % 2 == 1) //Handles odd numbers
+                            SetStackAmount(equalAmounts + 1);
+                        else
+                            SetStackAmount(equalAmounts);
+                        UpdateStackText();
+
+                        PickUpItemInInventory();
+
+                        GameObject dropped = Instantiate(this.gameObject, this.transform.position, this.transform.rotation, parent.transform);
+                        dropped.transform.localScale = Vector3.one;
+                        Item droppedItem = dropped.GetComponent<Item>();
+                        droppedItem.SetStackAmount(equalAmounts);
+                        droppedItem.UpdateStackText();
+                        droppedItem.SearchAndMoveToNearestInventorySlot();
+
+                        this.ItemComponentSetSiblingLast();
+
+                        Debug.Log("uhhhh");
+                    }
+                }
+                else
+                {
+                    PickUpItemInInventory();
+                }
+            }
+
+            
             
         }
     }
-
     public void PickUpItemInInventory()
     {
         //system will prioritize releasing items over picking new ones up
@@ -95,7 +168,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
         }
         itemIsPickedUpByMouse = !itemIsPickedUpByMouse;
 
-        this.transform.SetAsLastSibling();
+        this.ItemComponentSetSiblingLast();
 
         if (itemIsPickedUpByMouse)
         {
@@ -115,10 +188,9 @@ public class Item : MonoBehaviour, IPointerClickHandler
         if (itemIsPickedUpByMouse)
             transform.position = Input.mousePosition;
     }
-
     #endregion
 
-
+    #region _Inventory_
     public bool SearchForNearestValidInventorySlot()
     {
         //Search
@@ -260,6 +332,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
             }
         }
     }
+    #endregion
 
     #region _Stack_
     [Space]
@@ -282,16 +355,50 @@ public class Item : MonoBehaviour, IPointerClickHandler
     #endregion
 
 
+    #region _Size_
+
+    public void GenerateItem()
+    {
+        for (int y = 0; y < itemHeight; y++)
+        {
+            for (int x = 0; x < itemWidth; x++)
+            {
+                Vector3 positionRelativeToOrigin = this.transform.position + new Vector3(50 * y, 50 * x, transform.position.z);
+                GameObject itemComponentGameObject = Instantiate(this.gameObject, positionRelativeToOrigin, transform.rotation, transform);
+                Item itemComponentItem = itemComponentGameObject.GetComponent<Item>();
+                itemComponentItem.unitIsOrigin = false;
+            }
+        }
+    }
+
+    public void ItemComponentSetSiblingLast()
+    {
+        Item origin = this;
+        foreach (Item component in itemComponents)
+        {
+            component.transform.SetAsLastSibling();
+        }
+        origin.transform.SetAsLastSibling();
+    }
+
+
+    #endregion
+
     //TODO: Add item decrease / item increase methods (maybe in the stack)
 
     private void Awake()
     {
+        this.gameObject.name = itemName.ToString();
         parent = GetComponentInParent<Canvas>().gameObject; //huh i
         stackAmount = 1;
         SetStackLimit(5);
-        unitIsOrigin = true;
         UpdateStackText();
+        if (unitIsOrigin)
+        {
+            GenerateItem();
+        }
     }
+
 
     private void Update()
     {

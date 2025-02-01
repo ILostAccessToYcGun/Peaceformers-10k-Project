@@ -9,6 +9,7 @@ public class Inventory : MonoBehaviour
     //TODO: change access modifiers at some point
     public int inventoryWidth;
     public int inventoryHeight;
+    public int cellDistance;
     [Space]
     public Image inventoryPanel;
     public GameObject inventorySlot;
@@ -54,7 +55,7 @@ public class Inventory : MonoBehaviour
         {
             for (int x = 0; x < inventory[0].Capacity; x++)
             {
-                Vector3 slotLocation = inventoryPanel.transform.position + new Vector3(-150 + 80 * x, 150 - 80 * y, inventoryPanel.transform.position.z);
+                Vector3 slotLocation = inventoryPanel.transform.position + new Vector3(-350 + cellDistance * x, 350 - cellDistance * y, inventoryPanel.transform.position.z);
                 Instantiate(inventorySlot, slotLocation, inventoryPanel.transform.rotation, inventoryPanel.transform);
             }
             
