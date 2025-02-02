@@ -8,6 +8,8 @@ public class Player : MonoBehaviour
     [Space]
     [SerializeField] private CameraSpring cameraSpring;
     [SerializeField] private CameraLean cameraLean;
+    [Space]
+    [SerializeField] private PlayerUIToggler playerUIToggler;
 
     private PlayerActionInputs _inputActions;
 
@@ -31,6 +33,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         var input = _inputActions.Player;
+        var ui = _inputActions.UI;
         var deltaTime = Time.deltaTime;
 
         //Get camera input and update Cam Rotation
@@ -57,6 +60,11 @@ public class Player : MonoBehaviour
         };
         playerGun.RotateGunTowardsMouse();
         playerGun.UseWeapon(combatInput);
+
+        if(ui.SettlementUI.WasPressedThisFrame())
+        {
+            playerUIToggler.ToggleSettlementUI();
+        }
     }
 
     void LateUpdate()
