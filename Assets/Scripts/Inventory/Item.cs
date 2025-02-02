@@ -288,7 +288,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
                             {
                                 if (currentInventory.inventory[w][h] != null)
                                 {
-                                    if (currentInventory.inventory[(int)startPos.x][(int)startPos.y].itemName == itemName) //NULL REFERENCE EXCEPTION HERE
+                                    if (currentInventory.inventory[(int)startPos.x][(int)startPos.y].itemName == itemName) //NULL REFERENCE EXCEPTION HERE somehow
                                     {
                                         itemIsMerging = true;
                                     }
