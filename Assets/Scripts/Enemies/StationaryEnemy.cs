@@ -19,6 +19,7 @@ public class StationaryEnemy : MonoBehaviour
     [SerializeField] private float bulletForce = 50f;
     [SerializeField] private float timeBetweenShots = 0.04f;
     [SerializeField] private float reloadTime = 5f;
+    [SerializeField] private float bulletSpread = 3f;
     private bool isFiring;
     private bool isReloading;
 
@@ -120,9 +121,15 @@ public class StationaryEnemy : MonoBehaviour
         {
             GameObject b = Instantiate(bulletPrefab, barrel.position, barrel.rotation);
 
-            Vector3 direction = (target.position - barrel.position).normalized;
-            direction.y = Mathf.Max(direction.y, -0.02f);
-            b.GetComponent<Rigidbody>().linearVelocity = direction * bulletForce;
+            Vector3 spread = new Vector3(
+                Random.Range(-bulletSpread, bulletSpread),
+                Random.Range(-bulletSpread, bulletSpread),
+                Random.Range(-bulletSpread, bulletSpread)
+            );
+
+            Vector3 randomizedDirection = (barrel.forward + spread).normalized;
+
+            b.GetComponent<Rigidbody>().linearVelocity = randomizedDirection * bulletForce;
 
             b.GetComponent<Bullet>().baseDmg = baseDmg;
 

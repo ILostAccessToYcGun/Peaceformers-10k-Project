@@ -108,7 +108,7 @@ MonoBehaviour:
   - {fileID: 919204709522792817}
   bulletPrefab: {fileID: 2479250265035516339, guid: 00bdfcdffff991b419d31bb41388b104, type: 3}
   target: {fileID: 0}
-  detectionRange: 15
+  detectionRange: 20
   rotationSpeed: 10
   maxAmmo: 25
   currentAmmo: 0
@@ -116,6 +116,7 @@ MonoBehaviour:
   bulletForce: 50
   timeBetweenShots: 0.1
   reloadTime: 3
+  bulletSpread: 0.1
   alive: 1
 --- !u!1 &4788418911674833517
 GameObject:
