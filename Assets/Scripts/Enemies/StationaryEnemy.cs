@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class StationaryEnemy : MonoBehaviour
 {
+    [SerializeField] private Transform modelTransform;
     [SerializeField] private Transform shootingPoint;
     [Space]
     [Header("Detection")]
@@ -37,7 +38,7 @@ public class StationaryEnemy : MonoBehaviour
         {
 
             RaycastHit hitInfo;
-            if (Physics.Linecast(new Vector3(transform.position.x, (transform.position.y + 1.5f), transform.position.z),
+            if (Physics.Linecast(new Vector3(modelTransform.position.x, (modelTransform.position.y + 1.5f), modelTransform.position.z),
                 new Vector3(target.position.x, (target.position.y + 1.5f),
                     target.position.z), out hitInfo))
             {
@@ -51,13 +52,13 @@ public class StationaryEnemy : MonoBehaviour
                         StartCoroutine(ContinuousFire());
                     }
                     Vector3 targetPoint = target.position;
-                    Vector3 direction = (targetPoint - transform.position).normalized;
+                    Vector3 direction = (targetPoint - modelTransform.position).normalized;
                     direction.y = 0f;
 
                     if (direction != Vector3.zero)
                     {
                         Quaternion targetRotation = Quaternion.LookRotation(direction);
-                        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+                        modelTransform.rotation = Quaternion.Lerp(modelTransform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
                     }
                 }
             }
