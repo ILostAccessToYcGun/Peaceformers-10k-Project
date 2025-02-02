@@ -13,7 +13,7 @@ public class Bullet : MonoBehaviour
         {
             hp.LoseHealth(baseDmg);
         }
-
+        print(target.name);
         Destroy(this.gameObject);
     }
 

@@ -64,7 +64,6 @@ public class StationaryEnemy : MonoBehaviour
                     }
                     Vector3 targetPoint = target.position;
                     Vector3 direction = (targetPoint - modelTransform.position).normalized;
-                    direction.y = 0f;
 
                     if (direction != Vector3.zero)
                     {
@@ -101,7 +100,6 @@ public class StationaryEnemy : MonoBehaviour
             }
             else
             {
-                print("cant shoot for shit");
                 isFiring = false;
                 if (!isReloading)
                 {
@@ -121,16 +119,20 @@ public class StationaryEnemy : MonoBehaviour
         foreach (Transform barrel in shootingPoints)
         {
             GameObject b = Instantiate(bulletPrefab, barrel.position, barrel.rotation);
-            b.GetComponent<Rigidbody>().linearVelocity = modelTransform.forward * bulletForce;
+
+            Vector3 direction = (target.position - barrel.position).normalized;
+            direction.y = Mathf.Max(direction.y, -0.02f);
+            b.GetComponent<Rigidbody>().linearVelocity = direction * bulletForce;
+
             b.GetComponent<Bullet>().baseDmg = baseDmg;
 
-            Destroy(b, 4f);
+
+            Destroy(b, 8);
         }
     }
 
     IEnumerator Reload()
     {
-        print("Reloading");
         isReloading = true;
         yield return new WaitForSeconds(reloadTime);
         currentAmmo = maxAmmo;
