@@ -17,12 +17,19 @@ public class Item : MonoBehaviour, IPointerClickHandler
     [Space]
     public int itemWidth; //we NOT doing Ls
     public int itemHeight;
-    public bool unitIsOrigin = false;
-    public List<Item> itemComponents = new List<Item>();
+    public List<ItemComponent> itemComponents = new List<ItemComponent>();
+    public ItemComponent singleComponent;
+    public Image img;
+    public int componentDistance;
 
     [Space]
     public InventorySlot currentInventorySlot;
+    public InventorySlot previousInventorySlot;
+    public List<InventorySlot> componentSlots;
     public GameObject parent;
+
+    [Space]
+    public Inventory currentInventory;
     #region _Item_Pickup_in_Menu_
     private bool itemIsPickedUpByMouse;
 
@@ -31,127 +38,129 @@ public class Item : MonoBehaviour, IPointerClickHandler
         
         if (pointerEventData.button == PointerEventData.InputButton.Left)
         {
-            if (!unitIsOrigin)
+            PickUpItemInInventory();
+            //if (!unitIsOrigin)
+            //{
+            //    Item origin = this;
+            //    foreach (Item component in itemComponents)
+            //    {
+            //        if (component.unitIsOrigin)
+            //        {
+            //            origin = component;
+            //        }
+            //    }
+            //    origin.PickUpItemInInventory();
+            //}
+            //else
+            //{
+
+            //}
+        }
+        if (pointerEventData.button == PointerEventData.InputButton.Right)
+        {
+            if (stackAmount > 1)
             {
-                Item origin = this;
-                foreach (Item component in itemComponents)
+                if (itemIsPickedUpByMouse) //if we right click with item in hand DROP
                 {
-                    if (component.unitIsOrigin)
-                    {
-                        origin = component;
-                    }
+                    DecreaseStackAmount(1);
+                    UpdateStackText();
+                    GameObject dropped = Instantiate(this.gameObject, this.transform.position, this.transform.rotation, parent.transform);
+                    dropped.transform.localScale = Vector3.one;
+                    Item droppedItem = dropped.GetComponent<Item>();
+                    droppedItem.SetStackAmount(1);
+                    droppedItem.UpdateStackText();
+                    if (droppedItem.SearchForNearestValidInventorySlot())
+                        droppedItem.SearchAndMoveToNearestInventorySlot();
+                    this.ItemComponentSetSiblingLast();
                 }
-                origin.PickUpItemInInventory();
+                else //if we right click without item in hand SPLIT
+                {
+                    int equalAmounts = stackAmount / 2;
+                    if (stackAmount % 2 == 1) //Handles odd numbers
+                        SetStackAmount(equalAmounts + 1);
+                    else
+                        SetStackAmount(equalAmounts);
+                    UpdateStackText();
+
+                    PickUpItemInInventory();
+
+                    GameObject dropped = Instantiate(this.gameObject, this.transform.position, this.transform.rotation, parent.transform);
+                    dropped.transform.localScale = Vector3.one;
+                    Item droppedItem = dropped.GetComponent<Item>();
+                    droppedItem.SetStackAmount(equalAmounts);
+                    droppedItem.UpdateStackText();
+                    droppedItem.SearchAndMoveToNearestInventorySlot();
+
+                    this.ItemComponentSetSiblingLast();
+
+                    Debug.Log("uhhhh");
+                }
             }
             else
             {
                 PickUpItemInInventory();
             }
-        }
-        if (pointerEventData.button == PointerEventData.InputButton.Right)
-        {
-            if (!unitIsOrigin)
-            {
-                Item origin = this;
-                foreach (Item component in itemComponents)
-                {
-                    if (component.unitIsOrigin)
-                    {
-                        origin = component;
-                    }
-                }
-                
-                if (stackAmount > 1)
-                {
-                    if (itemIsPickedUpByMouse) //if we right click with item in hand
-                    {
-                        origin.DecreaseStackAmount(1);
-                        origin.UpdateStackText();
-                        GameObject dropped = Instantiate(origin.gameObject, origin.transform.position, origin.transform.rotation, parent.transform);
-                        dropped.transform.localScale = Vector3.one;
-                        Item droppedItem = dropped.GetComponent<Item>();
-                        droppedItem.SetStackAmount(1);
-                        droppedItem.UpdateStackText();
-                        if (droppedItem.SearchForNearestValidInventorySlot())
-                            droppedItem.SearchAndMoveToNearestInventorySlot();
-                        origin.ItemComponentSetSiblingLast();
-                    }
-                    else //if we right click without item in hand
-                    {
-                        int equalAmounts = stackAmount / 2;
-                        if (stackAmount % 2 == 1) //Handles odd numbers
-                            origin.SetStackAmount(equalAmounts + 1);
-                        else
-                            origin.SetStackAmount(equalAmounts);
-                        origin.UpdateStackText();
+            //if (!unitIsOrigin)
+            //{
+            //    Item origin = this;
+            //    foreach (Item component in itemComponents)
+            //    {
+            //        if (component.unitIsOrigin)
+            //        {
+            //            origin = component;
+            //        }
+            //    }
 
-                        origin.PickUpItemInInventory();
+            //    if (stackAmount > 1)
+            //    {
+            //        if (itemIsPickedUpByMouse) //if we right click with item in hand
+            //        {
+            //            origin.DecreaseStackAmount(1);
+            //            origin.UpdateStackText();
+            //            GameObject dropped = Instantiate(origin.gameObject, origin.transform.position, origin.transform.rotation, parent.transform);
+            //            dropped.transform.localScale = Vector3.one;
+            //            Item droppedItem = dropped.GetComponent<Item>();
+            //            droppedItem.SetStackAmount(1);
+            //            droppedItem.UpdateStackText();
+            //            if (droppedItem.SearchForNearestValidInventorySlot())
+            //                droppedItem.SearchAndMoveToNearestInventorySlot();
+            //            origin.ItemComponentSetSiblingLast();
+            //        }
+            //        else //if we right click without item in hand
+            //        {
+            //            int equalAmounts = stackAmount / 2;
+            //            if (stackAmount % 2 == 1) //Handles odd numbers
+            //                origin.SetStackAmount(equalAmounts + 1);
+            //            else
+            //                origin.SetStackAmount(equalAmounts);
+            //            origin.UpdateStackText();
 
-                        GameObject dropped = Instantiate(origin.gameObject, origin.transform.position, origin.transform.rotation, parent.transform);
-                        dropped.transform.localScale = Vector3.one;
-                        Item droppedItem = dropped.GetComponent<Item>();
-                        droppedItem.SetStackAmount(equalAmounts);
-                        droppedItem.UpdateStackText();
-                        droppedItem.SearchAndMoveToNearestInventorySlot();
+            //            origin.PickUpItemInInventory();
 
-                        origin.ItemComponentSetSiblingLast();
+            //            GameObject dropped = Instantiate(origin.gameObject, origin.transform.position, origin.transform.rotation, parent.transform);
+            //            dropped.transform.localScale = Vector3.one;
+            //            Item droppedItem = dropped.GetComponent<Item>();
+            //            droppedItem.SetStackAmount(equalAmounts);
+            //            droppedItem.UpdateStackText();
+            //            droppedItem.SearchAndMoveToNearestInventorySlot();
 
-                        Debug.Log("uhhhh");
-                    }
-                }
-                else
-                {
-                    origin.PickUpItemInInventory();
-                }
-            }
-            else
-            {
-                if (stackAmount > 1)
-                {
-                    if (itemIsPickedUpByMouse) //if we right click with item in hand
-                    {
-                        DecreaseStackAmount(1);
-                        UpdateStackText();
-                        GameObject dropped = Instantiate(this.gameObject, this.transform.position, this.transform.rotation, parent.transform);
-                        dropped.transform.localScale = Vector3.one;
-                        Item droppedItem = dropped.GetComponent<Item>();
-                        droppedItem.SetStackAmount(1);
-                        droppedItem.UpdateStackText();
-                        if (droppedItem.SearchForNearestValidInventorySlot())
-                            droppedItem.SearchAndMoveToNearestInventorySlot();
-                        this.ItemComponentSetSiblingLast();
-                    }
-                    else //if we right click without item in hand
-                    {
-                        int equalAmounts = stackAmount / 2;
-                        if (stackAmount % 2 == 1) //Handles odd numbers
-                            SetStackAmount(equalAmounts + 1);
-                        else
-                            SetStackAmount(equalAmounts);
-                        UpdateStackText();
+            //            origin.ItemComponentSetSiblingLast();
 
-                        PickUpItemInInventory();
+            //            Debug.Log("uhhhh");
+            //        }
+            //    }
+            //    else
+            //    {
+            //        origin.PickUpItemInInventory();
+            //    }
+            //}
+            //else
+            //{
 
-                        GameObject dropped = Instantiate(this.gameObject, this.transform.position, this.transform.rotation, parent.transform);
-                        dropped.transform.localScale = Vector3.one;
-                        Item droppedItem = dropped.GetComponent<Item>();
-                        droppedItem.SetStackAmount(equalAmounts);
-                        droppedItem.UpdateStackText();
-                        droppedItem.SearchAndMoveToNearestInventorySlot();
+            //}
 
-                        this.ItemComponentSetSiblingLast();
 
-                        Debug.Log("uhhhh");
-                    }
-                }
-                else
-                {
-                    PickUpItemInInventory();
-                }
-            }
 
-            
-            
         }
     }
     public void PickUpItemInInventory()
@@ -176,6 +185,20 @@ public class Item : MonoBehaviour, IPointerClickHandler
             {
                 currentInventorySlot.ClearHeldItem();
                 Debug.Log("Clear Item");
+
+                //InventorySlot[] inventorySlots = FindObjectsByType<InventorySlot>(FindObjectsSortMode.None);
+
+                foreach (InventorySlot slot in componentSlots)
+                {
+                    if (slot.inventoryPosition.x >= currentInventorySlot.inventoryPosition.x && slot.inventoryPosition.x <= currentInventorySlot.inventoryPosition.x + itemWidth)
+                    {
+                        if (slot.inventoryPosition.y >= currentInventorySlot.inventoryPosition.y && slot.inventoryPosition.y <= currentInventorySlot.inventoryPosition.y + itemWidth)
+                        {
+                            slot.ClearHeldItem();
+                        }
+                    }
+                }
+                componentSlots.Clear();
             }
                 ;
         }
@@ -238,92 +261,143 @@ public class Item : MonoBehaviour, IPointerClickHandler
         {
             float compareDistance;
             foreach (InventorySlot slot in inventorySlots)
-            { 
+            {
+                Vector2 startPos = slot.inventoryPosition;
                 compareDistance = (slot.transform.position - this.transform.position).magnitude;
                 if (compareDistance < nearestDistance)
                 {
-                    if (slot.GetHeldItem() == null) //if the slot isnt holding anything
+                    bool itemDoesFitInsideInventoryFrame = true;
+
+                    if (startPos.x + itemWidth > currentInventory.inventoryWidth)
                     {
-                        isStacking = false;
-                        isKeepHolding = false;
-                        nearestDistance = compareDistance;
-                        nearestInventorySlot = slot;
-                        stackingItem = null;
-                        Debug.Log("empty " + nearestDistance);
+                        itemDoesFitInsideInventoryFrame = false;
                     }
-                    else if (slot.GetHeldItem().itemName == itemName) //if the slot is holding another of the same item
-                    {  
-                        if (slot.GetHeldItem().stackAmount < slot.GetHeldItem().stackLimit && stackAmount < stackLimit) //if 
+                    if (startPos.y + itemHeight > currentInventory.inventoryHeight)
+                    {
+                        itemDoesFitInsideInventoryFrame = false;
+                    }
+
+                    bool itemDoesNotCollideWithOtherItems = true;
+                    bool itemIsMerging = false;
+
+                    if (itemDoesFitInsideInventoryFrame)
+                    {
+                        for (int h = (int)startPos.y; h < currentInventory.inventoryHeight; h++)
                         {
-                            if (slot.GetHeldItem().stackAmount + stackAmount > slot.GetHeldItem().stackLimit)
+                            for (int w = (int)startPos.x; w < currentInventory.inventoryWidth; w++)
                             {
-                                //if the item we are holding is not full and we are wanting to merge into a not full item,
-                                //and merging the items would cause the stack to excede the limit
-                                //we transfer some into the item on the ground, but dont stack, keep holding onto the item
+                                if (currentInventory.inventory[w][h] != null)
+                                {
+                                    if (currentInventory.inventory[(int)startPos.x][(int)startPos.y].itemName == itemName) //NULL REFERENCE EXCEPTION HERE
+                                    {
+                                        itemIsMerging = true;
+                                    }
+                                    itemDoesNotCollideWithOtherItems = false;
+                                }
+
+                            }
+                        }
+                    }
+                    
+                    
+
+                    if (itemDoesFitInsideInventoryFrame && (itemDoesNotCollideWithOtherItems || itemIsMerging))
+                    {
+                        Debug.Log("2 true");
+                        if (slot.GetHeldItem() == null) //if the slot isnt holding anything
+                        {
+                            isStacking = false;
+                            isKeepHolding = false;
+                            nearestDistance = compareDistance;
+                            nearestInventorySlot = slot;
+                            stackingItem = null;
+                            Debug.Log("empty " + nearestDistance);
+                        }
+                        else if (slot.GetHeldItem().itemName == itemName) //if the slot is holding another of the same item
+                        {
+                            if (slot.GetHeldItem().stackAmount < slot.GetHeldItem().stackLimit && stackAmount < stackLimit) //if 
+                            {
+                                if (slot.GetHeldItem().stackAmount + stackAmount > slot.GetHeldItem().stackLimit)
+                                {
+                                    isStacking = false;
+                                    isKeepHolding = true;
+                                    stackingItem = slot.GetHeldItem();
+
+                                    DecreaseStackAmount(stackingItem.stackLimit - stackingItem.stackAmount);
+                                    UpdateStackText();
+
+                                    stackingItem.SetStackAmount(stackingItem.stackLimit);
+                                    stackingItem.UpdateStackText();
+                                    Debug.Log("top up " + nearestDistance);
+                                }
+                                else
+                                {
+                                    isStacking = true;
+                                    isKeepHolding = false;
+                                    nearestDistance = compareDistance;
+                                    nearestInventorySlot = slot;
+                                    stackingItem = slot.GetHeldItem();
+                                    Debug.Log("merge " + nearestDistance);
+                                }
+
+                            }
+                            else if (slot.GetHeldItem().stackAmount < slot.GetHeldItem().stackLimit && stackAmount == stackLimit)
+                            {
                                 isStacking = false;
                                 isKeepHolding = true;
                                 stackingItem = slot.GetHeldItem();
+                                int tempHold = stackingItem.stackAmount;
 
-                                DecreaseStackAmount(stackingItem.stackLimit - stackingItem.stackAmount);
+                                stackingItem.SetStackAmount(stackAmount);
+                                SetStackAmount(tempHold);
+
+                                stackingItem.UpdateStackText();
                                 UpdateStackText();
 
-                                stackingItem.SetStackAmount(stackingItem.stackLimit);
-                                stackingItem.UpdateStackText();
-                                Debug.Log("top up " + nearestDistance);
+                                Debug.Log("swap" + nearestDistance);
                             }
-                            else
-                            {
-                                isStacking = true;
-                                isKeepHolding = false;
-                                nearestDistance = compareDistance;
-                                nearestInventorySlot = slot;
-                                stackingItem = slot.GetHeldItem();
-                                Debug.Log("merge " + nearestDistance);
-                            }
-                            
                         }
-                        else if (slot.GetHeldItem().stackAmount < slot.GetHeldItem().stackLimit && stackAmount == stackLimit)
-                        {
-                            //if the item we are holding is full and we are wanting to merge into a not full item,
-                            //swap the values
-
-
-                            isStacking = false;
-                            isKeepHolding = true;
-                            stackingItem = slot.GetHeldItem();
-                            int tempHold = stackingItem.stackAmount;
-
-                            stackingItem.SetStackAmount(stackAmount);
-                            SetStackAmount(tempHold);
-
-                            stackingItem.UpdateStackText();
-                            UpdateStackText();
-
-                            Debug.Log("swap" + nearestDistance);
-                        }
-                            
                     }
-                    
                 }
             }
         }
 
         //Move
-        if (nearestDistance > 100f) //if the item is really far away from the inventory slot, probably dont do anything
-            return;
-        else
+        if (nearestDistance > 100f) //* ( itemHeight > itemWidth ? itemHeight : itemWidth)) //if the item is really far away from the inventory slot, probably dont do anything
         {
-            currentInventorySlot = nearestInventorySlot;
+            Debug.Log("Previous");
+            if (previousInventorySlot == null)
+                return;
+            currentInventorySlot = previousInventorySlot;
             transform.position = currentInventorySlot.transform.position;
             currentInventorySlot.currentHeldItem = this; //need to do more with this
             currentInventorySlot.SetHeldItem(this);
 
+            AddComponentSlots(inventorySlots);
+        }
+        else
+        {
+            Debug.Log("next");
+            currentInventorySlot = nearestInventorySlot;
+            if (currentInventorySlot != null)
+                previousInventorySlot = currentInventorySlot;
+            transform.position = currentInventorySlot.transform.position;
+            currentInventorySlot.currentHeldItem = this; //need to do more with this
+            currentInventorySlot.SetHeldItem(this);
+
+
+            AddComponentSlots(inventorySlots);
+
+
             if (isStacking)
             {
-                Debug.Log("au haifliausdkjfn");
+                //Debug.Log("au haifliausdkjfn");
                 stackingItem.IncreaseStackAmount(stackAmount);
                 stackingItem.UpdateStackText();
                 currentInventorySlot.SetHeldItem(stackingItem);
+
+                AddComponentSlots(inventorySlots);
+
                 Destroy(this.gameObject);
             }
             else if (isKeepHolding)
@@ -332,6 +406,22 @@ public class Item : MonoBehaviour, IPointerClickHandler
             }
         }
     }
+
+    public void AddComponentSlots(InventorySlot[] inventorySlots)
+    {
+        foreach (InventorySlot slot in inventorySlots)
+        {
+            if (slot.inventoryPosition.x >= currentInventorySlot.inventoryPosition.x && slot.inventoryPosition.x < currentInventorySlot.inventoryPosition.x + itemWidth)
+            {
+                if (slot.inventoryPosition.y >= currentInventorySlot.inventoryPosition.y && slot.inventoryPosition.y < currentInventorySlot.inventoryPosition.y + itemWidth)
+                {
+                    slot.SetHeldItem(this);
+                    componentSlots.Add(slot);
+                }
+            }
+        }
+    }
+
     #endregion
 
     #region _Stack_
@@ -359,26 +449,31 @@ public class Item : MonoBehaviour, IPointerClickHandler
 
     public void GenerateItem()
     {
+        Debug.Log("generate");
         for (int y = 0; y < itemHeight; y++)
         {
             for (int x = 0; x < itemWidth; x++)
             {
-                Vector3 positionRelativeToOrigin = this.transform.position + new Vector3(50 * y, 50 * x, transform.position.z);
-                GameObject itemComponentGameObject = Instantiate(this.gameObject, positionRelativeToOrigin, transform.rotation, transform);
-                Item itemComponentItem = itemComponentGameObject.GetComponent<Item>();
-                itemComponentItem.unitIsOrigin = false;
+                if (!(y == 0 && x == 0))
+                {
+                    Vector3 positionRelativeToOrigin = this.transform.position + new Vector3(componentDistance * x, componentDistance * -y, transform.position.z);
+                    GameObject generatedItemGameObject = Instantiate(singleComponent.gameObject, positionRelativeToOrigin, transform.rotation, transform);
+                    ItemComponent generatedItemComponent = generatedItemGameObject.GetComponent<ItemComponent>();
+                    generatedItemComponent.originalItem = this;
+                    generatedItemComponent.SetImage();
+                    itemComponents.Add(generatedItemComponent);
+                }
             }
         }
     }
 
     public void ItemComponentSetSiblingLast()
     {
-        Item origin = this;
-        foreach (Item component in itemComponents)
+        foreach (ItemComponent component in itemComponents)
         {
             component.transform.SetAsLastSibling();
         }
-        origin.transform.SetAsLastSibling();
+        this.transform.SetAsLastSibling();
     }
 
 
@@ -389,10 +484,13 @@ public class Item : MonoBehaviour, IPointerClickHandler
     private void Awake()
     {
         this.gameObject.name = itemName.ToString();
+        currentInventory = FindAnyObjectByType<Inventory>();
         parent = GetComponentInParent<Canvas>().gameObject; //huh i
+        img = GetComponent<Image>();
         stackAmount = 1;
         SetStackLimit(5);
         UpdateStackText();
+        GenerateItem();
     }
 
 
