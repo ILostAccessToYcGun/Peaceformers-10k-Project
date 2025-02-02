@@ -4,7 +4,8 @@ using UnityEngine;
 public class StationaryEnemy : MonoBehaviour
 {
     [SerializeField] private Transform modelTransform;
-    [SerializeField] private Transform shootingPoint;
+    [SerializeField] private Transform[] shootingPoints;
+    [SerializeField] private GameObject bulletPrefab;
     [Space]
     [Header("Detection")]
     [SerializeField] private Transform target;
@@ -15,12 +16,17 @@ public class StationaryEnemy : MonoBehaviour
     [SerializeField] private int maxAmmo = 25;
     [SerializeField] private int currentAmmo;
     [SerializeField] private int baseDmg = 8;
+    [SerializeField] private float bulletForce = 50f;
     [SerializeField] private float timeBetweenShots = 0.04f;
     [SerializeField] private float reloadTime = 5f;
     private bool isFiring;
     private bool isReloading;
 
     private bool _requestedShoot;
+
+    private Coroutine firingCoroutine;
+
+    [SerializeField] private bool alive = true;
 
     void Start()
     {
@@ -29,7 +35,12 @@ public class StationaryEnemy : MonoBehaviour
 
     void Update()
     {
-        DetectPlayer();
+        if(alive)
+            DetectPlayer();
+        else
+        {
+            print(transform.name + ": im dead!!");
+        }
     }
 
     void DetectPlayer()
@@ -43,13 +54,13 @@ public class StationaryEnemy : MonoBehaviour
                     target.position.z), out hitInfo))
             {
 
-                if (hitInfo.transform == target) 
+                if (hitInfo.transform == target)
                 {
                     //requesting fire
                     if (!isFiring && !isReloading)
                     {
                         _requestedShoot = true;
-                        StartCoroutine(ContinuousFire());
+                        firingCoroutine = StartCoroutine(ContinuousFire());
                     }
                     Vector3 targetPoint = target.position;
                     Vector3 direction = (targetPoint - modelTransform.position).normalized;
@@ -61,6 +72,14 @@ public class StationaryEnemy : MonoBehaviour
                         modelTransform.rotation = Quaternion.Lerp(modelTransform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
                     }
                 }
+            }
+        }
+        else
+        {
+            if (firingCoroutine != null)
+            {
+                isFiring = false;
+                StopCoroutine(firingCoroutine);
             }
         }
     }
@@ -99,30 +118,14 @@ public class StationaryEnemy : MonoBehaviour
 
     private void FireBullet()
     {
-        if (target == null) return;
-
-        Healthbar hp = target.GetComponentInChildren<Healthbar>();
-        if (hp != null)
+        foreach (Transform barrel in shootingPoints)
         {
-            hp.LoseHealth(baseDmg);
+            GameObject b = Instantiate(bulletPrefab, barrel.position, barrel.rotation);
+            b.GetComponent<Rigidbody>().linearVelocity = modelTransform.forward * bulletForce;
+            b.GetComponent<Bullet>().baseDmg = baseDmg;
+
+            Destroy(b, 4f);
         }
-    }
-
-
-    Healthbar FindHealthbarInChildren(Transform parent)
-    {
-        foreach (Transform child in parent)
-        {
-            Healthbar health = child.GetComponent<Healthbar>();
-            if (health != null)
-                return health;
-
-            health = FindHealthbarInChildren(child);
-            if (health != null)
-                return health;
-        }
-
-        return null;
     }
 
     IEnumerator Reload()

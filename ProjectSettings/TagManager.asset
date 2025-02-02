@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Target
   - Settlement
+  - Bullet
   layers:
   - Default
   - TransparentFX
@@ -13,13 +14,13 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Minimap
+  - Player
+  - Environment
+  - Settlement
+  - Enemies
+  - Bullet
+  - Interactables
   - 
   - 
   - 
