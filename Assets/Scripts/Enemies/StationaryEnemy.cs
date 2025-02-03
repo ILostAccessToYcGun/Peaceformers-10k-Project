@@ -5,7 +5,8 @@ public class StationaryEnemy : MonoBehaviour
 {
     [SerializeField] private Transform modelTransform;
     [SerializeField] private Transform[] shootingPoints;
-    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private Material bulletTrailMaterial;
+    [SerializeField] private GameObject muzzleFlash;
     [Space]
     [Header("Detection")]
     [SerializeField] private Transform target;
@@ -16,7 +17,6 @@ public class StationaryEnemy : MonoBehaviour
     [SerializeField] private int maxAmmo = 25;
     [SerializeField] private int currentAmmo;
     [SerializeField] private int baseDmg = 8;
-    [SerializeField] private float bulletForce = 50f;
     [SerializeField] private float timeBetweenShots = 0.04f;
     [SerializeField] private float reloadTime = 5f;
     [SerializeField] private float bulletSpread = 3f;
@@ -92,10 +92,6 @@ public class StationaryEnemy : MonoBehaviour
         {
             if (currentAmmo > 0)
             {
-                //GameObject m = Instantiate(muzzleFlash, muzzlePoint.position, muzzlePoint.rotation);
-                //m.transform.parent = muzzlePoint;
-                //Destroy(m, 0.05f);
-
                 FireBullet();
                 currentAmmo--;
             }
@@ -119,23 +115,55 @@ public class StationaryEnemy : MonoBehaviour
     {
         foreach (Transform barrel in shootingPoints)
         {
-            GameObject b = Instantiate(bulletPrefab, barrel.position, barrel.rotation);
-
             Vector3 spread = new Vector3(
                 Random.Range(-bulletSpread, bulletSpread),
                 Random.Range(-bulletSpread, bulletSpread),
-                Random.Range(-bulletSpread, bulletSpread)
+                0f
             );
 
-            Vector3 randomizedDirection = (barrel.forward + spread).normalized;
+            Vector3 shootDirection = barrel.right + spread;
+            RaycastHit hit;
 
-            b.GetComponent<Rigidbody>().linearVelocity = randomizedDirection * bulletForce;
+            GameObject m = Instantiate(muzzleFlash, barrel.position, barrel.rotation);
+            m.transform.parent = barrel;
+            Destroy(m, 0.05f);
 
-            b.GetComponent<Bullet>().baseDmg = baseDmg;
+            if (Physics.Raycast(barrel.position, shootDirection, out hit, detectionRange))
+            {
+                Healthbar hp = hit.collider.GetComponentInChildren<Healthbar>();
+                if (hp != null)
+                {
+                    hp.LoseHealth(baseDmg);
+                }
+            }
 
+            GameObject line = new GameObject("BulletTrail");
+            LineRenderer lr = line.AddComponent<LineRenderer>();
+            lr.startWidth = 0.05f;
+            lr.endWidth = 0.05f;
+            lr.positionCount = 2;
+            lr.SetPosition(0, barrel.position);
+            lr.SetPosition(1, hit.point);
+            lr.material = bulletTrailMaterial; 
 
-            Destroy(b, 8);
+            Destroy(line, 0.02f);
         }
+    }
+
+    Healthbar FindHealthbarInChildren(Transform parent)
+    {
+        foreach (Transform child in parent)
+        {
+            Healthbar health = child.GetComponent<Healthbar>();
+            if (health != null)
+                return health;
+
+            health = FindHealthbarInChildren(child);
+            if (health != null)
+                return health;
+        }
+
+        return null;
     }
 
     IEnumerator Reload()

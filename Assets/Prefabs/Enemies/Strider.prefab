@@ -263,14 +263,14 @@ MonoBehaviour:
   shootingPoints:
   - {fileID: 284180439129356348}
   - {fileID: 498464010171434009}
-  bulletPrefab: {fileID: 2479250265035516339, guid: 00bdfcdffff991b419d31bb41388b104, type: 3}
+  bulletTrailMaterial: {fileID: 2100000, guid: 00e59bddd4cf1eb409be6f48b2ba4233, type: 2}
+  muzzleFlash: {fileID: 0}
   target: {fileID: 0}
   detectionRange: 20
   rotationSpeed: 8
   maxAmmo: 15
   currentAmmo: 0
   baseDmg: 5
-  bulletForce: 150
   timeBetweenShots: 0.4
   reloadTime: 2.5
   bulletSpread: 0.01
@@ -306,6 +306,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2893625557634845151}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!1 &9082035767698303248
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6762195452503149743}
+  m_Layer: 10
+  m_Name: MuzzlePoint1
+  m_TagString: Untagged
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6762195452503149743
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9082035767698303248}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0.45, z: 2.146}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2893625557634845151}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1001 &2060499082442629772
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -494,6 +525,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2c261c96b6739e54aa22b141a2aa472c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 284180439129356348}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2c261c96b6739e54aa22b141a2aa472c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6762195452503149743}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2c261c96b6739e54aa22b141a2aa472c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 498464010171434009}

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 69ed690a112ab9f4e8a4cdcdff2c570e
+guid: 2580b1fe15543884aaf8621b6080330a
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 0
@@ -11,5 +11,5 @@ AssetOrigin:
   productId: 56572
   packageName: Toon Muzzleflash Pack
   packageVersion: 1.0
-  assetPath: Assets/Packages/Toon Muzzleflash Pack/Components/Material/Sprites Material.mat
+  assetPath: Assets/Toon Muzzleflash Pack/Example Prefabs/Toon Muzzleflash 13.prefab
   uploadId: 103973

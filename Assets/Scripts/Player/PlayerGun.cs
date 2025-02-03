@@ -18,6 +18,7 @@ public class PlayerGun : MonoBehaviour
     [Space]
     [Header("Shooting")]
     [SerializeField] private Transform shootingPoint;
+    [SerializeField] private Material bulletTrailMaterial;
     [Space]
     [Header("Current Weapon")]
     [SerializeField] private int maxAmmo = 100;
@@ -87,6 +88,11 @@ public class PlayerGun : MonoBehaviour
         {
             StartCoroutine(ContinuousFire());
         }
+        
+        if(_requestedShoot && !isReloading && currentAmmo == 0)
+        {
+            StartCoroutine(Reload());
+        }
 
         if (_requestedReload && !isReloading)
         {
@@ -122,15 +128,47 @@ public class PlayerGun : MonoBehaviour
 
     private void FireBullet()
     {
-        if (currentTarget == null) return;
+        Vector3 direction;
 
-        Healthbar hp = currentTarget.GetComponentInChildren<Healthbar>();
-        if (hp != null)
+        if (currentTarget != null)
         {
-            hp.LoseHealth(baseDmg);
+            direction = (currentTarget.transform.position - shootingPoint.position).normalized;
+        }
+        else
+        {
+            direction = shootingPoint.forward;
+        }
+
+        RaycastHit hit;
+        if (Physics.Raycast(shootingPoint.position, direction, out hit, Mathf.Infinity))
+        {
+            Healthbar hp = hit.collider.GetComponentInChildren<Healthbar>();
+            if (hp != null)
+            {
+                hp.LoseHealth(baseDmg);
+            }
+
+            CreateBulletTrail(hit.point);
+        }
+        else
+        {
+            CreateBulletTrail(muzzlePoint.position + direction * range); 
         }
     }
 
+    private void CreateBulletTrail(Vector3 endPosition)
+    {
+        GameObject line = new GameObject("BulletTrail");
+        LineRenderer lr = line.AddComponent<LineRenderer>();
+        lr.startWidth = 0.05f;
+        lr.endWidth = 0.05f;
+        lr.positionCount = 2;
+        lr.SetPosition(0, muzzlePoint.position);
+        lr.SetPosition(1, endPosition);
+        lr.material = bulletTrailMaterial;
+
+        Destroy(line, 0.02f);
+    }
 
     Healthbar FindHealthbarInChildren(Transform parent)
     {

@@ -5,7 +5,7 @@ AssetOrigin:
   productId: 56572
   packageName: Toon Muzzleflash Pack
   packageVersion: 1.0
-  assetPath: Assets/Toon Muzzleflash Pack/Components/Spritesheets/Side/toon_muzzleflash_side_spritesheet_1.png
+  assetPath: Assets/Packages/Toon Muzzleflash Pack/Components/Spritesheets/Side/toon_muzzleflash_side_spritesheet_1.png
   uploadId: 103973
 TextureImporter:
   internalIDToNameTable:
