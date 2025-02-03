@@ -12,12 +12,12 @@ public class InventorySlot : MonoBehaviour
     public void SetHeldItem(Item item)
     {
         currentHeldItem = item;
-        parentInventory.inventory[(int)inventoryPosition.x][(int)inventoryPosition.y].SetHeldItem(item);
+        //parentInventory.inventory[(int)inventoryPosition.x][(int)inventoryPosition.y].SetHeldItem(item);
     }
     public void ClearHeldItem()
     {
         currentHeldItem = null;
-        parentInventory.inventory[(int)inventoryPosition.x][(int)inventoryPosition.y] = null ;
+        //parentInventory.inventory[(int)inventoryPosition.x][(int)inventoryPosition.y] = null ;
     }
 
 

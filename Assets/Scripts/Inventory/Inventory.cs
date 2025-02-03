@@ -66,14 +66,16 @@ public class Inventory : MonoBehaviour
         #region _Displaying_Inventory_Slots_
 
         //InventorySlot setupSlot = inventorySlot.GetComponent<InventorySlot>();
+        int tempHeight = inventory.Capacity;
+        int tempWidth = inventory[0].Capacity;
 
-        for (int y = 0; y < inventory.Capacity; y++)
+        for (int y = 0; y < tempHeight; y++)
         {
 
             //List<InventorySlot> Row = new List<InventorySlot>();
             //emptyInventory.Add(Row);
 
-            for (int x = 0; x < inventory[0].Capacity; x++)
+            for (int x = 0; x < tempWidth; x++) //Infinite LOOP!!!!
             {
                 Vector3 slotLocation = inventoryPanel.transform.position + new Vector3(-350 + cellDistance * x, 350 - cellDistance * y, inventoryPanel.transform.position.z);
                 //Instantiate(inventorySlot, slotLocation, inventoryPanel.transform.rotation, inventoryPanel.transform);
