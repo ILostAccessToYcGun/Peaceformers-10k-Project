@@ -148,6 +148,9 @@ public class PlayerGun : MonoBehaviour
                 hp.LoseHealth(baseDmg);
             }
 
+            //GameObject h = Instantiate(hitVfx, hit.transform.position, Quaternion.LookRotation(hit.normal));
+            //Destroy(h, 0.1f);
+
             CreateBulletTrail(hit.point);
         }
         else

@@ -262,9 +262,8 @@ MonoBehaviour:
   modelTransform: {fileID: 2893625557634845151}
   shootingPoints:
   - {fileID: 284180439129356348}
-  - {fileID: 498464010171434009}
   bulletTrailMaterial: {fileID: 2100000, guid: 00e59bddd4cf1eb409be6f48b2ba4233, type: 2}
-  muzzleFlash: {fileID: 0}
+  muzzleFlash: {fileID: 100008, guid: c460780050234874594e9f7a0f7decc6, type: 3}
   target: {fileID: 0}
   detectionRange: 20
   rotationSpeed: 8
