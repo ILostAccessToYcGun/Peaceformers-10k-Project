@@ -3739,7 +3739,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bd74a91c38bea0447a9317a1f7a9a7a9, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2
+      value: 1.45
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bd74a91c38bea0447a9317a1f7a9a7a9, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3777,6 +3777,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7635826562936255635, guid: bd74a91c38bea0447a9317a1f7a9a7a9, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 8660dcb418200644090b5ba715460fcb, type: 2}
     - target: {fileID: -975681301680285126, guid: bd74a91c38bea0447a9317a1f7a9a7a9, type: 3}
       propertyPath: m_Layer
       value: 7
@@ -4125,8 +4129,12 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2893625557634845151, guid: e51862f1ebc1433419a66684493cc6f9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2893625557634845151, guid: e51862f1ebc1433419a66684493cc6f9, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.86
+      value: 0.778
       objectReference: {fileID: 0}
     - target: {fileID: 2893625557634845151, guid: e51862f1ebc1433419a66684493cc6f9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -4179,7 +4187,7 @@ PrefabInstance:
     - target: {fileID: 4155301088064251225, guid: e51862f1ebc1433419a66684493cc6f9, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: ed9305647a2902e4fb8b12a3052a0f9a, type: 2}
+      objectReference: {fileID: 2100000, guid: 58d5399a25b7f6541bd254a0b3edb8c6, type: 2}
     - target: {fileID: 4520254786425622055, guid: e51862f1ebc1433419a66684493cc6f9, type: 3}
       propertyPath: m_Radius
       value: 3.98
@@ -4200,6 +4208,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5214432937269846333, guid: e51862f1ebc1433419a66684493cc6f9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.082
+      objectReference: {fileID: 0}
     - target: {fileID: 5567472437346848133, guid: e51862f1ebc1433419a66684493cc6f9, type: 3}
       propertyPath: target
       value: 
@@ -4211,7 +4223,7 @@ PrefabInstance:
     - target: {fileID: 6476108570778455483, guid: e51862f1ebc1433419a66684493cc6f9, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: ed9305647a2902e4fb8b12a3052a0f9a, type: 2}
+      objectReference: {fileID: 2100000, guid: 58d5399a25b7f6541bd254a0b3edb8c6, type: 2}
     - target: {fileID: 7481421481066168301, guid: e51862f1ebc1433419a66684493cc6f9, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0.43
@@ -4254,7 +4266,7 @@ PrefabInstance:
     - target: {fileID: 879833992734772369, guid: be1be77bab19fdb41bd17ae7a3635930, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: ed9305647a2902e4fb8b12a3052a0f9a, type: 2}
+      objectReference: {fileID: 2100000, guid: 36fa06f9aafaf5b4f82406db51d86d20, type: 2}
     - target: {fileID: 919204709522792817, guid: be1be77bab19fdb41bd17ae7a3635930, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.7071068
@@ -4274,7 +4286,7 @@ PrefabInstance:
     - target: {fileID: 2612594743674332254, guid: be1be77bab19fdb41bd17ae7a3635930, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: ed9305647a2902e4fb8b12a3052a0f9a, type: 2}
+      objectReference: {fileID: 2100000, guid: 36fa06f9aafaf5b4f82406db51d86d20, type: 2}
     - target: {fileID: 4375174454121215537, guid: be1be77bab19fdb41bd17ae7a3635930, type: 3}
       propertyPath: m_Name
       value: Stationary Turret
