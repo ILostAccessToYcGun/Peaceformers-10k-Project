@@ -15,7 +15,7 @@ public class Inventory : MonoBehaviour
     public GameObject inventorySlot;
     public Item SetupItem;
 
-    public List<List<Item>> inventory = new List<List<Item>>(); //lists because later we will change the size
+    public List<List<InventorySlot>> inventory = new List<List<InventorySlot>>(); //lists because later we will change the size
     //public List<List<InventorySlot>> emptyInventory = new List<List<InventorySlot>>(); //lists because later we will change the size
 
     public void ShowInventory()
@@ -47,7 +47,7 @@ public class Inventory : MonoBehaviour
         //}
         //inventory.Remove(temp);
 
-        List<Item> baseHeight = new List<Item>();
+        List<InventorySlot> baseHeight = new List<InventorySlot>();
         for (int j = 0; j < inventory.Capacity; j++)
         {
             inventory.Add(baseHeight);
@@ -79,7 +79,9 @@ public class Inventory : MonoBehaviour
                 //Instantiate(inventorySlot, slotLocation, inventoryPanel.transform.rotation, inventoryPanel.transform);
                 GameObject inventorySlotGameObject = Instantiate(inventorySlot, slotLocation, inventoryPanel.transform.rotation, inventoryPanel.transform);
                 InventorySlot invSlot = inventorySlotGameObject.GetComponent<InventorySlot>();
+
                 invSlot.inventoryPosition = new Vector2(x, y);
+                inventory[y].Add(invSlot);
                 //emptyInventory[y].Add(invSlot);
             }
             
