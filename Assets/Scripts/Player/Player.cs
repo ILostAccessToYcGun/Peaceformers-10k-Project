@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     [SerializeField] private CameraLean cameraLean;
     [Space]
     [SerializeField] private PlayerUIToggler playerUIToggler;
+    [SerializeField] private InteractionPrompt interactionPrompt;
 
     private PlayerActionInputs _inputActions;
 
@@ -65,6 +66,7 @@ public class Player : MonoBehaviour
         {
             playerUIToggler.ToggleSettlementUI();
         }
+        interactionPrompt.SetHold(input.Interact.IsPressed());
     }
 
     void LateUpdate()

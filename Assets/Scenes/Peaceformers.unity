@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 10167182}
   - component: {fileID: 10167181}
   - component: {fileID: 10167185}
+  - component: {fileID: 10167186}
   m_Layer: 5
   m_Name: MainScreenCanvas
   m_TagString: Untagged
@@ -241,6 +242,22 @@ MonoBehaviour:
   hiddenPos: {x: -586, y: 0, z: 0}
   timeToMove: 0.4
   settlementIsShowing: 0
+--- !u!114 &10167186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 10167180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e53a41873f06ef24a84ff2e9b543aa9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionPrompt: {fileID: 1073753346}
+  interactionFill: {fileID: 1033231132}
+  holdTimeRequired: 0
+  holdingInteract: 0
 --- !u!1 &50008468
 GameObject:
   m_ObjectHideFlags: 0
@@ -1595,6 +1612,7 @@ GameObject:
   - component: {fileID: 798244625}
   - component: {fileID: 798244624}
   - component: {fileID: 798244623}
+  - component: {fileID: 798244627}
   m_Layer: 0
   m_Name: Camp
   m_TagString: Camp
@@ -1691,6 +1709,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 929659744}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &798244627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 798244622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aee5b7a725228134697eb71c5505cc9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1678360443}
+  playerDetectionRange: 5
+  interactionPrompt: {fileID: 0}
 --- !u!4 &799694160 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3357661947424527134, guid: e51862f1ebc1433419a66684493cc6f9, type: 3}
@@ -2568,6 +2601,7 @@ MonoBehaviour:
   cameraSpring: {fileID: 985516352}
   cameraLean: {fileID: 1297807822}
   playerUIToggler: {fileID: 10167185}
+  interactionPrompt: {fileID: 10167186}
 --- !u!4 &1001539035
 Transform:
   m_ObjectHideFlags: 0
@@ -2851,7 +2885,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 55.2, y: 11.8}
+  m_AnchoredPosition: {x: 84.7, y: 13.51}
   m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1093982058
