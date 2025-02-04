@@ -19,11 +19,13 @@ public class PlayerGun : MonoBehaviour
     [Header("Shooting")]
     [SerializeField] private Transform shootingPoint;
     [SerializeField] private Material bulletTrailMaterial;
+    [SerializeField] private GameObject bulletPrefab;
     [Space]
     [Header("Current Weapon")]
     [SerializeField] private int maxAmmo = 100;
     [SerializeField] private int currentAmmo;
     [SerializeField] private int baseDmg = 8;
+    [SerializeField] private float bulletForce = 60f;
     [SerializeField] private float range = 100f;
     [SerializeField] private float timeBetweenShots = 0.04f;
     [SerializeField] private float reloadTime = 1.5f;
@@ -139,28 +141,35 @@ public class PlayerGun : MonoBehaviour
             direction = shootingPoint.forward;
         }
 
+        GameObject b = Instantiate(bulletPrefab, muzzlePoint.position, Quaternion.LookRotation(direction));
+        b.GetComponent<Rigidbody>().linearVelocity = direction * bulletForce;
+        b.GetComponent<Bullet>().baseDmg = baseDmg;
+
+        Destroy(b, 5f);
+
         RaycastHit hit;
         if (Physics.Raycast(shootingPoint.position, direction, out hit, Mathf.Infinity))
         {
-            Healthbar hp = hit.collider.GetComponentInChildren<Healthbar>();
-            if (hp != null)
-            {
-                hp.LoseHealth(baseDmg);
-            }
+            //Healthbar hp = hit.collider.GetComponentInChildren<Healthbar>();
+            //if (hp != null)
+            //{
+            //    hp.LoseHealth(baseDmg);
+            //}
 
             //GameObject h = Instantiate(hitVfx, hit.transform.position, Quaternion.LookRotation(hit.normal));
             //Destroy(h, 0.1f);
 
-            CreateBulletTrail(hit.point);
+            StartCoroutine(CreateBulletTrail(hit.point));
         }
         else
         {
-            CreateBulletTrail(muzzlePoint.position + direction * range); 
+            StartCoroutine(CreateBulletTrail(muzzlePoint.position + direction * range)); 
         }
     }
 
-    private void CreateBulletTrail(Vector3 endPosition)
+    IEnumerator CreateBulletTrail(Vector3 endPosition)
     {
+        yield return new WaitForSeconds(0.025f);
         GameObject line = new GameObject("BulletTrail");
         LineRenderer lr = line.AddComponent<LineRenderer>();
         lr.startWidth = 0.05f;
