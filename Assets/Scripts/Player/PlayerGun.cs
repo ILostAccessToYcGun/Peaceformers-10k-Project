@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public struct CombatInput
 {
@@ -36,6 +37,7 @@ public class PlayerGun : MonoBehaviour
     [SerializeField] private GameObject muzzleFlash;
     [SerializeField] private GameObject hitVfx;
     [SerializeField] private TextMeshProUGUI ammoText;
+    [SerializeField] private Image reloadCircle;
 
     private float currentReloadTime;
 
@@ -206,9 +208,23 @@ public class PlayerGun : MonoBehaviour
     {
         Debug.Log("Reloading...");
         isReloading = true;
-        yield return new WaitForSeconds(reloadTime);
+        ammoText.gameObject.SetActive(false);
+        reloadCircle.gameObject.SetActive(true);
+        reloadCircle.fillAmount = 0f;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < reloadTime)
+        {
+            elapsedTime += Time.deltaTime;
+            reloadCircle.fillAmount = elapsedTime / reloadTime; 
+            yield return null;
+        }
+
+        reloadCircle.fillAmount = 1f;
         currentAmmo = maxAmmo;
         isReloading = false;
+        reloadCircle.gameObject.SetActive(false);
+        ammoText.gameObject.SetActive(true);
         Debug.Log("Done Reloading.");
     }
 }
