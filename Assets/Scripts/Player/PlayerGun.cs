@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using TMPro;
 
 public struct CombatInput
 {
@@ -34,6 +35,7 @@ public class PlayerGun : MonoBehaviour
     [SerializeField] private Transform muzzlePoint;
     [SerializeField] private GameObject muzzleFlash;
     [SerializeField] private GameObject hitVfx;
+    [SerializeField] private TextMeshProUGUI ammoText;
 
     private float currentReloadTime;
 
@@ -100,6 +102,8 @@ public class PlayerGun : MonoBehaviour
         {
             StartCoroutine(Reload());
         }
+
+        ammoText.text = currentAmmo + "/" + maxAmmo;
     }
 
     IEnumerator ContinuousFire()
