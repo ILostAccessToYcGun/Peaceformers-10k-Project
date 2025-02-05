@@ -39,22 +39,6 @@ public class Item : MonoBehaviour, IPointerClickHandler
         if (pointerEventData.button == PointerEventData.InputButton.Left)
         {
             PickUpItemInInventory();
-            //if (!unitIsOrigin)
-            //{
-            //    Item origin = this;
-            //    foreach (Item component in itemComponents)
-            //    {
-            //        if (component.unitIsOrigin)
-            //        {
-            //            origin = component;
-            //        }
-            //    }
-            //    origin.PickUpItemInInventory();
-            //}
-            //else
-            //{
-
-            //}
         }
         if (pointerEventData.button == PointerEventData.InputButton.Right)
         {
@@ -63,7 +47,6 @@ public class Item : MonoBehaviour, IPointerClickHandler
                 if (itemIsPickedUpByMouse) //if we right click with item in hand DROP
                 {
                     DecreaseStackAmount(1);
-                    UpdateStackText();
                     GameObject dropped = Instantiate(this.gameObject, this.transform.position, this.transform.rotation, parent.transform);
                     dropped.transform.localScale = Vector3.one;
                     Item droppedItem = dropped.GetComponent<Item>();
@@ -91,75 +74,12 @@ public class Item : MonoBehaviour, IPointerClickHandler
                     droppedItem.SearchAndMoveToNearestInventorySlot();
 
                     this.ItemComponentSetSiblingLast();
-
-                    //Debug.Log("uhhhh");
                 }
             }
             else
             {
                 PickUpItemInInventory();
             }
-            //if (!unitIsOrigin)
-            //{
-            //    Item origin = this;
-            //    foreach (Item component in itemComponents)
-            //    {
-            //        if (component.unitIsOrigin)
-            //        {
-            //            origin = component;
-            //        }
-            //    }
-
-            //    if (stackAmount > 1)
-            //    {
-            //        if (itemIsPickedUpByMouse) //if we right click with item in hand
-            //        {
-            //            origin.DecreaseStackAmount(1);
-            //            origin.UpdateStackText();
-            //            GameObject dropped = Instantiate(origin.gameObject, origin.transform.position, origin.transform.rotation, parent.transform);
-            //            dropped.transform.localScale = Vector3.one;
-            //            Item droppedItem = dropped.GetComponent<Item>();
-            //            droppedItem.SetStackAmount(1);
-            //            droppedItem.UpdateStackText();
-            //            if (droppedItem.SearchForNearestValidInventorySlot())
-            //                droppedItem.SearchAndMoveToNearestInventorySlot();
-            //            origin.ItemComponentSetSiblingLast();
-            //        }
-            //        else //if we right click without item in hand
-            //        {
-            //            int equalAmounts = stackAmount / 2;
-            //            if (stackAmount % 2 == 1) //Handles odd numbers
-            //                origin.SetStackAmount(equalAmounts + 1);
-            //            else
-            //                origin.SetStackAmount(equalAmounts);
-            //            origin.UpdateStackText();
-
-            //            origin.PickUpItemInInventory();
-
-            //            GameObject dropped = Instantiate(origin.gameObject, origin.transform.position, origin.transform.rotation, parent.transform);
-            //            dropped.transform.localScale = Vector3.one;
-            //            Item droppedItem = dropped.GetComponent<Item>();
-            //            droppedItem.SetStackAmount(equalAmounts);
-            //            droppedItem.UpdateStackText();
-            //            droppedItem.SearchAndMoveToNearestInventorySlot();
-
-            //            origin.ItemComponentSetSiblingLast();
-
-            //            Debug.Log("uhhhh");
-            //        }
-            //    }
-            //    else
-            //    {
-            //        origin.PickUpItemInInventory();
-            //    }
-            //}
-            //else
-            //{
-
-            //}
-
-
-
         }
     }
     public void PickUpItemInInventory()
@@ -181,18 +101,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
             if (currentInventorySlot != null)
             {
                 currentInventorySlot.ClearHeldItem();
-                //Debug.Log("Clear Item");
-                foreach (InventorySlot slot in componentSlots)
-                {
-                    if (slot.inventoryPosition.x >= currentInventorySlot.inventoryPosition.x && slot.inventoryPosition.x <= currentInventorySlot.inventoryPosition.x + itemWidth)
-                    {
-                        if (slot.inventoryPosition.y >= currentInventorySlot.inventoryPosition.y && slot.inventoryPosition.y <= currentInventorySlot.inventoryPosition.y + itemWidth)
-                        {
-                            slot.ClearHeldItem();
-                        }
-                    }
-                }
-                componentSlots.Clear();
+                ClearComponentSlots();
             }
         }
         else
@@ -259,8 +168,6 @@ public class Item : MonoBehaviour, IPointerClickHandler
                 compareDistance = (slot.transform.position - this.transform.position).magnitude;
                 if (compareDistance < nearestDistance)
                 {
-
-
                     bool itemDoesFitInsideInventoryFrame = true; //check if the item size will fit in that spot
 
                     if (slotPosition.x + itemWidth > currentInventory.inventoryWidth)
@@ -285,37 +192,22 @@ public class Item : MonoBehaviour, IPointerClickHandler
                                 Item currentItem = currentInventory.inventory[h][w].GetHeldItem();
                                 if (currentItem != null) //if there is something inside the checking cells
                                 {
-
-
                                     if (w == (int)slotPosition.x && h == (int)slotPosition.y)
                                     //if (h == (int)startPos.y)
                                     {
-
                                         if (currentItem.itemName == this.itemName && currentItem.stackAmount < currentItem.stackLimit) //hmmm will need some work
                                         {
-                                            Debug.Log("h: " + h + " | w: " + w);
-                                            Debug.Log("item name in top left cell" + currentInventory.inventory[h][w]);
                                             firstCellisLikeItem = true;
                                         }
                                     }
                                     else
                                     {
-                                        Debug.Log("item Collision");
                                         itemDoesNotCollideWithOtherItems = false;
                                     }
                                 }
-
                             }
-                            
                         }
                     }
-
-                    //for (int w = (int)startPos.x; w < (int)startPos.x + itemWidth; w++)
-                    //{
-                      
-                     
-                    //}
-
 
 
                     if (itemDoesFitInsideInventoryFrame && (itemDoesNotCollideWithOtherItems || firstCellisLikeItem))
@@ -411,12 +303,8 @@ public class Item : MonoBehaviour, IPointerClickHandler
 
             if (isStacking)
             {
-                //Debug.Log("au haifliausdkjfn");
                 stackingItem.IncreaseStackAmount(stackAmount);
-                stackingItem.UpdateStackText();
                 stackingItem.currentInventorySlot.SetHeldItem(stackingItem);
-
-                //stackingItem.AddComponentSlots(inventorySlots);
 
                 Destroy(this.gameObject);
             }
@@ -443,6 +331,21 @@ public class Item : MonoBehaviour, IPointerClickHandler
         }
     }
 
+    public void ClearComponentSlots()
+    {
+        foreach (InventorySlot slot in componentSlots)
+        {
+            if (slot.inventoryPosition.x >= currentInventorySlot.inventoryPosition.x && slot.inventoryPosition.x <= currentInventorySlot.inventoryPosition.x + itemWidth)
+            {
+                if (slot.inventoryPosition.y >= currentInventorySlot.inventoryPosition.y && slot.inventoryPosition.y <= currentInventorySlot.inventoryPosition.y + itemWidth)
+                {
+                    slot.ClearHeldItem();
+                }
+            }
+        }
+        componentSlots.Clear();
+    }
+
     #endregion
 
     #region _Stack_
@@ -451,10 +354,29 @@ public class Item : MonoBehaviour, IPointerClickHandler
     public int stackLimit = 5;
     public TextMeshProUGUI stackText;
 
-    public void SetStackLimit(int newLimit) { stackLimit = newLimit; }
-    public void IncreaseStackAmount(int increase) { stackAmount += increase; }
-    public void DecreaseStackAmount(int decrease) { stackAmount -= decrease; }
-    public void SetStackAmount(int amount) { stackAmount = amount; }
+    public void SetStackLimit(int newLimit) { stackLimit = newLimit; UpdateStackText(); }
+    public void IncreaseStackAmount(int increase) 
+    { 
+        if (stackAmount + increase <= stackLimit)
+        {
+            stackAmount += increase;
+            UpdateStackText();
+        }
+            
+    }
+    public void DecreaseStackAmount(int decrease) 
+    {
+        stackAmount -= decrease;
+        UpdateStackText();
+        if (stackAmount < 0)
+        {
+            currentInventorySlot.ClearHeldItem();
+            ClearComponentSlots();
+            Destroy(this.gameObject);
+        }
+            
+    }
+    public void SetStackAmount(int amount) { stackAmount = amount; UpdateStackText(); }
     public void UpdateStackText()
     {
         stackText.text = stackAmount.ToString();
@@ -500,7 +422,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
 
     #endregion
 
-    //TODO: Add item decrease / item increase methods (maybe in the stack)
+
 
     private void Awake()
     {
@@ -510,8 +432,8 @@ public class Item : MonoBehaviour, IPointerClickHandler
         img = GetComponent<Image>();
         stackAmount = 1;
         SetStackLimit(5);
-        UpdateStackText();
-        GenerateItem();
+        if (itemComponents.Count < (itemWidth * itemHeight) - 1)
+            GenerateItem();
     }
 
 

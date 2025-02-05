@@ -27,10 +27,11 @@ public class Inventory : MonoBehaviour
         inventoryPanel.gameObject.SetActive(false);
     }
 
-    public void SetInventory()
+    public void SetInventory(InventorySlot[] cells)
     {
-        InventorySlot[] cells = FindObjectsByType<InventorySlot>(FindObjectsSortMode.None);
-
+        if (cells == null)
+            cells = FindObjectsByType<InventorySlot>(FindObjectsSortMode.None);
+            
         foreach (InventorySlot cell in cells)
         {
             inventory[(int)cell.inventoryPosition.y][(int)cell.inventoryPosition.x] = cell;
@@ -86,18 +87,84 @@ public class Inventory : MonoBehaviour
         #endregion
     }
 
+  
+
+    public void DecreaseItemStackAmount(InventorySlot itemToDecrease, int amount)
+    {
+        itemToDecrease.GetHeldItem().DecreaseStackAmount(amount);
+    }
+    public void IncreaseItemStackAmount(InventorySlot itemToIncrease, int amount)
+    {
+        itemToIncrease.GetHeldItem().IncreaseStackAmount(amount);
+    }
+
     public InventorySlot FindTopSlotWithItem(Item itemToFind)
     {
         for (int j = 0; j < inventory.Capacity; j++)
         {
             for (int i = 0; i < inventory[j].Capacity; i++)
             {
-                if (inventory[j][i].GetHeldItem() == itemToFind)
-                    return inventory[j][i];
+                InventorySlot slot = inventory[j][i];
+                if (slot.GetHeldItem() == itemToFind)
+                    return slot;
             }
         }
 
-        return new InventorySlot();
+        return null;
+    }
+    public InventorySlot FindPartialyFilledItemOrEmptySlot(Item itemToFind)
+    {
+        //finding partially filled, has prio over empty slot
+        for (int j = 0; j < inventory.Capacity; j++)
+        {
+            for (int i = 0; i < inventory[j].Capacity; i++)
+            {
+                InventorySlot slot = inventory[j][i];
+                if (slot.GetHeldItem() == itemToFind && slot.GetHeldItem().stackAmount < slot.GetHeldItem().stackLimit)
+                    return slot;
+            }
+        }
+
+        //finding empty slot
+
+        //looping through inventory
+        for (int j = 0; j < inventory.Capacity; j++)
+        {
+            for (int i = 0; i < inventory[j].Capacity; i++)
+            {
+                Item item = inventory[j][i].GetHeldItem();
+                bool isValidSpot = true;
+                //looping through item dimensions
+                for (int h = j; h < (j + item.itemHeight > inventory.Capacity ? inventory.Capacity : j + item.itemHeight); h++)
+                {
+                    for (int w = i; w < (i + item.itemWidth > inventory[j].Capacity ? inventory[j].Capacity : i + item.itemWidth); w++)
+                    {
+                        Item itemComponents = inventory[h][w].GetHeldItem();
+                        //if there is something inside the cell, then it collides with the item if it were to be placed there
+                        //so its not a valid spot
+                        if (itemComponents != null) 
+                        {
+                            isValidSpot = false;
+                        }
+                    }
+                }
+                if (isValidSpot)
+                    return inventory[j][i]; 
+            }
+        }
+
+        return null;
+    }
+
+    public void AddItemToInventory(Item itemToFind, int amount)
+    {
+        InventorySlot findSlot = FindPartialyFilledItemOrEmptySlot(itemToFind);
+        if (findSlot != null) { IncreaseItemStackAmount(findSlot, amount); }
+    }
+    public void RemoveItemFromInventory(Item itemToFind, int amount)
+    {
+        InventorySlot findSlot = FindTopSlotWithItem(itemToFind);
+        if (findSlot != null) { DecreaseItemStackAmount(findSlot, amount); }
     }
 
     private void Update()
@@ -118,7 +185,7 @@ public class Inventory : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E) && inventoryPanel.gameObject.activeSelf)
         {
             GenerateInventory(inventoryWidth, inventoryHeight);
-            SetInventory();
+            SetInventory(null);
         }
     }
 }
