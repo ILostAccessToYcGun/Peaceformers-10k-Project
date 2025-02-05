@@ -36,27 +36,11 @@ public class Inventory : MonoBehaviour
             inventory[(int)cell.inventoryPosition.y][(int)cell.inventoryPosition.x] = cell;
         }
     }
-
     public void GenerateInventory(int width, int height)
     {
         #region _List_Size_
         //look at milinote for a diagram of the lists
         inventory.Capacity = height;
-
-        ////Adding an Item, so the inner parts of the inventory can be reached
-
-        //List<Item> temp = new List<Item>();
-        //temp.Add(SetupItem);
-        //inventory.Add(temp);
-
-        //for (int i = 0; i < inventory.Count; i++)
-        //{
-            
-        //    Debug.Log(inventory[i].Capacity);
-        //}
-        //inventory.Remove(temp);
-
-        
         
         for (int j = 0; j < inventory.Capacity; j++)
         {
@@ -100,6 +84,20 @@ public class Inventory : MonoBehaviour
         }
         
         #endregion
+    }
+
+    public InventorySlot FindTopSlotWithItem(Item itemToFind)
+    {
+        for (int j = 0; j < inventory.Capacity; j++)
+        {
+            for (int i = 0; i < inventory[j].Capacity; i++)
+            {
+                if (inventory[j][i].GetHeldItem() == itemToFind)
+                    return inventory[j][i];
+            }
+        }
+
+        return new InventorySlot();
     }
 
     private void Update()

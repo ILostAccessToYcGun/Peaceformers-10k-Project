@@ -282,7 +282,8 @@ public class Item : MonoBehaviour, IPointerClickHandler
                         {
                             for (int w = (int)slotPosition.x; w < (int)slotPosition.x + itemWidth; w++)
                             {
-                                if (currentInventory.inventory[h][w].GetHeldItem() != null) //if there is something inside the checking cells
+                                Item currentItem = currentInventory.inventory[h][w].GetHeldItem();
+                                if (currentItem != null) //if there is something inside the checking cells
                                 {
 
 
@@ -290,7 +291,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
                                     //if (h == (int)startPos.y)
                                     {
 
-                                        if (currentInventory.inventory[h][w].GetHeldItem().itemName == this.itemName)
+                                        if (currentItem.itemName == this.itemName && currentItem.stackAmount < currentItem.stackLimit) //hmmm will need some work
                                         {
                                             Debug.Log("h: " + h + " | w: " + w);
                                             Debug.Log("item name in top left cell" + currentInventory.inventory[h][w]);
