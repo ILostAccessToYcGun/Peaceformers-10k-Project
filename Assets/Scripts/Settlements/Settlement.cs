@@ -23,6 +23,16 @@ public class Settlement : MonoBehaviour
     [SerializeField] private Color goodHealthColor;
     [SerializeField] private Color watchOutColor;
     [SerializeField] private Color criticalColor;
+    [Space]
+    [Header("Interaction")]
+    [SerializeField] private Transform player;
+    [SerializeField] private float playerDetectionRange;
+    [SerializeField] private InteractionPrompt interactionPrompt;
+    [Space]
+    [SerializeField] private GameObject interactionPromptImage;
+    [SerializeField] private Image interactionFill;
+    [SerializeField] private bool requestedInteract;
+    [SerializeField] private bool initializeAction;
 
     void Start()
     {
@@ -49,9 +59,25 @@ public class Settlement : MonoBehaviour
 
         currentUpkeep = Mathf.Clamp(currentUpkeep, 0, maxUpkeep);
         Upkeepbar();
+        Interaction();
     }
 
-    private void Upkeepbar()
+    void Interaction()
+    {
+        if (Vector3.Distance(transform.position, player.position) <= playerDetectionRange && !initializeAction)
+        {
+            requestedInteract = true;
+            interactionPrompt.RequestInteraction(1f, ref interactionPromptImage, ref interactionFill, () => GainMeter(20));
+        }
+        else if (Vector3.Distance(transform.position, player.position) <= playerDetectionRange && requestedInteract)
+        {
+            interactionPrompt.DisableInteraction();
+            requestedInteract = false;
+            initializeAction = false;
+        }
+    }
+
+    void Upkeepbar()
     {
         float barRatio = currentUpkeep / maxUpkeep;
 
@@ -75,14 +101,5 @@ public class Settlement : MonoBehaviour
     {
         currentUpkeep = Mathf.Clamp(currentUpkeep - value, 0, maxUpkeep);
         stationary = true;
-    }
-
-    //temp collection
-    void OnTriggerEnter(Collider col)
-    {
-        if(col.gameObject.CompareTag("Player"))
-        {
-            GainMeter(20);
-        }
     }
 }

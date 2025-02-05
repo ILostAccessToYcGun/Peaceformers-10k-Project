@@ -15,7 +15,7 @@ public class InteractionPrompt : MonoBehaviour
 
     void Start()
     {
-        DisableInteraction();
+        
     }
 
     void Update()
@@ -36,6 +36,7 @@ public class InteractionPrompt : MonoBehaviour
 
             if (currentHoldTime >= holdTimeRequired)
             {
+                print("Finished interaction");
                 interactDone?.Invoke();
                 DisableInteraction();
             }
@@ -47,8 +48,8 @@ public class InteractionPrompt : MonoBehaviour
         interactionRequested = true;
         holdTimeRequired = holdTime;
         interactionPrompt = interactionImg;
-        interactionPrompt.SetActive(true);
         interactionFill = interactionPromptFill;
+        interactionPrompt.SetActive(true);
         interactDone = interactionDone;
     }
 

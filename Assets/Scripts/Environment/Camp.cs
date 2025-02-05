@@ -10,6 +10,7 @@ public class Camp : MonoBehaviour
     [Space]
     [SerializeField] private GameObject interactionPromptImage;
     [SerializeField] private Image interactionFill;
+    [SerializeField] private bool requestedInteract;
     [SerializeField] private bool initializeAction;
 
     void Start()
@@ -21,17 +22,19 @@ public class Camp : MonoBehaviour
     {
         if (Vector3.Distance(transform.position, player.position) <= playerDetectionRange && !initializeAction)
         {
-            interactionPrompt.RequestInteraction(1f, ref interactionPromptImage, ref interactionFill, () => initializeAction = true);
+            requestedInteract = true;
+            interactionPrompt.RequestInteraction(1f, ref interactionPromptImage, ref interactionFill, () => OpenCampPrompt());
         }
-        else
+        else if (Vector3.Distance(transform.position, player.position) <= playerDetectionRange && requestedInteract)
         {
             interactionPrompt.DisableInteraction();
+            requestedInteract = false;
             initializeAction = false;
         }
+    }
 
-        if(initializeAction)
-        {
-            print("Open camp prompt");
-        }
+    void OpenCampPrompt()
+    {
+        print("Open camp prompt");
     }
 }
