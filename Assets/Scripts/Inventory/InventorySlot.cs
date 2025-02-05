@@ -8,6 +8,11 @@ public class InventorySlot : MonoBehaviour
     public Item currentHeldItem = null;
     public Vector2 inventoryPosition;
 
+    public void SetInventoryPosition(Vector2 pos)
+    {
+        inventoryPosition = pos;
+    }
+
     public Item GetHeldItem() { return currentHeldItem; }
     public void SetHeldItem(Item item)
     {

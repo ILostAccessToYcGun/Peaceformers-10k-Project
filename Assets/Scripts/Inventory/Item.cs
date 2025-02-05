@@ -282,7 +282,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
                         {
                             for (int w = (int)slotPosition.x; w < (int)slotPosition.x + itemWidth; w++)
                             {
-                                if (currentInventory.inventory[h][w] != null) //if there is something inside the checking cells
+                                if (currentInventory.inventory[h][w].GetHeldItem() != null) //if there is something inside the checking cells
                                 {
 
 
@@ -299,6 +299,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
                                     }
                                     else
                                     {
+                                        Debug.Log("item Collision");
                                         itemDoesNotCollideWithOtherItems = false;
                                     }
                                 }
@@ -435,7 +436,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
                 {
                     slot.SetHeldItem(this);
                     componentSlots.Add(slot);
-                    //Debug.Log("component slot added");
+                    Debug.Log("component slot added");
                 }
             }
         }

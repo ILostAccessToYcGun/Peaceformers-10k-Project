@@ -27,6 +27,15 @@ public class Inventory : MonoBehaviour
         inventoryPanel.gameObject.SetActive(false);
     }
 
+    public void SetInventory()
+    {
+        InventorySlot[] cells = FindObjectsByType<InventorySlot>(FindObjectsSortMode.None);
+
+        foreach (InventorySlot cell in cells)
+        {
+            inventory[(int)cell.inventoryPosition.y][(int)cell.inventoryPosition.x] = cell;
+        }
+    }
 
     public void GenerateInventory(int width, int height)
     {
@@ -47,16 +56,17 @@ public class Inventory : MonoBehaviour
         //}
         //inventory.Remove(temp);
 
-        List<InventorySlot> baseHeight = new List<InventorySlot>();
+        
+        
         for (int j = 0; j < inventory.Capacity; j++)
         {
-            inventory.Add(baseHeight);
+            inventory.Add(new List<InventorySlot>());
             inventory[j].Capacity = width;
-            inventory[j].Add(null);
-            //for (int i = 0; i < inventory[0].Capacity; i++)
-            //{
 
-            //}
+            for (int i = 0; i < inventory[0].Capacity; i++)
+            {
+                inventory[j].Add(null);
+            }
         }
 
 
@@ -82,8 +92,7 @@ public class Inventory : MonoBehaviour
                 GameObject inventorySlotGameObject = Instantiate(inventorySlot, slotLocation, inventoryPanel.transform.rotation, inventoryPanel.transform);
                 InventorySlot invSlot = inventorySlotGameObject.GetComponent<InventorySlot>();
 
-                invSlot.inventoryPosition = new Vector2(x, y);
-                inventory[y].Add(invSlot);
+                invSlot.SetInventoryPosition(new Vector2(x, y));
                 //emptyInventory[y].Add(invSlot);
             }
             
@@ -111,6 +120,7 @@ public class Inventory : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E) && inventoryPanel.gameObject.activeSelf)
         {
             GenerateInventory(inventoryWidth, inventoryHeight);
+            SetInventory();
         }
     }
 }
