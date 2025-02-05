@@ -69,7 +69,7 @@ public class Settlement : MonoBehaviour
             requestedInteract = true;
             interactionPrompt.RequestInteraction(1f, ref interactionPromptImage, ref interactionFill, () => GainMeter(20));
         }
-        else if (Vector3.Distance(transform.position, player.position) <= playerDetectionRange && requestedInteract)
+        else if (Vector3.Distance(transform.position, player.position) >= playerDetectionRange && requestedInteract)
         {
             interactionPrompt.DisableInteraction();
             requestedInteract = false;

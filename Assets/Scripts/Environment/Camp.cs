@@ -25,7 +25,7 @@ public class Camp : MonoBehaviour
             requestedInteract = true;
             interactionPrompt.RequestInteraction(1f, ref interactionPromptImage, ref interactionFill, () => OpenCampPrompt());
         }
-        else if (Vector3.Distance(transform.position, player.position) <= playerDetectionRange && requestedInteract)
+        else if (Vector3.Distance(transform.position, player.position) >= playerDetectionRange && requestedInteract)
         {
             interactionPrompt.DisableInteraction();
             requestedInteract = false;
