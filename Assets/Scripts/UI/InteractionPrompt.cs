@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class InteractionPrompt : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class InteractionPrompt : MonoBehaviour
     [Space]
     [SerializeField] private bool holdingInteract;
     private bool interactionRequested;
+    private Action interactDone;
 
     void Start()
     {
@@ -31,14 +33,23 @@ public class InteractionPrompt : MonoBehaviour
 
             float holdRatio = currentHoldTime / holdTimeRequired;
             interactionFill.fillAmount = holdRatio;
+
+            if (currentHoldTime >= holdTimeRequired)
+            {
+                interactDone?.Invoke();
+                DisableInteraction();
+            }
         }
     }
 
-    public void RequestInteraction(float holdTime)
+    public void RequestInteraction(float holdTime, ref GameObject interactionImg, ref Image interactionPromptFill, Action interactionDone)
     {
         interactionRequested = true;
         holdTimeRequired = holdTime;
+        interactionPrompt = interactionImg;
         interactionPrompt.SetActive(true);
+        interactionFill = interactionPromptFill;
+        interactDone = interactionDone;
     }
 
     public void DisableInteraction()
