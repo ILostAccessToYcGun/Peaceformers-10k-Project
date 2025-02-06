@@ -53,6 +53,7 @@ public class Player : MonoBehaviour
         };
         playerCharacter.UpdateInput(characterInput);
         playerCharacter.UpdateBody(deltaTime);
+        playerCharacter.BoostVisual(deltaTime);
 
         var combatInput = new CombatInput
         {

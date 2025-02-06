@@ -21,11 +21,6 @@ public struct CharacterInput
 
 public class PlayerMovement : MonoBehaviour, ICharacterController
 {
-    /*TO-DO: 
-     * REDO JUMPING TO RUN OFF A JUMP VALUE INT AS WELL SO WE CAN HAVE SOME SWEET SWEET DOUBLE JUMPS 
-     * MAKE SURE TO IMPLEMENT STATE VELOCITY SO THE COMMENTED PORTION OF AFTERCHARACTERUPDATE WORKS
-     */
-
 
     [Header("Components")]
     [SerializeField] private KinematicCharacterMotor motor;
@@ -34,6 +29,14 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
 
     [SerializeField] private Transform cameraTarget;
     [Space]
+
+    [Space]
+    [SerializeField] private Transform playerLegs;
+    [SerializeField] private float legRotationSpeed = 8f;
+    [SerializeField] private GameObject[] boostVisuals;
+    [SerializeField] private float frequency = 5f;
+    [SerializeField] private float scaleOffset = 0.05f;
+    [SerializeField] private float baseScale = 0.95f;
 
     [Header("Speeds")]
     [SerializeField] private float walkSpeed = 20f;
@@ -116,6 +119,26 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
 
         _requestedSprint = input.Sprint;
 
+    }
+
+    public void BoostVisual(float deltaTime)
+    {
+        if(_requestedSprint)
+        {
+            foreach(GameObject booster in boostVisuals)
+            {
+                booster.SetActive(true);
+                float scale = baseScale + Mathf.Sin(Time.time * frequency) * scaleOffset;
+                booster.transform.localScale = new Vector3(scale, scale, scale);
+            }
+        }
+        else
+        {
+            foreach (GameObject booster in boostVisuals)
+            {
+                booster.SetActive(false);
+            }
+        }
     }
 
     public void UpdateBody(float deltaTime)
@@ -292,6 +315,12 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
 
         if (forward != Vector3.zero)
             currentRotation = Quaternion.LookRotation(forward, motor.CharacterUp);
+
+        if (_requestedMovement.sqrMagnitude > 0.01f) 
+        {
+            Quaternion targetLegRotation = Quaternion.LookRotation(_requestedMovement, motor.CharacterUp);
+            playerLegs.rotation = Quaternion.Lerp(playerLegs.rotation, targetLegRotation, legRotationSpeed * deltaTime);
+        }
     }
 
 
