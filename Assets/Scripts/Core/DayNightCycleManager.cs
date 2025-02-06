@@ -15,13 +15,14 @@ public class DayNightCycleManager : MonoBehaviour
 
     public enum twelveHour { AM, PM }
     public twelveHour twelveHourClock = twelveHour.AM;
-
+    [Space]
     public float time;
     public float totalTime;
 
     public int hour = 6;
     public int minute;
-
+    [Space]
+    public int UIUpdateFrequency;
     public TextMeshProUGUI timeUI;
     public Light sunLight;
     public float sunLightAngle;
@@ -98,8 +99,10 @@ public class DayNightCycleManager : MonoBehaviour
                     twelveHourClock = twelveHour.AM;
             }
         }
-
-        UpdateTimeUI();
+        if (minute % UIUpdateFrequency == 0)
+        {
+            UpdateTimeUI();
+        }
         EndOfDayCheck();
     }
 

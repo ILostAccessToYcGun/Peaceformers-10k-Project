@@ -6174,6 +6174,7 @@ MonoBehaviour:
   totalTime: 0
   hour: 6
   minute: 0
+  UIUpdateFrequency: 20
   timeUI: {fileID: 1066492162}
   sunLight: {fileID: 1460068866}
   sunLightAngle: 0
