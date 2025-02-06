@@ -123,7 +123,7 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
 
     public void BoostVisual(float deltaTime)
     {
-        if(_requestedSprint)
+        if(_requestedSprint || _requestedDash)
         {
             foreach(GameObject booster in boostVisuals)
             {
