@@ -125,7 +125,7 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
         _requestedMovement = input.Rotation * _requestedMovement;
 
         var wasRequestingJump = _requestedJump;
-        _requestedJump = _requestedJump || input.Jump;
+        _requestedJump = _requestedJump || input.Jump && boostCapacity > jumpBoostLoss;
         if (_requestedJump && !wasRequestingJump)
         {
             _timeSinceJumpRequest = 0f;
