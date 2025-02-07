@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 public class Inventory : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class Inventory : MonoBehaviour
     [Space]
     public Image inventoryPanel;
     public GameObject inventorySlot;
-    public Item SetupItem;
+    public Item testItem;
 
     public List<List<InventorySlot>> inventory = new List<List<InventorySlot>>(); //lists because later we will change the size
     //public List<List<InventorySlot>> emptyInventory = new List<List<InventorySlot>>(); //lists because later we will change the size
@@ -105,11 +106,13 @@ public class Inventory : MonoBehaviour
             for (int i = 0; i < inventory[j].Capacity; i++)
             {
                 InventorySlot slot = inventory[j][i];
-                if (slot.GetHeldItem() == itemToFind)
-                    return slot;
+                if (slot.GetHeldItem() != null)
+                {
+                    if (slot.GetHeldItem().itemName == itemToFind.itemName)
+                        return slot;
+                }
             }
         }
-
         return null;
     }
     public InventorySlot FindPartialyFilledItemOrEmptySlot(Item itemToFind)
@@ -120,13 +123,17 @@ public class Inventory : MonoBehaviour
             for (int i = 0; i < inventory[j].Capacity; i++)
             {
                 InventorySlot slot = inventory[j][i];
-                if (slot.GetHeldItem() == itemToFind && slot.GetHeldItem().stackAmount < slot.GetHeldItem().stackLimit)
-                    return slot;
+                if (slot.GetHeldItem() != null)
+                {
+                    if (slot.GetHeldItem().itemName == itemToFind.itemName && slot.GetHeldItem().stackAmount < slot.GetHeldItem().stackLimit)
+                    {
+                        Debug.Log("Existing Item found");
+                        return slot;
+                    }
+                }
             }
         }
-
         //finding empty slot
-
         //looping through inventory
         for (int j = 0; j < inventory.Capacity; j++)
         {
@@ -135,36 +142,55 @@ public class Inventory : MonoBehaviour
                 Item item = inventory[j][i].GetHeldItem();
                 bool isValidSpot = true;
                 //looping through item dimensions
-                for (int h = j; h < (j + item.itemHeight > inventory.Capacity ? inventory.Capacity : j + item.itemHeight); h++)
+                if (item == null)
                 {
-                    for (int w = i; w < (i + item.itemWidth > inventory[j].Capacity ? inventory[j].Capacity : i + item.itemWidth); w++)
+                    if (j + itemToFind.itemHeight > inventory.Capacity || i + itemToFind.itemWidth > inventory[j].Capacity)
+                        isValidSpot = false;
+                    else
                     {
-                        Item itemComponents = inventory[h][w].GetHeldItem();
-                        //if there is something inside the cell, then it collides with the item if it were to be placed there
-                        //so its not a valid spot
-                        if (itemComponents != null) 
+                        for (int h = j; h < j + itemToFind.itemHeight; h++)
                         {
-                            isValidSpot = false;
+                            for (int w = i; w < i + itemToFind.itemWidth; w++)
+                            {
+                                Item itemComponents = inventory[h][w].GetHeldItem();
+                                //if there is something inside the cell, then it collides with the item if it were to be placed there
+                                //so its not a valid spot
+                                if (itemComponents != null)
+                                {
+                                    isValidSpot = false;
+                                }
+                            }
                         }
                     }
+                    
+                    if (isValidSpot)
+                        return inventory[j][i];
                 }
-                if (isValidSpot)
-                    return inventory[j][i]; 
             }
         }
-
         return null;
     }
 
     public void AddItemToInventory(Item itemToFind, int amount)
     {
         InventorySlot findSlot = FindPartialyFilledItemOrEmptySlot(itemToFind);
-        if (findSlot != null) { IncreaseItemStackAmount(findSlot, amount); }
+        if (findSlot == null) { return; }
+        if (findSlot.GetHeldItem() != null) { IncreaseItemStackAmount(findSlot, amount); }
+        else
+        {
+            GameObject added = Instantiate(testItem.gameObject, findSlot.transform.position, findSlot.transform.rotation, itemToFind.parent.transform);
+            added.transform.localScale = Vector3.one;
+            Item addedItem = added.GetComponent<Item>();
+            addedItem.SearchAndMoveToNearestInventorySlot();
+            if (!inventoryPanel.gameObject.activeSelf)
+                added.SetActive(false);
+        }
     }
     public void RemoveItemFromInventory(Item itemToFind, int amount)
     {
         InventorySlot findSlot = FindTopSlotWithItem(itemToFind);
-        if (findSlot != null) { DecreaseItemStackAmount(findSlot, amount); }
+        if (findSlot == null) { return; }
+        if (findSlot.GetHeldItem() != null) { DecreaseItemStackAmount(findSlot, amount); }
     }
 
     private void Update()
@@ -186,6 +212,16 @@ public class Inventory : MonoBehaviour
         {
             GenerateInventory(inventoryWidth, inventoryHeight);
             SetInventory(null);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Z) && inventoryPanel.gameObject.activeSelf)
+        {
+            AddItemToInventory(testItem, 1);
+        }
+
+        if (Input.GetKeyDown(KeyCode.X) && inventoryPanel.gameObject.activeSelf)
+        {
+            RemoveItemFromInventory(testItem, 1);
         }
     }
 }

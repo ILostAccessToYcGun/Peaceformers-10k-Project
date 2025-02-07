@@ -122,23 +122,74 @@ public class Item : MonoBehaviour, IPointerClickHandler
         InventorySlot[] inventorySlots = FindObjectsByType<InventorySlot>(FindObjectsSortMode.None);
         if (inventorySlots.Length < 1) { return false; }
 
-        float nearestDistance = (inventorySlots[0].transform.position - transform.position).magnitude;////
+        float nearestDistance = 300f;
 
         if (inventorySlots.Length > 1) //if there is more than one inventory slot on screen, find the closest
         {
             float compareDistance;
             foreach (InventorySlot slot in inventorySlots)
             {
-                compareDistance = (slot.transform.position - transform.position).magnitude;
+                Vector2 slotPosition = slot.inventoryPosition;
+                compareDistance = (slot.transform.position - this.transform.position).magnitude;
                 if (compareDistance < nearestDistance)
                 {
-                    if (slot.GetHeldItem() == null || slot.GetHeldItem().itemName == itemName)
-                        nearestDistance = compareDistance;
+                    bool itemDoesFitInsideInventoryFrame = true; //check if the item size will fit in that spot
+
+                    if (slotPosition.x + itemWidth > currentInventory.inventoryWidth)
+                    {
+                        itemDoesFitInsideInventoryFrame = false;
+                    }
+                    if (slotPosition.y + itemHeight > currentInventory.inventoryHeight)
+                    {
+                        itemDoesFitInsideInventoryFrame = false;
+                    }
+
+                    bool itemDoesNotCollideWithOtherItems = true;
+                    bool firstCellisLikeItem = false;
+
+                    ////check if the item placed in that spot will collide
+                    if (itemDoesFitInsideInventoryFrame) //if its not within frame, dont bother
+                    {
+                        for (int h = (int)slotPosition.y; h < (int)slotPosition.y + itemHeight; h++)
+                        {
+                            for (int w = (int)slotPosition.x; w < (int)slotPosition.x + itemWidth; w++)
+                            {
+                                Item currentItem = currentInventory.inventory[h][w].GetHeldItem();
+                                if (currentItem != null) //if there is something inside the checking cells
+                                {
+                                    if (w == (int)slotPosition.x && h == (int)slotPosition.y)
+                                    //if (h == (int)startPos.y)
+                                    {
+                                        if (currentItem.itemName == this.itemName && currentItem.stackAmount < currentItem.stackLimit) //hmmm will need some work
+                                        {
+                                            firstCellisLikeItem = true;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        itemDoesNotCollideWithOtherItems = false;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (itemDoesFitInsideInventoryFrame && (itemDoesNotCollideWithOtherItems || firstCellisLikeItem))
+                    {
+                        if (slot.GetHeldItem() == null) //if the slot isnt holding anything
+                            nearestDistance = compareDistance;
+                        else if (slot.GetHeldItem().itemName == itemName) //if the slot is holding another of the same item
+                        {
+                            if (slot.GetHeldItem().stackAmount < slot.GetHeldItem().stackLimit && stackAmount < stackLimit) //if 
+                                nearestDistance = compareDistance;
+                        }
+                    }
+
                 }
             }
         }
 
-        if (nearestDistance > 100f) //if the item is really far away from the inventory slot, probably dont do anything
+        if (nearestDistance > 200f) //if the item is really far away from the inventory slot, probably dont do anything
             return false;
         else
         {
@@ -295,23 +346,17 @@ public class Item : MonoBehaviour, IPointerClickHandler
             transform.position = currentInventorySlot.transform.position;
             currentInventorySlot.currentHeldItem = this; //need to do more with this
             currentInventorySlot.SetHeldItem(this);
-            Debug.Log(currentInventorySlot.inventoryPosition);
-
-
+            //Debug.Log(currentInventorySlot.inventoryPosition);
             AddComponentSlots(inventorySlots);
-
 
             if (isStacking)
             {
                 stackingItem.IncreaseStackAmount(stackAmount);
                 stackingItem.currentInventorySlot.SetHeldItem(stackingItem);
-
                 Destroy(this.gameObject);
             }
             else if (isKeepHolding)
-            {
                 PickUpItemInInventory();
-            }
         }
     }
 
@@ -368,7 +413,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
     {
         stackAmount -= decrease;
         UpdateStackText();
-        if (stackAmount < 0)
+        if (stackAmount == 0)
         {
             currentInventorySlot.ClearHeldItem();
             ClearComponentSlots();
