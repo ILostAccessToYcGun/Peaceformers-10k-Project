@@ -125,7 +125,6 @@ public class DayNightCycleManager : MonoBehaviour
             UpdateTime();
             time = 0;
         }
-
         totalTime += Time.deltaTime / 0.29166f;
         UpdateLightAngle();
         UpdateLightIntensity();
@@ -137,6 +136,11 @@ public class DayNightCycleManager : MonoBehaviour
     {
         cm = FindAnyObjectByType<CalendarManger>();
         BeginDay();
+
+        if (UIUpdateFrequency == 0)
+        {
+            UIUpdateFrequency = 20;
+        }
         
     }
 }
