@@ -184,7 +184,7 @@ public class Inventory : MonoBehaviour
                 //if (isValidSpot)
                 //{
                 //    Debug.Log("Valid spot found");
-                //    return inventory[j][i];
+                //    return inventory[j][i]; /
                 //}
 
                 if (item == null)
