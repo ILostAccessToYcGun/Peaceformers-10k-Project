@@ -1,5 +1,7 @@
 using UnityEngine;
 using KinematicCharacterController;
+using UnityEngine.UI;
+using System.Collections;
 
 
 public struct CharacterState
@@ -21,11 +23,6 @@ public struct CharacterInput
 
 public class PlayerMovement : MonoBehaviour, ICharacterController
 {
-    /*TO-DO: 
-     * REDO JUMPING TO RUN OFF A JUMP VALUE INT AS WELL SO WE CAN HAVE SOME SWEET SWEET DOUBLE JUMPS 
-     * MAKE SURE TO IMPLEMENT STATE VELOCITY SO THE COMMENTED PORTION OF AFTERCHARACTERUPDATE WORKS
-     */
-
 
     [Header("Components")]
     [SerializeField] private KinematicCharacterMotor motor;
@@ -34,6 +31,14 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
 
     [SerializeField] private Transform cameraTarget;
     [Space]
+
+    [Space]
+    [SerializeField] private Transform playerLegs;
+    [SerializeField] private float legRotationSpeed = 8f;
+    [SerializeField] private GameObject[] boostVisuals;
+    [SerializeField] private float frequency = 5f;
+    [SerializeField] private float scaleOffset = 0.05f;
+    [SerializeField] private float baseScale = 0.95f;
 
     [Header("Speeds")]
     [SerializeField] private float walkSpeed = 20f;
@@ -44,7 +49,6 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
     [Space]
     [Range(1f,2f)]
     [SerializeField] private float sprintMultiplier = 1.3f;
-    [SerializeField] private float boostCapacity = 100f;
 
     [Header("Jumping")]
     [SerializeField] private float jumpSpeed = 20f;
@@ -60,6 +64,23 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
     [SerializeField] private float dashRecoveryCooldown = 0.3f;
     [SerializeField] private int maxDashes = 2;
     [SerializeField] private int dashes = 2;
+
+    [Header("Boost")]
+    [SerializeField] private float maxBoost = 100f;
+    [SerializeField] private float boostCapacity = 100f;
+    [SerializeField] private float boostGain = 2f;
+    [SerializeField] private float dashBoostLoss = 20f;
+    [SerializeField] private float sprintBoostLoss = 4f;
+    [SerializeField] private float jumpBoostLoss = 20f;
+    [Space]
+    [SerializeField] private Image boostBarFill;
+    [SerializeField] private Image boostBarLoss;
+    [SerializeField] private float lossLerpSpeed = 2f;
+    [Space]
+    [SerializeField] private Color goodboostColor;
+    [SerializeField] private Color watchOutColor;
+    [SerializeField] private Color criticalColor;
+
 
     private CharacterState _state;
     private CharacterState _lastState;
@@ -87,6 +108,7 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
         _lastState = _state;
 
         dashes = maxDashes;
+        boostCapacity = maxBoost;
 
         motor.CharacterController = this;
     }
@@ -103,7 +125,7 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
         _requestedMovement = input.Rotation * _requestedMovement;
 
         var wasRequestingJump = _requestedJump;
-        _requestedJump = _requestedJump || input.Jump;
+        _requestedJump = _requestedJump || input.Jump && boostCapacity > jumpBoostLoss;
         if (_requestedJump && !wasRequestingJump)
         {
             _timeSinceJumpRequest = 0f;
@@ -114,8 +136,57 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
 
         _requestedDash = _requestedDash || input.Dash;
 
-        _requestedSprint = input.Sprint;
+        _requestedSprint = input.Sprint && boostCapacity > 0;
 
+    }
+
+    public void BoostVisual(float deltaTime)
+    {
+        if(_requestedSprint || _requestedDash)
+        {
+            foreach(GameObject booster in boostVisuals)
+            {
+                booster.SetActive(true);
+                float scale = baseScale + Mathf.Sin(Time.time * frequency) * scaleOffset;
+                booster.transform.localScale = new Vector3(scale, scale, scale);
+            }
+        }
+        else
+        {
+            foreach (GameObject booster in boostVisuals)
+            {
+                booster.SetActive(false);
+            }
+        }
+
+        float boostRatio = boostCapacity / maxBoost;
+
+        boostBarFill.fillAmount = boostRatio;
+
+        if (boostCapacity > (maxBoost / 2))
+            boostBarFill.color = goodboostColor;
+        else if (boostCapacity > (maxBoost / 4))
+            boostBarFill.color = watchOutColor;
+        else
+            boostBarFill.color = criticalColor;
+
+        StopAllCoroutines();
+        StartCoroutine(LerpBarLoss(boostRatio));
+    }
+
+    private IEnumerator LerpBarLoss(float targetFill)
+    {
+        float startFill = boostBarLoss.fillAmount;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < 1f)
+        {
+            elapsedTime += Time.deltaTime * lossLerpSpeed;
+            boostBarLoss.fillAmount = Mathf.Lerp(startFill, targetFill, elapsedTime);
+            yield return null;
+        }
+
+        boostBarLoss.fillAmount = targetFill;
     }
 
     public void UpdateBody(float deltaTime)
@@ -140,6 +211,15 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
 
         if (dashes > maxDashes)
             dashes = maxDashes;
+
+        if(_requestedSprint)
+        {
+            boostCapacity = Mathf.Clamp(boostCapacity - (sprintBoostLoss * deltaTime), 0, maxBoost);
+        }
+        else
+        {
+            boostCapacity = Mathf.Clamp(boostCapacity + (boostGain * deltaTime), 0, maxBoost);
+        }
     }
 
     public void UpdateVelocity(ref Vector3 currentVelocity, float deltaTime)
@@ -163,7 +243,7 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
             var targetVelocity = groundedMovement * walkSpeed;
 
             //if sprinting
-            targetVelocity *= _requestedSprint ? sprintMultiplier : 1f;
+            targetVelocity *= (_requestedSprint && boostCapacity > 0) ? sprintMultiplier : 1f;
 
             var moveVelocity = Vector3.Lerp
             (
@@ -203,7 +283,7 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
                 var targetPlanarVelocity = currentPlanarVelocity + movementForce;
 
                 //if sprinting
-                targetPlanarVelocity *= _requestedSprint ? sprintMultiplier : 1f;
+                targetPlanarVelocity *= (_requestedSprint && boostCapacity > 0) ? sprintMultiplier : 1f;
 
                 targetPlanarVelocity = Vector3.ClampMagnitude(targetPlanarVelocity, airSpeed);
 
@@ -223,12 +303,12 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
         if (_requestedJump)
         {
             var grounded = motor.GroundingStatus.IsStableOnGround;
-            var canCoyoteJump = _timeSinceUngrounded < coyoteTime && !_ungroundedDueToJump;
+            var canCoyoteJump = _timeSinceUngrounded < coyoteTime && !_ungroundedDueToJump && boostCapacity >= jumpBoostLoss;
 
             //we JUMPIN
             if (grounded || canCoyoteJump)
             {
-
+                boostCapacity -= jumpBoostLoss;
                 _requestedJump = false;
 
                 //unstick that thang
@@ -254,12 +334,13 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
 
         if (_requestedDash)
         {
-            var canDash = (dashBetweenCooldown == 0f) && (dashes > 0);
+            var canDash = (dashBetweenCooldown == 0f) && (dashes > 0) && boostCapacity >= dashBoostLoss;
 
             if (canDash)
             {
                 dashBetweenCooldown = 0.2f;
                 dashes--;
+                boostCapacity -= dashBoostLoss;
                 _requestedDash = false;
 
 
@@ -292,6 +373,12 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
 
         if (forward != Vector3.zero)
             currentRotation = Quaternion.LookRotation(forward, motor.CharacterUp);
+
+        if (_requestedMovement.sqrMagnitude > 0.01f) 
+        {
+            Quaternion targetLegRotation = Quaternion.LookRotation(_requestedMovement, motor.CharacterUp);
+            playerLegs.rotation = Quaternion.Lerp(playerLegs.rotation, targetLegRotation, legRotationSpeed * deltaTime);
+        }
     }
 
 
