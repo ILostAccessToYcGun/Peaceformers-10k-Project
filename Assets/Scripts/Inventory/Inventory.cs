@@ -10,7 +10,9 @@ public class Inventory : MonoBehaviour
     //TODO: change access modifiers at some point
     public int inventoryWidth;
     public int inventoryHeight;
-    public int cellDistance;
+    public int cellDistance; //since im usihng the lay out group I can probably remove this, but for now it stays
+    public GridLayoutGroup gridLayout;
+
     [Space]
     public Image inventoryPanel;
     public GameObject inventorySlot;
@@ -35,11 +37,22 @@ public class Inventory : MonoBehaviour
             
         foreach (InventorySlot cell in cells)
         {
-            inventory[(int)cell.inventoryPosition.y][(int)cell.inventoryPosition.x] = cell;
+            if (!cell.isTrashSlot)
+                inventory[(int)cell.inventoryPosition.y][(int)cell.inventoryPosition.x] = cell;
         }
     }
-    public void GenerateInventory(int width, int height)
+    public void GenerateInventory(int width, int height, int cellWidth, int cellHeight)
     {
+        #region _Grid_Layout_
+        gridLayout.padding.left = 10;
+        gridLayout.padding.right = 10;
+        gridLayout.padding.top = 10;
+        gridLayout.padding.bottom = 10;
+        gridLayout.constraintCount = width;
+        gridLayout.cellSize.Set(cellWidth, cellHeight);
+
+        #endregion
+
         #region _List_Size_
         //look at milinote for a diagram of the lists
         inventory.Capacity = height;
@@ -84,7 +97,16 @@ public class Inventory : MonoBehaviour
             
                 
         }
-        
+
+        Vector3 trashLocation = inventoryPanel.transform.position + new Vector3(-350 + cellDistance * tempWidth, 350 - cellDistance * (tempHeight - 1), inventoryPanel.transform.position.z);
+        //Instantiate(inventorySlot, slotLocation, inventoryPanel.transform.rotation, inventoryPanel.transform);
+        GameObject trashSlotGameObject = Instantiate(inventorySlot, trashLocation, inventoryPanel.transform.rotation, inventoryPanel.transform);
+        InventorySlot trashSlot = trashSlotGameObject.GetComponent<InventorySlot>();
+        trashSlot.isTrashSlot = true;
+        Image trashImg = trashSlot.GetComponent<Image>();
+        trashImg.color = new Color(1f, 60f / 255f, 60f / 255f, 1f);
+        trashSlot.SetInventoryPosition(new Vector2(tempWidth, tempHeight - 1));
+
         #endregion
     }
 
@@ -210,7 +232,7 @@ public class Inventory : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E) && inventoryPanel.gameObject.activeSelf)
         {
-            GenerateInventory(inventoryWidth, inventoryHeight);
+            GenerateInventory(inventoryWidth, inventoryHeight, 50, 50);
             SetInventory(null);
         }
 
