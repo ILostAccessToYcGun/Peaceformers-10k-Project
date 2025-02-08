@@ -1147,9 +1147,9 @@ MonoBehaviour:
   inventoryHeight: 6
   cellDistance: 140
   gridLayout: {fileID: 556414797}
-  inventoryPanel: {fileID: 556414795}
+  inventoryPanel: {fileID: 556414794}
   inventorySlot: {fileID: 3976304327754479419, guid: 65242ffa900d7c24aa6d2a8eb49ee4ac, type: 3}
-  testItem: {fileID: 8345865606624636533, guid: 8cdf262d8f70ae24ca7ec8ae13ca455f, type: 3}
+  testItem: {fileID: 6044579259339587209}
 --- !u!4 &1220238707
 Transform:
   m_ObjectHideFlags: 0
@@ -2020,6 +2020,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7925307298522792866, guid: 8cdf262d8f70ae24ca7ec8ae13ca455f, type: 3}
   m_PrefabInstance: {fileID: 1681488188705213470}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6044579259339587209 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8345865606624636533, guid: 8cdf262d8f70ae24ca7ec8ae13ca455f, type: 3}
+  m_PrefabInstance: {fileID: 1681488188705213470}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f64e8504e2e9154ab4d8355a96ff06f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

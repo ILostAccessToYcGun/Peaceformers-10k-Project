@@ -354,15 +354,29 @@ public class Item : MonoBehaviour, IPointerClickHandler
         //Move
         if (nearestDistance > 200f)// * ( itemHeight > itemWidth ? itemHeight : itemWidth)) //if the item is really far away from the inventory slot, probably dont do anything
         {
-            //Debug.Log("Previous");
-            if (previousInventorySlot == null)
-                return;
-            currentInventorySlot = previousInventorySlot;
-            transform.position = currentInventorySlot.transform.position;
-            currentInventorySlot.currentHeldItem = this; //need to do more with this
-            currentInventorySlot.SetHeldItem(this);
+            //check if the item's location is still inside the current inventory   
+            if (this.transform.position.x > currentInventory.inventoryPanel.gameObject.transform.position.x - currentInventory.inventoryPanel.sizeDelta.x 
+                && this.transform.position.x < currentInventory.inventoryPanel.gameObject.transform.position.x + currentInventory.inventoryPanel.sizeDelta.x 
+                && this.transform.position.y > currentInventory.inventoryPanel.gameObject.transform.position.y - currentInventory.inventoryPanel.sizeDelta.y 
+                && this.transform.position.y < currentInventory.inventoryPanel.gameObject.transform.position.y + currentInventory.inventoryPanel.sizeDelta.y)
+            {
+                //Debug.Log("Previous");
+                if (previousInventorySlot == null)
+                    return;
+                currentInventorySlot = previousInventorySlot;
+                transform.position = currentInventorySlot.transform.position;
+                currentInventorySlot.currentHeldItem = this; //need to do more with this
+                currentInventorySlot.SetHeldItem(this);
 
-            AddComponentSlots(inventorySlots);
+                AddComponentSlots(inventorySlots);
+            }
+            else //outside of the current inventory
+            {
+                Debug.Log("Drop item into world");
+                OnDestroy();
+            }
+
+            
         }
         else
         {
@@ -373,13 +387,12 @@ public class Item : MonoBehaviour, IPointerClickHandler
             transform.position = currentInventorySlot.transform.position;
             currentInventorySlot.currentHeldItem = this; //need to do more with this
             currentInventorySlot.SetHeldItem(this);
+            currentInventory = currentInventorySlot.parentInventory;
             //Debug.Log(currentInventorySlot.inventoryPosition);
 
             if (isTrashing)
             {
-                currentInventorySlot.ClearHeldItem();
-                ClearComponentSlots();
-                Destroy(this.gameObject);
+                OnDestroy();
                 return;
             }
 
@@ -452,9 +465,8 @@ public class Item : MonoBehaviour, IPointerClickHandler
         UpdateStackText();
         if (stackAmount == 0)
         {
-            currentInventorySlot.ClearHeldItem();
-            ClearComponentSlots();
-            Destroy(this.gameObject);
+            
+            OnDestroy();
         }
             
     }
@@ -506,9 +518,12 @@ public class Item : MonoBehaviour, IPointerClickHandler
     #endregion
 
 
-    ~Item()
+    private void OnDestroy()
     {
-        Debug.Log(":O");
+        if (currentInventorySlot != null)
+            currentInventorySlot.ClearHeldItem();
+        ClearComponentSlots();
+        Destroy(gameObject);
     }
 
     private void Awake()

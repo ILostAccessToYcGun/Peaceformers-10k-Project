@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using static UnityEditor.Progress;
+//using UnityEngine.UIElements;
 
 public class Inventory : MonoBehaviour
 {
@@ -14,20 +15,36 @@ public class Inventory : MonoBehaviour
     public GridLayoutGroup gridLayout;
 
     [Space]
-    public Image inventoryPanel;
+    public RectTransform inventoryPanel;
     public GameObject inventorySlot;
     public Item testItem;
+    [Space]
+    public bool isPlayerInventory = true;
 
     public List<List<InventorySlot>> inventory = new List<List<InventorySlot>>(); //lists because later we will change the size
     //public List<List<InventorySlot>> emptyInventory = new List<List<InventorySlot>>(); //lists because later we will change the size
 
     public void ShowInventory()
     {
-        inventoryPanel.gameObject.SetActive(true);
+        ToggleInventoryVisiblity(true);
     }
     public void HideInventory()
     {
-        inventoryPanel.gameObject.SetActive(false);
+        ToggleInventoryVisiblity(false);
+    }
+
+    private void ToggleInventoryVisiblity(bool toggle)
+    {
+        inventoryPanel.gameObject.SetActive(toggle);
+        for (int j = 0; j < inventory.Count; ++j)
+        {
+            for (int i = 0; i < inventory[j].Count; ++i)
+            {
+                Item item = inventory[j][i].GetHeldItem();
+                if (item != null)
+                    item.gameObject.SetActive(toggle);
+            }
+        }
     }
 
     public void SetInventory(InventorySlot[] cells)
@@ -38,11 +55,23 @@ public class Inventory : MonoBehaviour
         foreach (InventorySlot cell in cells)
         {
             if (!cell.isTrashSlot)
-                inventory[(int)cell.inventoryPosition.y][(int)cell.inventoryPosition.x] = cell;
+            {
+                if (cell.transform.position.x > inventoryPanel.gameObject.transform.position.x - inventoryPanel.sizeDelta.x
+                && cell.transform.position.x < inventoryPanel.gameObject.transform.position.x + inventoryPanel.sizeDelta.x
+                && cell.transform.position.y > inventoryPanel.gameObject.transform.position.y - inventoryPanel.sizeDelta.y
+                && cell.transform.position.y < inventoryPanel.gameObject.transform.position.y + inventoryPanel.sizeDelta.y)
+                {
+                    inventory[(int)cell.inventoryPosition.y][(int)cell.inventoryPosition.x] = cell;
+                }
+            }
+                
         }
     }
     public void GenerateInventory(int width, int height, int cellWidth, int cellHeight)
     {
+        //TODO: change this
+        isPlayerInventory = true;
+
         #region _Grid_Layout_
         gridLayout.padding.left = 10;
         gridLayout.padding.right = 10;
@@ -78,34 +107,32 @@ public class Inventory : MonoBehaviour
         int tempHeight = inventory.Capacity;
         int tempWidth = inventory[0].Capacity;
 
+        Vector3 slotLocation;
+
         for (int y = 0; y < tempHeight; y++)
         {
-
-            //List<InventorySlot> Row = new List<InventorySlot>();
-            //emptyInventory.Add(Row);
-
             for (int x = 0; x < tempWidth; x++) //Infinite LOOP!!!!
             {
-                Vector3 slotLocation = inventoryPanel.transform.position + new Vector3(-350 + cellDistance * x, 350 - cellDistance * y, inventoryPanel.transform.position.z);
-                //Instantiate(inventorySlot, slotLocation, inventoryPanel.transform.rotation, inventoryPanel.transform);
+                slotLocation = inventoryPanel.transform.position + new Vector3(-350 + cellDistance * x, 350 - cellDistance * y, inventoryPanel.transform.position.z);
                 GameObject inventorySlotGameObject = Instantiate(inventorySlot, slotLocation, inventoryPanel.transform.rotation, inventoryPanel.transform);
                 InventorySlot invSlot = inventorySlotGameObject.GetComponent<InventorySlot>();
 
                 invSlot.SetInventoryPosition(new Vector2(x, y));
-                //emptyInventory[y].Add(invSlot);
             }
-            
-                
         }
 
-        Vector3 trashLocation = inventoryPanel.transform.position + new Vector3(-350 + cellDistance * tempWidth, 350 - cellDistance * (tempHeight - 1), inventoryPanel.transform.position.z);
-        //Instantiate(inventorySlot, slotLocation, inventoryPanel.transform.rotation, inventoryPanel.transform);
-        GameObject trashSlotGameObject = Instantiate(inventorySlot, trashLocation, inventoryPanel.transform.rotation, inventoryPanel.transform);
-        InventorySlot trashSlot = trashSlotGameObject.GetComponent<InventorySlot>();
-        trashSlot.isTrashSlot = true;
-        Image trashImg = trashSlot.GetComponent<Image>();
-        trashImg.color = new Color(1f, 60f / 255f, 60f / 255f, 1f);
-        trashSlot.SetInventoryPosition(new Vector2(tempWidth, tempHeight - 1));
+        if (isPlayerInventory)
+        {
+            slotLocation = inventoryPanel.transform.position + new Vector3(-350 + cellDistance * tempWidth, 350 - cellDistance * (tempHeight - 1), inventoryPanel.transform.position.z);
+            //Instantiate(inventorySlot, slotLocation, inventoryPanel.transform.rotation, inventoryPanel.transform);
+            GameObject trashSlotGameObject = Instantiate(inventorySlot, slotLocation, inventoryPanel.transform.rotation, inventoryPanel.transform);
+            InventorySlot trashSlot = trashSlotGameObject.GetComponent<InventorySlot>();
+            trashSlot.isTrashSlot = true;
+            Image trashImg = trashSlot.GetComponent<Image>();
+            trashImg.color = new Color(1f, 60f / 255f, 60f / 255f, 1f);
+            trashSlot.SetInventoryPosition(new Vector2(tempWidth, tempHeight - 1));
+        }
+        
 
         #endregion
     }
@@ -236,12 +263,12 @@ public class Inventory : MonoBehaviour
             SetInventory(null);
         }
 
-        if (Input.GetKeyDown(KeyCode.Z) && inventoryPanel.gameObject.activeSelf)
+        if (Input.GetKeyDown(KeyCode.Z))
         {
             AddItemToInventory(testItem, 1);
         }
 
-        if (Input.GetKeyDown(KeyCode.X) && inventoryPanel.gameObject.activeSelf)
+        if (Input.GetKeyDown(KeyCode.X))
         {
             RemoveItemFromInventory(testItem, 1);
         }
