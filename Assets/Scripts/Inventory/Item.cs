@@ -396,17 +396,28 @@ public class Item : MonoBehaviour, IPointerClickHandler
                 return;
             }
 
-            AddComponentSlots(inventorySlots);
+            
 
             if (isStacking)
             {
                 stackingItem.IncreaseStackAmount(stackAmount);
                 stackingItem.AddComponentSlots(inventorySlots);
-                //stackingItem.currentInventorySlot.SetHeldItem(stackingItem);
+                stackingItem.currentInventorySlot.SetHeldItem(stackingItem);
                 Destroy(this.gameObject);
             }
-            else if (isKeepHolding)
-                PickUpItemInInventory();
+            else
+            {
+                if (isKeepHolding)
+                {
+                    PickUpItemInInventory();
+                }
+                else
+                {
+                    AddComponentSlots(inventorySlots);
+                }
+                
+            }
+                
         }
     }
 
