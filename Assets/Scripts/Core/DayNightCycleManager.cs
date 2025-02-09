@@ -27,6 +27,9 @@ public class DayNightCycleManager : MonoBehaviour
     public Light sunLight;
     public float sunLightAngle;
 
+    public Light moonLight;
+    public float moonLightAngle;
+
     public void UpdateTimeUI() 
     {
         string hourZero;
@@ -52,7 +55,21 @@ public class DayNightCycleManager : MonoBehaviour
         //1080 minutes = 0.5 1.5
         //1440 minutes = 0   2
 
-        sunLight.intensity = (totalTime <= 720 ? totalTime / 720 : 2 - (totalTime / 720));
+        if (totalTime <= 1080)
+        {
+
+            sunLight.intensity = Mathf.Clamp(Mathf.Lerp(sunLight.intensity, (totalTime <= 720 ? totalTime * 1.5f / 720 : 2f - ((totalTime / 720)) * 0.5f), Time.deltaTime / 10f), 0f, 1f);
+            moonLight.intensity = Mathf.Lerp(moonLight.intensity, 0, Time.deltaTime / 10f);
+        }
+        else
+        {
+            sunLight.intensity = Mathf.Lerp(sunLight.intensity, 0, Time.deltaTime / 10f);
+            moonLight.intensity = Mathf.Clamp(Mathf.Lerp(moonLight.intensity, (totalTime / 720f) - 1f, Time.deltaTime / 10f), 0f, 0.75f);
+        }
+        
+
+
+        
     }
 
     public void UpdateLightAngle()
@@ -64,11 +81,16 @@ public class DayNightCycleManager : MonoBehaviour
 
         sunLightAngle = Mathf.Lerp(sunLightAngle, ((totalTime / 1440f) * -360f) - 90f, Time.deltaTime);
         sunLight.gameObject.transform.localEulerAngles = new Vector3(sunLightAngle, 90f, 0);
+        
+        moonLightAngle = Mathf.Lerp(moonLightAngle, ((totalTime / 1440f) * -360f) - 270f, Time.deltaTime);
+        moonLight.gameObject.transform.localEulerAngles = new Vector3(moonLightAngle, 90f, 0);
     }
 
     public void BeginDay()
     {
         SetTime(6, 0);
+        moonLight.intensity = 0;
+        sunLight.intensity = 0.7f;
     }
     public void SetTime(int _hour, int _minute)
     {
@@ -77,6 +99,10 @@ public class DayNightCycleManager : MonoBehaviour
         totalTime = ((twelveHourClock == twelveHour.PM ? 12 : 0) + hour * 60) + minute;
         sunLightAngle = ((totalTime / 1440f) * -360f) - 90f;
         sunLight.gameObject.transform.localEulerAngles = new Vector3(sunLightAngle, 90f, 0);
+
+        
+        moonLightAngle = ((totalTime / 1440f) * -360f) - 270f;
+        moonLight.gameObject.transform.localEulerAngles = new Vector3(moonLightAngle, 90f, 0);
         UpdateTimeUI();
     }
 
@@ -120,7 +146,7 @@ public class DayNightCycleManager : MonoBehaviour
 
     private void Update()
     {
-        if (time >= 0.29166)
+        if (time >= 0.29166f)
         {
             UpdateTime();
             time = 0;
