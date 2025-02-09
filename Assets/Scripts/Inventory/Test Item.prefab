@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6003361459494350507}
   - component: {fileID: 8345865606624636533}
   - component: {fileID: 6398434180376619896}
+  - component: {fileID: 5636125126361760169}
   m_Layer: 5
   m_Name: Test Item
   m_TagString: Untagged
@@ -97,8 +98,13 @@ MonoBehaviour:
   itemComponents: []
   singleComponent: {fileID: 2686435426259607568, guid: a7f2d3ace108e5b47842f25e896d399d, type: 3}
   img: {fileID: 6003361459494350507}
+  componentDistance: 0
+  gridLayout: {fileID: 5636125126361760169}
   currentInventorySlot: {fileID: 0}
+  previousInventorySlot: {fileID: 0}
+  componentSlots: []
   parent: {fileID: 0}
+  currentInventory: {fileID: 0}
   stackAmount: 0
   stackLimit: 0
   stackText: {fileID: 2430252357916042962}
@@ -131,6 +137,30 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &5636125126361760169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1515575751944225772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 50, y: 50}
+  m_Spacing: {x: 10, y: 10}
+  m_Constraint: 1
+  m_ConstraintCount: 2
 --- !u!1 &8711930798989297352
 GameObject:
   m_ObjectHideFlags: 0
@@ -163,10 +193,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 7925307298522792866}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 10, y: 10}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3684779230684367642
 CanvasRenderer:
@@ -198,8 +228,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: '#'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ebcf30964bc8fdd4d8255b662e39a350, type: 2}
+  m_sharedMaterial: {fileID: 5627060112372618412, guid: ebcf30964bc8fdd4d8255b662e39a350, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

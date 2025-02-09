@@ -12,7 +12,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
 
     public enum Type { Resource, Weapon, Ammunition, Supplies };
     public Type itemType = Type.Resource;
-    public enum Name { Wood, Steel};
+    public enum Name { Wood, Stone, Scrap};
     public Name itemName = Name.Wood;
     [Space]
     public int itemWidth; //we NOT doing Ls
@@ -21,6 +21,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
     public ItemComponent singleComponent;
     public Image img;
     public int componentDistance;
+    public GridLayoutGroup gridLayout;
 
     [Space]
     public InventorySlot currentInventorySlot;
@@ -122,23 +123,80 @@ public class Item : MonoBehaviour, IPointerClickHandler
         InventorySlot[] inventorySlots = FindObjectsByType<InventorySlot>(FindObjectsSortMode.None);
         if (inventorySlots.Length < 1) { return false; }
 
-        float nearestDistance = (inventorySlots[0].transform.position - transform.position).magnitude;////
+        float nearestDistance = 300f;
 
         if (inventorySlots.Length > 1) //if there is more than one inventory slot on screen, find the closest
         {
             float compareDistance;
             foreach (InventorySlot slot in inventorySlots)
             {
-                compareDistance = (slot.transform.position - transform.position).magnitude;
+                Vector2 slotPosition = slot.inventoryPosition;
+                compareDistance = (slot.transform.position - this.transform.position).magnitude;
                 if (compareDistance < nearestDistance)
                 {
-                    if (slot.GetHeldItem() == null || slot.GetHeldItem().itemName == itemName)
+                    if (!slot.isTrashSlot)
+                    {
+                        bool itemDoesFitInsideInventoryFrame = true; //check if the item size will fit in that spot
+
+                        if (slotPosition.x + itemWidth > currentInventory.inventoryWidth)
+                        {
+                            itemDoesFitInsideInventoryFrame = false;
+                        }
+                        if (slotPosition.y + itemHeight > currentInventory.inventoryHeight)
+                        {
+                            itemDoesFitInsideInventoryFrame = false;
+                        }
+
+                        bool itemDoesNotCollideWithOtherItems = true;
+                        bool firstCellisLikeItem = false;
+
+                        ////check if the item placed in that spot will collide
+                        if (itemDoesFitInsideInventoryFrame) //if its not within frame, dont bother
+                        {
+                            for (int h = (int)slotPosition.y; h < (int)slotPosition.y + itemHeight; h++)
+                            {
+                                for (int w = (int)slotPosition.x; w < (int)slotPosition.x + itemWidth; w++)
+                                {
+                                    Item currentItem = currentInventory.inventory[h][w].GetHeldItem();
+                                    if (currentItem != null) //if there is something inside the checking cells
+                                    {
+                                        if (w == (int)slotPosition.x && h == (int)slotPosition.y)
+                                        //if (h == (int)startPos.y)
+                                        {
+                                            if (currentItem.itemName == this.itemName && currentItem.stackAmount < currentItem.stackLimit) //hmmm will need some work
+                                            {
+                                                firstCellisLikeItem = true;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            itemDoesNotCollideWithOtherItems = false;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (itemDoesFitInsideInventoryFrame && (itemDoesNotCollideWithOtherItems || firstCellisLikeItem))
+                        {
+                            if (slot.GetHeldItem() == null) //if the slot isnt holding anything
+                                nearestDistance = compareDistance;
+                            else if (slot.GetHeldItem().itemName == itemName) //if the slot is holding another of the same item
+                            {
+                                if (slot.GetHeldItem().stackAmount < slot.GetHeldItem().stackLimit && stackAmount < stackLimit) //if 
+                                    nearestDistance = compareDistance;
+                            }
+                        }
+                    }
+                    else
+                    {
                         nearestDistance = compareDistance;
+                    }
                 }
             }
         }
 
-        if (nearestDistance > 100f) //if the item is really far away from the inventory slot, probably dont do anything
+        if (nearestDistance > 200f) //if the item is really far away from the inventory slot, probably dont do anything
             return false;
         else
         {
@@ -157,6 +215,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
 
         bool isStacking = false;///
         bool isKeepHolding = false;
+        bool isTrashing = false;
         Item stackingItem = inventorySlots[0].GetHeldItem();///
 
         if (inventorySlots.Length > 1) //if there is more than one inventory slot on screen, find the closest
@@ -168,107 +227,126 @@ public class Item : MonoBehaviour, IPointerClickHandler
                 compareDistance = (slot.transform.position - this.transform.position).magnitude;
                 if (compareDistance < nearestDistance)
                 {
-                    bool itemDoesFitInsideInventoryFrame = true; //check if the item size will fit in that spot
 
-                    if (slotPosition.x + itemWidth > currentInventory.inventoryWidth)
+                    if (!slot.isTrashSlot)
                     {
-                        itemDoesFitInsideInventoryFrame = false;
-                    }
-                    if (slotPosition.y + itemHeight > currentInventory.inventoryHeight)
-                    {
-                        itemDoesFitInsideInventoryFrame = false;
-                    }
+                        bool itemDoesFitInsideInventoryFrame = true; //check if the item size will fit in that spot
 
-                    bool itemDoesNotCollideWithOtherItems = true;
-                    bool firstCellisLikeItem = false;
-
-                    ////check if the item placed in that spot will collide
-                    if (itemDoesFitInsideInventoryFrame) //if its not within frame, dont bother
-                    {
-                        for (int h = (int)slotPosition.y; h < (int)slotPosition.y + itemHeight; h++)
+                        if (slotPosition.x + itemWidth > currentInventory.inventoryWidth)
                         {
-                            for (int w = (int)slotPosition.x; w < (int)slotPosition.x + itemWidth; w++)
+                            itemDoesFitInsideInventoryFrame = false;
+                        }
+                        if (slotPosition.y + itemHeight > currentInventory.inventoryHeight)
+                        {
+                            itemDoesFitInsideInventoryFrame = false;
+                        }
+
+                        bool itemDoesNotCollideWithOtherItems = true;
+                        bool firstCellisLikeItem = false;
+
+                        ////check if the item placed in that spot will collide
+                        if (itemDoesFitInsideInventoryFrame) //if its not within frame, dont bother
+                        {
+                            for (int h = (int)slotPosition.y; h < (int)slotPosition.y + itemHeight; h++)
                             {
-                                Item currentItem = currentInventory.inventory[h][w].GetHeldItem();
-                                if (currentItem != null) //if there is something inside the checking cells
+                                for (int w = (int)slotPosition.x; w < (int)slotPosition.x + itemWidth; w++)
                                 {
-                                    if (w == (int)slotPosition.x && h == (int)slotPosition.y)
-                                    //if (h == (int)startPos.y)
+                                    Item currentItem = currentInventory.inventory[h][w].GetHeldItem();
+                                    if (currentItem != null) //if there is something inside the checking cells
                                     {
-                                        if (currentItem.itemName == this.itemName && currentItem.stackAmount < currentItem.stackLimit) //hmmm will need some work
+                                        if (w == (int)slotPosition.x && h == (int)slotPosition.y)
+                                        //if (h == (int)startPos.y)
                                         {
-                                            firstCellisLikeItem = true;
+                                            if (currentItem.itemName == this.itemName && currentItem.stackAmount < currentItem.stackLimit) //hmmm will need some work
+                                            {
+                                                firstCellisLikeItem = true;
+                                            }
                                         }
+                                        else
+                                        {
+                                            itemDoesNotCollideWithOtherItems = false;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+
+                        if (itemDoesFitInsideInventoryFrame && (itemDoesNotCollideWithOtherItems || firstCellisLikeItem))
+                        {
+                            //Debug.Log("itemDoesFitInsideInventoryFrame: " + itemDoesFitInsideInventoryFrame);
+                            Debug.Log("itemDoesNotCollideWithOtherItems: " + itemDoesNotCollideWithOtherItems);
+                            Debug.Log("firstCellisLikeItem: " + firstCellisLikeItem);
+                            if (slot.GetHeldItem() == null) //if the slot isnt holding anything
+                            {
+                                isStacking = false;
+                                isKeepHolding = false;
+                                isTrashing = false;
+                                nearestDistance = compareDistance;
+                                nearestInventorySlot = slot;
+                                stackingItem = null;
+                                Debug.Log("empty " + nearestDistance);
+                            }
+                            else if (slot.GetHeldItem().itemName == itemName) //if the slot is holding another of the same item
+                            {
+                                if (slot.GetHeldItem().stackAmount < slot.GetHeldItem().stackLimit && stackAmount < stackLimit) //if 
+                                {
+                                    if (slot.GetHeldItem().stackAmount + stackAmount > slot.GetHeldItem().stackLimit)
+                                    {
+                                        isStacking = false;
+                                        isKeepHolding = true;
+                                        isTrashing = false;
+                                        stackingItem = slot.GetHeldItem();
+
+                                        DecreaseStackAmount(stackingItem.stackLimit - stackingItem.stackAmount);
+                                        UpdateStackText();
+
+                                        stackingItem.SetStackAmount(stackingItem.stackLimit);
+                                        stackingItem.UpdateStackText();
+                                        //Debug.Log("top up " + nearestDistance);
                                     }
                                     else
                                     {
-                                        itemDoesNotCollideWithOtherItems = false;
+                                        isStacking = true;
+                                        isKeepHolding = false;
+                                        isTrashing = false;
+                                        nearestDistance = compareDistance;
+                                        nearestInventorySlot = slot;
+                                        stackingItem = slot.GetHeldItem();
+                                        //Debug.Log("merge " + nearestDistance);
                                     }
+
                                 }
-                            }
-                        }
-                    }
-
-
-                    if (itemDoesFitInsideInventoryFrame && (itemDoesNotCollideWithOtherItems || firstCellisLikeItem))
-                    {
-                        //Debug.Log("itemDoesFitInsideInventoryFrame: " + itemDoesFitInsideInventoryFrame);
-                        Debug.Log("itemDoesNotCollideWithOtherItems: " + itemDoesNotCollideWithOtherItems);
-                        Debug.Log("firstCellisLikeItem: " + firstCellisLikeItem);
-                        if (slot.GetHeldItem() == null) //if the slot isnt holding anything
-                        {
-                            isStacking = false;
-                            isKeepHolding = false;
-                            nearestDistance = compareDistance;
-                            nearestInventorySlot = slot;
-                            stackingItem = null;
-                            Debug.Log("empty " + nearestDistance);
-                        }
-                        else if (slot.GetHeldItem().itemName == itemName) //if the slot is holding another of the same item
-                        {
-                            if (slot.GetHeldItem().stackAmount < slot.GetHeldItem().stackLimit && stackAmount < stackLimit) //if 
-                            {
-                                if (slot.GetHeldItem().stackAmount + stackAmount > slot.GetHeldItem().stackLimit)
+                                else if (slot.GetHeldItem().stackAmount < slot.GetHeldItem().stackLimit && stackAmount == stackLimit)
                                 {
                                     isStacking = false;
                                     isKeepHolding = true;
+                                    isTrashing = false;
                                     stackingItem = slot.GetHeldItem();
+                                    int tempHold = stackingItem.stackAmount;
 
-                                    DecreaseStackAmount(stackingItem.stackLimit - stackingItem.stackAmount);
+                                    stackingItem.SetStackAmount(stackAmount);
+                                    SetStackAmount(tempHold);
+
+                                    stackingItem.UpdateStackText();
                                     UpdateStackText();
 
-                                    stackingItem.SetStackAmount(stackingItem.stackLimit);
-                                    stackingItem.UpdateStackText();
-                                    //Debug.Log("top up " + nearestDistance);
+                                    //Debug.Log("swap" + nearestDistance);
                                 }
-                                else
-                                {
-                                    isStacking = true;
-                                    isKeepHolding = false;
-                                    nearestDistance = compareDistance;
-                                    nearestInventorySlot = slot;
-                                    stackingItem = slot.GetHeldItem();
-                                    //Debug.Log("merge " + nearestDistance);
-                                }
-
-                            }
-                            else if (slot.GetHeldItem().stackAmount < slot.GetHeldItem().stackLimit && stackAmount == stackLimit)
-                            {
-                                isStacking = false;
-                                isKeepHolding = true;
-                                stackingItem = slot.GetHeldItem();
-                                int tempHold = stackingItem.stackAmount;
-
-                                stackingItem.SetStackAmount(stackAmount);
-                                SetStackAmount(tempHold);
-
-                                stackingItem.UpdateStackText();
-                                UpdateStackText();
-
-                                //Debug.Log("swap" + nearestDistance);
                             }
                         }
                     }
+                    else //trash slot
+                    {
+                        isStacking = false;
+                        isKeepHolding = false;
+                        isTrashing = true;
+                        nearestDistance = compareDistance;
+                        nearestInventorySlot = slot;
+                        stackingItem = null;
+                        Debug.Log("trash " + nearestDistance);
+                    }
+                    
                 }
             }
         }
@@ -276,15 +354,29 @@ public class Item : MonoBehaviour, IPointerClickHandler
         //Move
         if (nearestDistance > 200f)// * ( itemHeight > itemWidth ? itemHeight : itemWidth)) //if the item is really far away from the inventory slot, probably dont do anything
         {
-            //Debug.Log("Previous");
-            if (previousInventorySlot == null)
-                return;
-            currentInventorySlot = previousInventorySlot;
-            transform.position = currentInventorySlot.transform.position;
-            currentInventorySlot.currentHeldItem = this; //need to do more with this
-            currentInventorySlot.SetHeldItem(this);
+            //check if the item's location is still inside the current inventory   
+            if (this.transform.position.x > currentInventory.inventoryPanel.gameObject.transform.position.x - currentInventory.inventoryPanel.sizeDelta.x 
+                && this.transform.position.x < currentInventory.inventoryPanel.gameObject.transform.position.x + currentInventory.inventoryPanel.sizeDelta.x 
+                && this.transform.position.y > currentInventory.inventoryPanel.gameObject.transform.position.y - currentInventory.inventoryPanel.sizeDelta.y 
+                && this.transform.position.y < currentInventory.inventoryPanel.gameObject.transform.position.y + currentInventory.inventoryPanel.sizeDelta.y)
+            {
+                //Debug.Log("Previous");
+                if (previousInventorySlot == null)
+                    return;
+                currentInventorySlot = previousInventorySlot;
+                transform.position = currentInventorySlot.transform.position;
+                currentInventorySlot.currentHeldItem = this; //need to do more with this
+                currentInventorySlot.SetHeldItem(this);
 
-            AddComponentSlots(inventorySlots);
+                AddComponentSlots(inventorySlots);
+            }
+            else //outside of the current inventory
+            {
+                Debug.Log("Drop item into world");
+                OnDestroy();
+            }
+
+            
         }
         else
         {
@@ -295,23 +387,37 @@ public class Item : MonoBehaviour, IPointerClickHandler
             transform.position = currentInventorySlot.transform.position;
             currentInventorySlot.currentHeldItem = this; //need to do more with this
             currentInventorySlot.SetHeldItem(this);
-            Debug.Log(currentInventorySlot.inventoryPosition);
+            currentInventory = currentInventorySlot.parentInventory;
+            //Debug.Log(currentInventorySlot.inventoryPosition);
 
+            if (isTrashing)
+            {
+                OnDestroy();
+                return;
+            }
 
-            AddComponentSlots(inventorySlots);
-
+            
 
             if (isStacking)
             {
                 stackingItem.IncreaseStackAmount(stackAmount);
+                stackingItem.AddComponentSlots(inventorySlots);
                 stackingItem.currentInventorySlot.SetHeldItem(stackingItem);
-
                 Destroy(this.gameObject);
             }
-            else if (isKeepHolding)
+            else
             {
-                PickUpItemInInventory();
+                if (isKeepHolding)
+                {
+                    PickUpItemInInventory();
+                }
+                else
+                {
+                    AddComponentSlots(inventorySlots);
+                }
+                
             }
+                
         }
     }
 
@@ -368,11 +474,10 @@ public class Item : MonoBehaviour, IPointerClickHandler
     {
         stackAmount -= decrease;
         UpdateStackText();
-        if (stackAmount < 0)
+        if (stackAmount == 0)
         {
-            currentInventorySlot.ClearHeldItem();
-            ClearComponentSlots();
-            Destroy(this.gameObject);
+            
+            OnDestroy();
         }
             
     }
@@ -392,7 +497,8 @@ public class Item : MonoBehaviour, IPointerClickHandler
 
     public void GenerateItem()
     {
-        Debug.Log("generate");
+        gridLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+        gridLayout.constraintCount = itemWidth;
         for (int y = 0; y < itemHeight; y++)
         {
             for (int x = 0; x < itemWidth; x++)
@@ -423,6 +529,13 @@ public class Item : MonoBehaviour, IPointerClickHandler
     #endregion
 
 
+    private void OnDestroy()
+    {
+        if (currentInventorySlot != null)
+            currentInventorySlot.ClearHeldItem();
+        ClearComponentSlots();
+        Destroy(gameObject);
+    }
 
     private void Awake()
     {
@@ -432,6 +545,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
         img = GetComponent<Image>();
         stackAmount = 1;
         SetStackLimit(5);
+        //componentDistance = 100;
         if (itemComponents.Count < (itemWidth * itemHeight) - 1)
             GenerateItem();
     }

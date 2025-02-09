@@ -7,6 +7,7 @@ public class InventorySlot : MonoBehaviour
     public Inventory parentInventory;
     public Item currentHeldItem = null;
     public Vector2 inventoryPosition;
+    public bool isTrashSlot = false;
 
     public void SetInventoryPosition(Vector2 pos)
     {
