@@ -12,7 +12,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
 
     public enum Type { Resource, Weapon, Ammunition, Supplies };
     public Type itemType = Type.Resource;
-    public enum Name { Wood, Steel};
+    public enum Name { Wood, Stone, Scrap};
     public Name itemName = Name.Wood;
     [Space]
     public int itemWidth; //we NOT doing Ls
