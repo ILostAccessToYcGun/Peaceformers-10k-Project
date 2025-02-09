@@ -238,6 +238,7 @@ GameObject:
   - component: {fileID: 5737902145912586090}
   - component: {fileID: 5329586920675453467}
   - component: {fileID: 7059151179054628515}
+  - component: {fileID: 799791086440288198}
   m_Layer: 0
   m_Name: InteractCanvas
   m_TagString: Untagged
@@ -310,7 +311,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &7059151179054628515
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -328,6 +329,22 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &799791086440288198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4861826488088090265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e53a41873f06ef24a84ff2e9b543aa9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionPrompt: {fileID: 0}
+  interactionFill: {fileID: 0}
+  holdTimeRequired: 0
+  holdingInteract: 0
 --- !u!1 &5881791475613046642
 GameObject:
   m_ObjectHideFlags: 0

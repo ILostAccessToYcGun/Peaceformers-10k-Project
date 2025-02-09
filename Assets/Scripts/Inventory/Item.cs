@@ -9,28 +9,36 @@ using UnityEngine.UI;
 public class Item : MonoBehaviour, IPointerClickHandler
 {
     //This is the base Item class, all items will derrive from this class
-
     public enum Type { Resource, Weapon, Ammunition, Supplies };
-    public Type itemType = Type.Resource;
-    public enum Name { Wood, Stone, Scrap};
-    public Name itemName = Name.Wood;
-    [Space]
-    public int itemWidth; //we NOT doing Ls
-    public int itemHeight;
-    public List<ItemComponent> itemComponents = new List<ItemComponent>();
-    public ItemComponent singleComponent;
-    public Image img;
-    public int componentDistance;
-    public GridLayoutGroup gridLayout;
+    public enum Name { Wood, Stone, Scrap };
+
+    [Header("Categories")]
+    [SerializeField] Type itemType = Type.Resource;
+    [SerializeField] public Name itemName;
 
     [Space]
-    public InventorySlot currentInventorySlot;
-    public InventorySlot previousInventorySlot;
-    public List<InventorySlot> componentSlots;
-    public GameObject parent;
+    [Header("Dimensions")]
+    [SerializeField] public int itemWidth; //we NOT doing Ls
+    [SerializeField] public  int itemHeight;
+    [SerializeField] List<ItemComponent> itemComponents = new List<ItemComponent>();
+    [SerializeField] ItemComponent singleComponent;
+    [SerializeField] public Image img;
+    [SerializeField] int componentDistance;
+    [SerializeField] GridLayoutGroup gridLayout;
 
     [Space]
-    public Inventory currentInventory;
+    [Header("Inventory")]
+    [SerializeField] InventorySlot currentInventorySlot;
+    [SerializeField] InventorySlot previousInventorySlot;
+    [SerializeField] List<InventorySlot> componentSlots;
+
+    [Space]
+    [Header("Connected Objects")]
+    [SerializeField] PlayerMovement player;
+    [SerializeField] public GameObject parent;
+    [SerializeField] Inventory currentInventory;
+    [SerializeField] WorldItem worldItem;
+    
     #region _Item_Pickup_in_Menu_
     private bool itemIsPickedUpByMouse;
 
@@ -275,8 +283,8 @@ public class Item : MonoBehaviour, IPointerClickHandler
                         if (itemDoesFitInsideInventoryFrame && (itemDoesNotCollideWithOtherItems || firstCellisLikeItem))
                         {
                             //Debug.Log("itemDoesFitInsideInventoryFrame: " + itemDoesFitInsideInventoryFrame);
-                            Debug.Log("itemDoesNotCollideWithOtherItems: " + itemDoesNotCollideWithOtherItems);
-                            Debug.Log("firstCellisLikeItem: " + firstCellisLikeItem);
+                            //Debug.Log("itemDoesNotCollideWithOtherItems: " + itemDoesNotCollideWithOtherItems);
+                            //Debug.Log("firstCellisLikeItem: " + firstCellisLikeItem);
                             if (slot.GetHeldItem() == null) //if the slot isnt holding anything
                             {
                                 isStacking = false;
@@ -285,7 +293,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
                                 nearestDistance = compareDistance;
                                 nearestInventorySlot = slot;
                                 stackingItem = null;
-                                Debug.Log("empty " + nearestDistance);
+                                //Debug.Log("empty " + nearestDistance);
                             }
                             else if (slot.GetHeldItem().itemName == itemName) //if the slot is holding another of the same item
                             {
@@ -372,8 +380,12 @@ public class Item : MonoBehaviour, IPointerClickHandler
             }
             else //outside of the current inventory
             {
-                Debug.Log("Drop item into world");
-                OnDestroy();
+                if (player != null)
+                {
+                    Instantiate(worldItem.gameObject, player.transform.position + new Vector3(0, 0, 2f), player.transform.rotation);
+                    OnDestroy();
+                }
+                
             }
 
             
@@ -395,9 +407,6 @@ public class Item : MonoBehaviour, IPointerClickHandler
                 OnDestroy();
                 return;
             }
-
-            
-
             if (isStacking)
             {
                 stackingItem.IncreaseStackAmount(stackAmount);
@@ -492,7 +501,6 @@ public class Item : MonoBehaviour, IPointerClickHandler
     }
     #endregion
 
-
     #region _Size_
 
     public void GenerateItem()
@@ -528,7 +536,6 @@ public class Item : MonoBehaviour, IPointerClickHandler
 
     #endregion
 
-
     private void OnDestroy()
     {
         if (currentInventorySlot != null)
@@ -545,6 +552,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
         img = GetComponent<Image>();
         stackAmount = 1;
         SetStackLimit(5);
+        player = FindAnyObjectByType<PlayerMovement>();
         //componentDistance = 100;
         if (itemComponents.Count < (itemWidth * itemHeight) - 1)
             GenerateItem();
