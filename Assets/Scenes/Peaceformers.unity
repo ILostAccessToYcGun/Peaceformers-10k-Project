@@ -4779,7 +4779,7 @@ PrefabInstance:
       objectReference: {fileID: 10167186}
     - target: {fileID: 8298317992312266744, guid: e64b25b68280b9f448a8f87c0afbb7bf, type: 3}
       propertyPath: m_Mass
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9054458157456506914, guid: e64b25b68280b9f448a8f87c0afbb7bf, type: 3}
       propertyPath: holdTimeRequired
@@ -5943,6 +5943,10 @@ PrefabInstance:
     - target: {fileID: 1966892282438000027, guid: d0e2c2d796812f948b8e56e5e496b63d, type: 3}
       propertyPath: m_Name
       value: WorldItem (Stone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2333370333059261475, guid: d0e2c2d796812f948b8e56e5e496b63d, type: 3}
+      propertyPath: m_Mass
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3861208176700824283, guid: d0e2c2d796812f948b8e56e5e496b63d, type: 3}
       propertyPath: m_LocalPosition.x
