@@ -10,7 +10,7 @@ public class InteractionPrompt : MonoBehaviour
     private float currentHoldTime;
     [Space]
     [SerializeField] private bool holdingInteract;
-    private bool interactionRequested;
+    public bool interactionRequested;
     private Action interactDone;
 
     void Start()
@@ -46,6 +46,7 @@ public class InteractionPrompt : MonoBehaviour
     public void RequestInteraction(float holdTime, ref GameObject interactionImg, ref Image interactionPromptFill, Action interactionDone)
     {
         interactionRequested = true;
+        Debug.Log(interactionRequested);
         holdTimeRequired = holdTime;
         interactionPrompt = interactionImg;
         interactionFill = interactionPromptFill;
@@ -63,5 +64,17 @@ public class InteractionPrompt : MonoBehaviour
     public void SetHold(bool isHoldingInteract)
     {
         holdingInteract = isHoldingInteract;
+    }
+
+    public void SetRequest(bool isRequestingInteract)
+    {
+        interactionRequested = isRequestingInteract;
+    }
+
+    public void SetHoldTime(float newTime)
+    {
+        currentHoldTime = newTime;
+        float holdRatio = currentHoldTime / holdTimeRequired;
+        interactionFill.fillAmount = holdRatio;
     }
 }

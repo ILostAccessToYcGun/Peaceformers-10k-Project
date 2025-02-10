@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -11,8 +13,45 @@ public class Player : MonoBehaviour
     [Space]
     [SerializeField] private PlayerUIToggler playerUIToggler;
     [SerializeField] private InteractionPrompt interactionPrompt;
+    [SerializeField] private List<InteractionPrompt> interactionPrompts;
+    [SerializeField] private List<float> interactionDistances;
+    [SerializeField] private float closestPrompt;
 
     private PlayerActionInputs _inputActions;
+
+    public void AddInteractionPrompt(InteractionPrompt newPrompt, float distance)
+    {
+        ////hmmmmmmmmm closestPrompt some thing something
+        interactionPrompts.Add(newPrompt);
+        interactionDistances.Add(distance);
+    }
+
+    public void SetInteractionPrompt()
+    {
+        if (interactionPrompts.Count <= 0) { return; }
+        int prompt = 0;
+        float smallestDistance = 20;
+        for (int i = 0; i < interactionDistances.Count; i++)
+        {
+            if (interactionDistances[i] < smallestDistance)
+            {
+                prompt = i;
+                smallestDistance = interactionDistances[i];
+            }
+        }
+        ////hmmmmmmmmm closestPrompt some thing something
+        interactionPrompt = interactionPrompts[prompt];
+        interactionPrompts.Remove(interactionPrompts[prompt]);
+
+        for (int i = 0; i < interactionPrompts.Count; i++)
+        {
+            interactionPrompts[i].SetHold(false);
+            interactionPrompts[i].SetRequest(false);
+            interactionPrompts[i].SetHoldTime(0);
+        }
+        interactionPrompts.Clear();
+        interactionDistances.Clear();
+    }
 
     void Start()
     {
@@ -81,5 +120,7 @@ public class Player : MonoBehaviour
         playerCamera.UpdatePosition(cameraTarget);
         cameraSpring.UpdateSpring(deltaTime, cameraTarget.up);
         cameraLean.UpdateLean(deltaTime, state.Acceleration, cameraTarget.up);
+
+        SetInteractionPrompt();
     }
 }

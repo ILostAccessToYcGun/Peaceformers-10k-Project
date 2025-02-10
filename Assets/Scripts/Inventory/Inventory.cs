@@ -9,13 +9,17 @@ using static UnityEditor.Progress;
 public class Inventory : MonoBehaviour
 {
     //TODO: change access modifiers at some point
+    [Space]
     public int inventoryWidth;
     public int inventoryHeight;
+    public int cellWidth;
+    public int cellHeight;
     public int cellDistance; //since im usihng the lay out group I can probably remove this, but for now it stays
     public GridLayoutGroup gridLayout;
 
     [Space]
     public RectTransform inventoryPanel;
+    public GameObject parent;
     public GameObject inventorySlot;
     public Item testItem;
     [Space]
@@ -78,7 +82,7 @@ public class Inventory : MonoBehaviour
         gridLayout.padding.top = 10;
         gridLayout.padding.bottom = 10;
         gridLayout.constraintCount = width;
-        gridLayout.cellSize.Set(cellWidth, cellHeight);
+        gridLayout.cellSize = new Vector2(cellWidth, cellHeight);
 
         #endregion
 
@@ -166,6 +170,7 @@ public class Inventory : MonoBehaviour
     }
     public InventorySlot FindPartialyFilledItemOrEmptySlot(Item itemToFind)
     {
+        Debug.Log(itemToFind.itemName);
         //finding partially filled, has prio over empty slot
         for (int j = 0; j < inventory.Capacity; j++)
         {
@@ -227,7 +232,7 @@ public class Inventory : MonoBehaviour
         if (findSlot.GetHeldItem() != null) { IncreaseItemStackAmount(findSlot, amount); }
         else
         {
-            GameObject added = Instantiate(testItem.gameObject, findSlot.transform.position, findSlot.transform.rotation, itemToFind.parent.transform);
+            GameObject added = Instantiate(itemToFind.gameObject, findSlot.transform.position + new Vector3(0, 0, 1), findSlot.transform.rotation, parent.transform);
             added.transform.localScale = Vector3.one;
             Item addedItem = added.GetComponent<Item>();
             addedItem.SearchAndMoveToNearestInventorySlot();
@@ -259,8 +264,11 @@ public class Inventory : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E) && inventoryPanel.gameObject.activeSelf)
         {
-            GenerateInventory(inventoryWidth, inventoryHeight, 50, 50);
-            SetInventory(null);
+            if (inventory.Count == 0)
+            {
+                GenerateInventory(inventoryWidth, inventoryHeight, cellWidth, cellHeight);
+                SetInventory(null);
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Z))
@@ -273,4 +281,5 @@ public class Inventory : MonoBehaviour
             RemoveItemFromInventory(testItem, 1);
         }
     }
+
 }

@@ -15,5 +15,6 @@ public class ItemComponent : MonoBehaviour, IPointerClickHandler
     public void SetImage()
     {
         img.color = originalItem.img.color;
+        img.material = originalItem.img.material;
     }
 }

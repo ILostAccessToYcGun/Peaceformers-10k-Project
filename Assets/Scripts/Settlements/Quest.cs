@@ -3,23 +3,13 @@ using UnityEngine;
 
 public class Quest : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-
-
-
-
-
     /*//Quests have a 
      * time limit
      * complete percentage
      * parent settlement
      * random material required
      * completed bool
-     
-     
-     
-     
-     
+
      */
     [Header("Other Objects")]
     public Settlement parentSettlement;
@@ -34,9 +24,7 @@ public class Quest : MonoBehaviour
     [SerializeField] Item.Name desiredResource;
     [Space]
     [Header("Time")]  
-    [SerializeField] int dayAccepted;
     [SerializeField] int dayDue;
-    [SerializeField] Vector2 timeAccepted;  //x is hour, y is minutes
     [SerializeField] Vector2 timeDue;       //x is hour, y is minutes
 
     #region _Parent_Settlement_
@@ -84,19 +72,14 @@ public class Quest : MonoBehaviour
 
     #region _Time_
 
-    public void SetDayAccepted(int day) { dayAccepted = day; }
-    public int GetDayAccepted() { return dayAccepted; }
-
     public void SetDayDue(int day) { dayDue = day; }
     public int GetDayDue() { return dayDue; }
     public void RandomizeDayDue(int min, int max)
     {
-        int acceptDay = GetDayAccepted();
-        SetDayDue(Random.Range(acceptDay + min, acceptDay + max + 1));
+        int currentDate = calendar.date;
+        SetDayDue(Random.Range(currentDate + min, currentDate + max + 1));
     }
 
-    public void SetTimeAccepted(Vector2 time) { timeAccepted = time; }
-    public Vector2 GetTimeAccepted() { return timeAccepted; }
 
     public void SetTimeDue(Vector2 time) { timeDue = time; }
     public Vector2 GetTimeDue() { return timeDue; }
@@ -108,10 +91,8 @@ public class Quest : MonoBehaviour
         ToggleCompletionStatus(false);
         RandomizeResource();
         RandomizeResourceRequirement(1, 10);
-        SetDayAccepted(calendar.date);
-        SetTimeAccepted(new Vector2(time.hour, time.minute));
+        SetTimeDue(new Vector2(time.hour, time.minute));
         RandomizeDayDue(1, 3);
-        SetTimeDue(GetTimeAccepted()); //TODO: maybe randomize this later, but good for now
         //add to quest board UI
 
         Debug.Log("gl hf");
@@ -142,5 +123,6 @@ public class Quest : MonoBehaviour
     private void Awake()
     {
         time = FindAnyObjectByType<DayNightCycleManager>();
+        calendar = FindAnyObjectByType<CalendarManger>();
     }
 }
