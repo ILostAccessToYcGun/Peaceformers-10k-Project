@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class Settlement : MonoBehaviour
+public class Settlement : BaseInteractable
 {
     [Header("Basics")]
     [SerializeField] private string settlementName;
@@ -23,18 +23,12 @@ public class Settlement : MonoBehaviour
     [SerializeField] private Color goodHealthColor;
     [SerializeField] private Color watchOutColor;
     [SerializeField] private Color criticalColor;
-    [Space]
-    [Header("Interaction")]
-    [SerializeField] private Transform player;
-    [SerializeField] private float playerDetectionRange;
-    [SerializeField] private InteractionPrompt interactionPrompt;
-    [Space]
-    [SerializeField] private GameObject interactionPromptImage;
-    [SerializeField] private Image interactionFill;
-    [SerializeField] private bool requestedInteract;
-    [SerializeField] private bool initializeAction;
 
-    void Start()
+    protected virtual void Awake()
+    {
+        base.Awake();
+    }
+    protected virtual void Start()
     {
         nametag.text = settlementName;
         transform.name = settlementName;
@@ -59,22 +53,7 @@ public class Settlement : MonoBehaviour
 
         currentUpkeep = Mathf.Clamp(currentUpkeep, 0, maxUpkeep);
         Upkeepbar();
-        Interaction();
-    }
-
-    void Interaction()
-    {
-        if (Vector3.Distance(transform.position, player.position) <= playerDetectionRange && !initializeAction)
-        {
-            requestedInteract = true;
-            interactionPrompt.RequestInteraction(1f, ref interactionPromptImage, ref interactionFill, () => GainMeter(20));
-        }
-        else if (Vector3.Distance(transform.position, player.position) >= playerDetectionRange && requestedInteract)
-        {
-            interactionPrompt.DisableInteraction();
-            requestedInteract = false;
-            initializeAction = false;
-        }
+        base.Update();
     }
 
     void Upkeepbar()

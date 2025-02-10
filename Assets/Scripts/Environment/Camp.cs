@@ -1,40 +1,25 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using Unity.VisualScripting;
 
-public class Camp : MonoBehaviour
+public class Camp : BaseInteractable
 {
-    [SerializeField] private Transform player;
-    [SerializeField] private float playerDetectionRange;
-    [SerializeField] private InteractionPrompt interactionPrompt;
-    [Space]
-    [SerializeField] private GameObject interactionPromptImage;
-    [SerializeField] private Image interactionFill;
-    [SerializeField] private bool requestedInteract;
-    [SerializeField] private bool initializeAction;
-
-    void Start()
+    protected override void Update()
     {
-        
+        base.Update();
     }
 
-    void Update()
-    {
-        if (Vector3.Distance(transform.position, player.position) <= playerDetectionRange && !initializeAction)
-        {
-            requestedInteract = true;
-            interactionPrompt.RequestInteraction(1f, ref interactionPromptImage, ref interactionFill, () => OpenCampPrompt());
-        }
-        else if (Vector3.Distance(transform.position, player.position) >= playerDetectionRange && requestedInteract)
-        {
-            interactionPrompt.DisableInteraction();
-            requestedInteract = false;
-            initializeAction = false;
-        }
-    }
-
-    void OpenCampPrompt()
+    protected override void OpenPrompt()
     {
         print("Open camp prompt");
     }
+
+    protected override void Awake()
+    {
+        InteractionPrompt tempPrompt = interactionPrompt;
+        base.Awake();
+        interactionPrompt = tempPrompt;
+    }
+
 }
