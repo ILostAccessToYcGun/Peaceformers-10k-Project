@@ -4649,6 +4649,7 @@ MonoBehaviour:
   cellDistance: 140
   gridLayout: {fileID: 1874485412}
   inventoryPanel: {fileID: 1874485411}
+  parent: {fileID: 1349281797}
   inventorySlot: {fileID: 3976304327754479419, guid: 65242ffa900d7c24aa6d2a8eb49ee4ac, type: 3}
   testItem: {fileID: 0}
   isPlayerInventory: 1
