@@ -1,7 +1,9 @@
 using System.Reflection;
 using UnityEngine;
 
-public class Quest : MonoBehaviour
+[CreateAssetMenu(fileName = "New Quest", menuName = "Quest")]
+
+public class QuestObject : ScriptableObject
 {
     /*//Quests have a 
      * time limit
@@ -21,11 +23,15 @@ public class Quest : MonoBehaviour
     [SerializeField] int resourceCount;
     [SerializeField] int resourcesRequired;
     [SerializeField] float completionPercentage;
-    [SerializeField] Item.Name desiredResource;
+    [SerializeField] Item.Name desiredResourceName;
     [Space]
     [Header("Time")]  
     [SerializeField] int dayDue;
     [SerializeField] Vector2 timeDue;       //x is hour, y is minutes
+    [Space]
+    [Header("QuestDisplay")]
+    [SerializeField] string description;
+
 
     #region _Parent_Settlement_
 
@@ -60,8 +66,8 @@ public class Quest : MonoBehaviour
     }
     public float GetCompletionPercentage() { return completionPercentage; }
 
-    public void SetResource(Item.Name _resourceName) { desiredResource = _resourceName; }
-    public Item.Name GetResource() { return desiredResource; }
+    public void SetResource(Item.Name _resourceName) { desiredResourceName = _resourceName; }
+    public Item.Name GetResource() { return desiredResourceName; }
     public void RandomizeResource()
     {
         SetResource((Item.Name)Random.Range(0, 3));
@@ -86,11 +92,41 @@ public class Quest : MonoBehaviour
 
     #endregion
 
-    public void AcceptQuest()
+    #region _Description_
+
+    public void SetDescription()
+    {
+        if (parentSettlement == null) { return; }
+        string suffix = "";
+        if (dayDue == 1 || dayDue == 21 || dayDue == 31)
+            suffix = "st";
+        else if (dayDue == 2 || dayDue == 22)
+            suffix = "nd";
+        else if (dayDue == 3 || dayDue == 23)
+            suffix = "rd";
+        else
+            suffix = "th";
+
+        description = "Collect " + resourcesRequired + " " + desiredResourceName + " and Deliver to " + parentSettlement.GetSettlementName()
+            + " before " + timeDue.x + ":" + (timeDue.y < 10 ? "0" : "") + timeDue.y + " on the " + dayDue + suffix + " of November.";
+    }
+
+    public string GetDescription() { return description; }
+
+    #endregion
+
+
+    public void SetUpQuest(int minResource, int maxResource)
     {
         ToggleCompletionStatus(false);
         RandomizeResource();
-        RandomizeResourceRequirement(1, 10);
+        RandomizeResourceRequirement(minResource, maxResource);
+        RandomizeDayDue(3, 4);
+        SetDescription();
+    }
+
+    public void AcceptQuest()
+    {
         SetTimeDue(new Vector2(time.hour, time.minute));
         RandomizeDayDue(1, 3);
         //add to quest board UI
@@ -124,5 +160,6 @@ public class Quest : MonoBehaviour
     {
         time = FindAnyObjectByType<DayNightCycleManager>();
         calendar = FindAnyObjectByType<CalendarManger>();
+        SetUpQuest(1, 10);
     }
 }

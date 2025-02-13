@@ -19,24 +19,48 @@ public class QuestBoard : MonoBehaviour
      
      */
 
-    public GameObject scrollQuestParent;
+    public GameObject scrollContent;
     public enum QuestStatus { InProgress, Completed }
 
-    public List<Quest> quests;
+    public List<QuestDisplay> quests;
+
+    public GameObject baseQuestUI;
+    public QuestObject baseQuestObject;
 
 
-    public void AddQuest(Quest newQuest)
+    public void AddQuest(QuestObject newObject = null)
     {
-        quests.Add(newQuest);
+        Debug.Log(baseQuestObject);
+        if (newObject == null)
+        {
+            newObject = Instantiate(baseQuestObject);
+        }
+            
+        GameObject questUI = Instantiate(baseQuestUI, scrollContent.transform);
+        QuestDisplay newDisplay = questUI.GetComponent<QuestDisplay>();
+
+
+        newObject.SetResourceCount(Random.Range(0, newObject.GetResourceRequirement()));
+        newDisplay.SetQuestObject(newObject);
+        quests.Add(newDisplay);
+
+        
+        //instantiate quest UI
         //add something to the scrollQuestParent
     }
 
-    public void RemoveQuest(Quest removeQuest)
+    public void RemoveQuest(QuestDisplay removeQuest)
     {
         quests.Remove(removeQuest);
         //remove something to the scrollQuestParent
     }
 
 
-
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            AddQuest();
+        }
+    }
 }

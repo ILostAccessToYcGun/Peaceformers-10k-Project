@@ -46,7 +46,6 @@ public class InteractionPrompt : MonoBehaviour
     public void RequestInteraction(float holdTime, ref GameObject interactionImg, ref Image interactionPromptFill, Action interactionDone)
     {
         interactionRequested = true;
-        Debug.Log(interactionRequested);
         holdTimeRequired = holdTime;
         interactionPrompt = interactionImg;
         interactionFill = interactionPromptFill;

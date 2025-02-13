@@ -81,4 +81,6 @@ public class Settlement : BaseInteractable
         currentUpkeep = Mathf.Clamp(currentUpkeep - value, 0, maxUpkeep);
         stationary = true;
     }
+
+    public string GetSettlementName() { return settlementName; }
 }
