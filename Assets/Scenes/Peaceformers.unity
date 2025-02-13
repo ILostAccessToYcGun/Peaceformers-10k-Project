@@ -7868,7 +7868,7 @@ MonoBehaviour:
   scrollContent: {fileID: 1454257206}
   quests: []
   baseQuestUI: {fileID: 1212120359091950080, guid: 9643095ff74058a42892014076b0d30e, type: 3}
-  baseQuestObject: {fileID: 0}
+  baseQuestObject: {fileID: 11400000, guid: 77eee3b92dacd3049a59a2bfb0acc93d, type: 2}
 --- !u!1 &1663364902
 GameObject:
   m_ObjectHideFlags: 0
@@ -9659,7 +9659,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5897798532370953168, guid: 9643095ff74058a42892014076b0d30e, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5897798532370953168, guid: 9643095ff74058a42892014076b0d30e, type: 3}
       propertyPath: m_AnchorMin.x
@@ -9667,7 +9667,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5897798532370953168, guid: 9643095ff74058a42892014076b0d30e, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5897798532370953168, guid: 9643095ff74058a42892014076b0d30e, type: 3}
       propertyPath: m_SizeDelta.x
@@ -9707,11 +9707,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5897798532370953168, guid: 9643095ff74058a42892014076b0d30e, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 672
       objectReference: {fileID: 0}
     - target: {fileID: 5897798532370953168, guid: 9643095ff74058a42892014076b0d30e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -150
       objectReference: {fileID: 0}
     - target: {fileID: 5897798532370953168, guid: 9643095ff74058a42892014076b0d30e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
