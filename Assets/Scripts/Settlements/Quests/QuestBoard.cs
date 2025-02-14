@@ -19,28 +19,37 @@ public class QuestBoard : MonoBehaviour
      
      */
 
-    public GameObject scrollContent;
-    public enum QuestStatus { InProgress, Completed }
+    [SerializeField] protected GameObject scrollContent;
+    public enum QuestStatus { InProgress, Completed } //????
 
-    public List<QuestDisplay> quests;
+    [SerializeField] protected List<QuestDisplay> quests;
 
-    public GameObject baseQuestUI;
-    public QuestObject baseQuestObject;
+    [SerializeField] protected GameObject baseQuestUI;
+    [SerializeField] protected QuestObject baseQuestObject;
 
-
-    public void AddQuest(QuestObject newObject = null)
+    //public void ToggleQuestBoardVisibility()
+    //{
+    //    if (this.gameObject.activeSelf)
+    //        this.gameObject.SetActive(false);
+    //    else
+    //        this.gameObject.SetActive(true);
+    //}
+    public virtual void AddQuest(QuestObject newObject = null)
     {
         Debug.Log(baseQuestObject);
         if (newObject == null)
         {
+
             newObject = Instantiate(baseQuestObject);
+            newObject.SetResourceCount(Random.Range(0, newObject.GetResourceRequirement()));
         }
             
         GameObject questUI = Instantiate(baseQuestUI, scrollContent.transform);
         QuestDisplay newDisplay = questUI.GetComponent<QuestDisplay>();
 
 
-        newObject.SetResourceCount(Random.Range(0, newObject.GetResourceRequirement()));
+        
+        newDisplay.SetQuestBoard(this); //streamline this eventually
         newDisplay.SetQuestObject(newObject);
         quests.Add(newDisplay);
 
@@ -52,15 +61,9 @@ public class QuestBoard : MonoBehaviour
     public void RemoveQuest(QuestDisplay removeQuest)
     {
         quests.Remove(removeQuest);
+        Destroy(removeQuest.gameObject);
         //remove something to the scrollQuestParent
-    }
 
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            AddQuest();
-        }
+        //I need to show a confirmation prompt to the plyer to make sure they want to adandon the quest.
     }
 }

@@ -1,4 +1,5 @@
 using System.Reflection;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Quest", menuName = "Quest")]
@@ -108,7 +109,7 @@ public class QuestObject : ScriptableObject
             suffix = "th";
 
         description = "Collect " + resourcesRequired + " " + desiredResourceName + " and Deliver to " + parentSettlement.GetSettlementName()
-            + " before " + timeDue.x + ":" + (timeDue.y < 10 ? "0" : "") + timeDue.y + " on the " + dayDue + suffix + " of November.";
+            + " before " + timeDue.x + ":" + (timeDue.y < 10 ? "0" : "") + timeDue.y + " on the " + dayDue + suffix + " of November.\n\nWill add X% to the settlement's upkeep meter";
     }
 
     public string GetDescription() { return description; }
@@ -118,17 +119,19 @@ public class QuestObject : ScriptableObject
 
     public void SetUpQuest(int minResource, int maxResource)
     {
+        //QuestGiver questGiverParent = this.GetComponentInParent<QuestGiver>();
+        //SetParentSettlement(questGiverParent.GetSettlement());
         ToggleCompletionStatus(false);
         RandomizeResource();
         RandomizeResourceRequirement(minResource, maxResource);
-        RandomizeDayDue(3, 4);
+        RandomizeDayDue(3, 5);
         SetDescription();
     }
 
     public void AcceptQuest()
     {
-        SetTimeDue(new Vector2(time.hour, time.minute));
-        RandomizeDayDue(1, 3);
+        //SetTimeDue(new Vector2(time.hour, time.minute));
+        //RandomizeDayDue(1, 4);
         //add to quest board UI
 
         Debug.Log("gl hf");
@@ -158,6 +161,7 @@ public class QuestObject : ScriptableObject
 
     private void Awake()
     {
+        Debug.Log("Roo");
         time = FindAnyObjectByType<DayNightCycleManager>();
         calendar = FindAnyObjectByType<CalendarManger>();
         SetUpQuest(1, 10);

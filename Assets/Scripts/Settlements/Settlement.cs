@@ -23,10 +23,12 @@ public class Settlement : BaseInteractable
     [SerializeField] private Color goodHealthColor;
     [SerializeField] private Color watchOutColor;
     [SerializeField] private Color criticalColor;
+    [SerializeField] private QuestGiver questGiver;
 
     protected virtual void Awake()
     {
         base.Awake();
+        questGiver = GetComponent<QuestGiver>();
     }
     protected virtual void Start()
     {
@@ -82,5 +84,13 @@ public class Settlement : BaseInteractable
         stationary = true;
     }
 
+    protected override void OpenPrompt()
+    {
+        print("Open QuestGiver prompt");
+        //questGiver.
+    }
+
     public string GetSettlementName() { return settlementName; }
+    public float GetCurrentUpKeep() { return currentUpkeep; }
+    public float GetMaxUpKeep() { return maxUpkeep; }
 }

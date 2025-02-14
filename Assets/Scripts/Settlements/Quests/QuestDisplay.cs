@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class QuestDisplay : MonoBehaviour
 {
     public QuestObject questObject;
+    public QuestBoard questBoard;
     public Image settlementIcon;
     public TextMeshProUGUI description;
     public Slider completionSlider;
@@ -14,7 +15,6 @@ public class QuestDisplay : MonoBehaviour
 
     public void SetUpQuestDisplay()
     {
-        
         //settlementIcon = questObject.parentSettlement.icon
         if (questObject != null)
         {
@@ -35,13 +35,20 @@ public class QuestDisplay : MonoBehaviour
         SetUpQuestDisplay();
     }
 
-    public void ButtonAbandonedQuest()
+    public void SetQuestBoard(QuestBoard newBoard)
+    {
+        questBoard = newBoard;
+    }
+
+    public virtual void ButtonAbandonedQuest()
     {
         Debug.Log("abandon");
 
         //TESTING//
-        questObject.SetResourceCount(questObject.GetResourceCount() + 1);
-        UpdateSliderUI();
+        //questObject.SetResourceCount(questObject.GetResourceCount() + 1);
+        //UpdateSliderUI();
+
+        questBoard.RemoveQuest(this);
     }
 
     public void UpdateSliderUI()
