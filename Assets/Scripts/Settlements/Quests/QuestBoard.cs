@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
 
 public class QuestBoard : MonoBehaviour
 {
@@ -27,6 +28,9 @@ public class QuestBoard : MonoBehaviour
     [SerializeField] protected GameObject baseQuestUI;
     [SerializeField] protected QuestObject baseQuestObject;
 
+    [SerializeField] protected GameObject abandonVerification;
+    [SerializeField] protected Button abandonConfirmButton;
+
     //public void ToggleQuestBoardVisibility()
     //{
     //    if (this.gameObject.activeSelf)
@@ -39,7 +43,6 @@ public class QuestBoard : MonoBehaviour
         Debug.Log(baseQuestObject);
         if (newObject == null)
         {
-
             newObject = Instantiate(baseQuestObject);
             newObject.SetResourceCount(Random.Range(0, newObject.GetResourceRequirement()));
         }
@@ -48,7 +51,8 @@ public class QuestBoard : MonoBehaviour
         QuestDisplay newDisplay = questUI.GetComponent<QuestDisplay>();
 
 
-        
+        newDisplay.SetAbandonVerification(abandonVerification);
+        newDisplay.SetAbandonConfirmButton(abandonConfirmButton);
         newDisplay.SetQuestBoard(this); //streamline this eventually
         newDisplay.SetQuestObject(newObject);
         quests.Add(newDisplay);
@@ -60,10 +64,16 @@ public class QuestBoard : MonoBehaviour
 
     public void RemoveQuest(QuestDisplay removeQuest)
     {
+        if (removeQuest == null) { return; }
         quests.Remove(removeQuest);
         Destroy(removeQuest.gameObject);
         //remove something to the scrollQuestParent
 
         //I need to show a confirmation prompt to the plyer to make sure they want to adandon the quest.
+    }
+
+    public void AbortAbandon()
+    {
+        abandonVerification.SetActive(false);
     }
 }

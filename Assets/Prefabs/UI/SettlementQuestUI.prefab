@@ -188,71 +188,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!1 &1537672293660290384
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3531118218321960344}
-  - component: {fileID: 3769265542281202366}
-  m_Layer: 5
-  m_Name: Buttons
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &3531118218321960344
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1537672293660290384}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 4613980357133126517}
-  - {fileID: 3502389051205028693}
-  - {fileID: 8165019398061956496}
-  m_Father: {fileID: 6833290062736797181}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -115}
-  m_SizeDelta: {x: 1050, y: 50}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &3769265542281202366
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1537672293660290384}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 4
-  m_Spacing: 0
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
 --- !u!1 &1571978191860909064
 GameObject:
   m_ObjectHideFlags: 0
@@ -285,11 +220,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7178407453475166005}
-  m_Father: {fileID: 3531118218321960344}
+  m_Father: {fileID: 6833290062736797181}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 787.5, y: -25}
+  m_AnchoredPosition: {x: 813.08, y: -265}
   m_SizeDelta: {x: 271.58252, y: 45.3391}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8513464155028904898
@@ -374,9 +309,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: QuestDisplay, Assembly-CSharp
-        m_MethodName: ButtonAbandonedQuest
+      - m_Target: {fileID: 2198516132754162079}
+        m_TargetAssemblyTypeName: SettlementQuestDisplay, Assembly-CSharp
+        m_MethodName: ButtonHandInQuest
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -455,8 +390,10 @@ RectTransform:
   m_Children:
   - {fileID: 813139490548676865}
   - {fileID: 158295443649636105}
-  - {fileID: 3531118218321960344}
   - {fileID: 7199139222333389206}
+  - {fileID: 4613980357133126517}
+  - {fileID: 3502389051205028693}
+  - {fileID: 8165019398061956496}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -522,6 +459,8 @@ MonoBehaviour:
   sliderFill: {fileID: 232367042683359073}
   completionPercentage: {fileID: 4136898204580705177}
   daysLeft: {fileID: 4589181020733397689}
+  abandonVerification: {fileID: 0}
+  abandonConfirmButton: {fileID: 0}
   acceptButton: {fileID: 4682521659931614574}
   abandonButton: {fileID: 8843638700616903492}
   handInButton: {fileID: 190240043723345682}
@@ -891,8 +830,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -967,11 +906,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4472811339023987322}
-  m_Father: {fileID: 3531118218321960344}
+  m_Father: {fileID: 6833290062736797181}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 525, y: -25}
+  m_AnchoredPosition: {x: 269.92, y: -265}
   m_SizeDelta: {x: 271.58252, y: 45.3391}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3713767917673161877
@@ -1056,7 +995,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2198516132754162079}
         m_TargetAssemblyTypeName: QuestDisplay, Assembly-CSharp
         m_MethodName: ButtonAbandonedQuest
         m_Mode: 1
@@ -1827,11 +1766,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8408274728989438468}
-  m_Father: {fileID: 3531118218321960344}
+  m_Father: {fileID: 6833290062736797181}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 525, y: -25}
+  m_AnchoredPosition: {x: 541.5, y: -265}
   m_SizeDelta: {x: 271.58252, y: 45.3391}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7587938704108770505
@@ -1916,9 +1855,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: QuestDisplay, Assembly-CSharp
-        m_MethodName: ButtonAbandonedQuest
+      - m_Target: {fileID: 2198516132754162079}
+        m_TargetAssemblyTypeName: SettlementQuestDisplay, Assembly-CSharp
+        m_MethodName: ButtonAcceptQuest
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

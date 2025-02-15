@@ -12,6 +12,9 @@ public class QuestDisplay : MonoBehaviour
     public Image sliderFill;
     public TextMeshProUGUI completionPercentage;
     public TextMeshProUGUI daysLeft;
+    [SerializeField] protected GameObject abandonVerification;
+    [SerializeField] Button abandonConfirmButton;
+
 
     public void SetUpQuestDisplay()
     {
@@ -40,16 +43,36 @@ public class QuestDisplay : MonoBehaviour
         questBoard = newBoard;
     }
 
-    public virtual void ButtonAbandonedQuest()
+    #region _Button_
+
+    public void ButtonAbandonedQuest()
     {
         Debug.Log("abandon");
+        abandonVerification.SetActive(true);
+        abandonConfirmButton.onClick.RemoveAllListeners();
+        abandonConfirmButton.onClick.AddListener(this.ButtonConfirmAbandon_onClick);
+        
+    }
 
-        //TESTING//
-        //questObject.SetResourceCount(questObject.GetResourceCount() + 1);
-        //UpdateSliderUI();
+    //Handle the onClick event
+    protected void ButtonConfirmAbandon_onClick()
+    {
+        ConfirmAbandon();
+    }
 
+    public virtual void ConfirmAbandon()
+    {
+        Debug.Log("quest, not settlement");
+        abandonVerification.SetActive(false);
         questBoard.RemoveQuest(this);
     }
+
+    
+
+    public void SetAbandonVerification(GameObject newVerification) { abandonVerification = newVerification; }
+    public void SetAbandonConfirmButton(Button newButton) { abandonConfirmButton = newButton; }
+
+    #endregion
 
     public void UpdateSliderUI()
     {

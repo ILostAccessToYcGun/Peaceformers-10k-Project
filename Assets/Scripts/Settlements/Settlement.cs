@@ -87,7 +87,7 @@ public class Settlement : BaseInteractable
     protected override void OpenPrompt()
     {
         print("Open QuestGiver prompt");
-        //questGiver.
+        questGiver.ToggleSettlementQuestBoardVisibility();
     }
 
     public string GetSettlementName() { return settlementName; }

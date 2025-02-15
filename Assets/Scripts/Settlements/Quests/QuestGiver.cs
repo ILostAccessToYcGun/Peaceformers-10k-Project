@@ -37,10 +37,16 @@ public class QuestGiver : MonoBehaviour
         if (newObject == null)
         {
             newObject = Instantiate(baseQuestObject, this.transform);
+            newObject.SetParentSettlement(currentSettlement); //I wish there was a better way of setting it up but oh well
             newObject.SetResourceCount(Random.Range(0, newObject.GetResourceRequirement()));
         }
 
         quests.Add(newObject);
+
+        if (settlementQuestBoard.GetCurrentViewingSettlement() == currentSettlement)
+        {
+            settlementQuestBoard.SetQuests(quests);
+        }
 
     }
 
@@ -59,15 +65,27 @@ public class QuestGiver : MonoBehaviour
     public void SetSettlement() { currentSettlement = GetComponent<Settlement>(); }
     public Settlement GetSettlement() { return currentSettlement; }
 
-    //private void Update()
-    //{
-    //    if (currentSettlement != null)
-    //        UpdateMeter();
-    //}
+    public void ToggleSettlementQuestBoardVisibility()
+    {
+        if (settlementQuestBoard.gameObject.activeSelf)
+        {
+            settlementQuestBoard.ResetCurrentViewingSettlement();
+            settlementQuestBoard.gameObject.SetActive(false);
+        }
+            
+        else
+        {
+            //pass in the quests list and remake the settlement quest board based on it
+            settlementQuestBoard.SetCurrentViewingSettlement(this);
+            settlementQuestBoard.SetQuests(quests);
+            settlementQuestBoard.gameObject.SetActive(true);
+        }
+            
+    }
 
     private void Awake()
     {
-        settlementQuestBoard = FindAnyObjectByType<SettlementQuestBoard>();
+        //settlementQuestBoard = FindAnyObjectByType<SettlementQuestBoard>();
         SetSettlement();
     }
 }

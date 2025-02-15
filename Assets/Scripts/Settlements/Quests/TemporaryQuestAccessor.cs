@@ -4,6 +4,7 @@ public class TemporaryQuestAccessor : MonoBehaviour
 {
     public QuestBoard questBoard;
     public SettlementQuestBoard settlementBoard;
+    public QuestGiver questGivingSettlement;
     // Update is called once per frame
     void Update()
     {
@@ -21,7 +22,7 @@ public class TemporaryQuestAccessor : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.K))
         {
-            settlementBoard.AddQuest();
+            questGivingSettlement.AddQuest();
         }
     }
 }

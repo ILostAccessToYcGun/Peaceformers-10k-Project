@@ -25,6 +25,7 @@ public class QuestObject : ScriptableObject
     [SerializeField] int resourcesRequired;
     [SerializeField] float completionPercentage;
     [SerializeField] Item.Name desiredResourceName;
+    [SerializeField] float upKeepGain;
     [Space]
     [Header("Time")]  
     [SerializeField] int dayDue;
@@ -36,7 +37,7 @@ public class QuestObject : ScriptableObject
 
     #region _Parent_Settlement_
 
-    public void SetParentSettlement(Settlement newSettlement) { parentSettlement = newSettlement; }
+    public void SetParentSettlement(Settlement newSettlement) { parentSettlement = newSettlement; SetDescription(); }
     public Settlement GetParentSettlement() { return parentSettlement; }
 
     #endregion
@@ -48,7 +49,7 @@ public class QuestObject : ScriptableObject
         isCompleted = toggle;
         //TODO: update UI here
     }
-
+   
     public void SetResourceCount(int _resourceCount) { resourceCount = _resourceCount; }
     public int GetResourceCount() { return resourceCount; }
 
@@ -73,6 +74,16 @@ public class QuestObject : ScriptableObject
     {
         SetResource((Item.Name)Random.Range(0, 3));
         Debug.Log(GetResource());
+    }
+
+
+    public void SetUpKeepGain(float newGain) { upKeepGain = newGain; }
+    public float GetUpKeepGain() { return upKeepGain; }
+
+    public void RandomizeGain(float minGain, float maxGain) // in %
+    {
+        SetUpKeepGain((Mathf.Floor(Random.Range(minGain * 10f, maxGain * 10f))) / 10f);
+        Debug.Log(GetUpKeepGain());
     }
 
     #endregion
@@ -109,7 +120,8 @@ public class QuestObject : ScriptableObject
             suffix = "th";
 
         description = "Collect " + resourcesRequired + " " + desiredResourceName + " and Deliver to " + parentSettlement.GetSettlementName()
-            + " before " + timeDue.x + ":" + (timeDue.y < 10 ? "0" : "") + timeDue.y + " on the " + dayDue + suffix + " of November.\n\nWill add X% to the settlement's upkeep meter";
+            + " before " + timeDue.x + ":" + (timeDue.y < 10 ? "0" : "") + timeDue.y + " on the " + dayDue + suffix + " of November.\n\n" +
+            "Will add " + GetUpKeepGain() +  "% to the settlement's upkeep meter";
     }
 
     public string GetDescription() { return description; }
@@ -119,16 +131,17 @@ public class QuestObject : ScriptableObject
 
     public void SetUpQuest(int minResource, int maxResource)
     {
-        //QuestGiver questGiverParent = this.GetComponentInParent<QuestGiver>();
-        //SetParentSettlement(questGiverParent.GetSettlement());
+        
+        //SetParentSettlement();
         ToggleCompletionStatus(false);
         RandomizeResource();
         RandomizeResourceRequirement(minResource, maxResource);
         RandomizeDayDue(3, 5);
-        SetDescription();
+        RandomizeGain(10, 30);
+        SetDescription(); //kinda pointless here
     }
 
-    public void AcceptQuest()
+    public void AcceptQuest() //I dont think the accept quest stuff should be handled here
     {
         //SetTimeDue(new Vector2(time.hour, time.minute));
         //RandomizeDayDue(1, 4);
@@ -147,11 +160,17 @@ public class QuestObject : ScriptableObject
 
     public bool CheckQuestValidity()
     {
-        if (calendar.date <= GetDayDue())
+        if (calendar.date < GetDayDue())
+        {
+            Debug.Log("quest is still valid");
+            return true;
+            
+        }
+        else if (calendar.date == GetDayDue())
         {
             if (time.hour < GetTimeDue().x && time.minute < GetTimeDue().y)
             {
-                Debug.Log("quest is still valid");
+                Debug.Log("you're cutting it close now buddy");
                 return true;
             }
         }
