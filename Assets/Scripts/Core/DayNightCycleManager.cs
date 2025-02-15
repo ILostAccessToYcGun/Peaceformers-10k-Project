@@ -1,6 +1,7 @@
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DayNightCycleManager : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class DayNightCycleManager : MonoBehaviour
     //17.5s per hour
     //2.91666s per 10 minutes
     //0.29166s per minute
+    public bool updateTime = true;
+    [Space]
     public CalendarManger cm;
 
     public enum twelveHour { AM, PM }
@@ -29,6 +32,19 @@ public class DayNightCycleManager : MonoBehaviour
 
     public Light moonLight;
     public float moonLightAngle;
+
+    [Space]
+    [Header("Inbetween")]
+    public Image dayEndPanel;
+
+    public void DisableTime() { updateTime = false; }
+    public void EnableTime() {  updateTime = true; }
+
+    public void DayEndPanel(bool enable)
+    {
+        dayEndPanel.gameObject.SetActive(enable);
+    }
+
 
     public void UpdateTimeUI() 
     {
@@ -146,15 +162,18 @@ public class DayNightCycleManager : MonoBehaviour
 
     private void Update()
     {
-        if (time >= 0.29166f)
+        if (updateTime)
         {
-            UpdateTime();
-            time = 0;
+            if (time >= 0.29166f)
+            {
+                UpdateTime();
+                time = 0;
+            }
+            totalTime += Time.deltaTime / 0.29166f;
+            UpdateLightAngle();
+            UpdateLightIntensity();
+            time += Time.deltaTime;
         }
-        totalTime += Time.deltaTime / 0.29166f;
-        UpdateLightAngle();
-        UpdateLightIntensity();
-        time += Time.deltaTime;
         
     }
 
