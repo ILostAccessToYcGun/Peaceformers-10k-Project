@@ -1,6 +1,7 @@
-using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.UI;
+using UnityEditor.PackageManager.Requests;
+using UnityEngine;
+using static QuestBoard;
 
 
 public class QuestGiver : MonoBehaviour
@@ -31,14 +32,15 @@ public class QuestGiver : MonoBehaviour
     //[SerializeField] GameObject baseQuestUI;
     [SerializeField] QuestObject baseQuestObject;
 
-    public void AddQuest(QuestObject newObject = null)
+    public void AddQuestToGiver(QuestObject newObject = null)
     {
         Debug.Log(baseQuestObject);
         if (newObject == null)
         {
             newObject = Instantiate(baseQuestObject, this.transform);
             newObject.SetParentSettlement(currentSettlement); //I wish there was a better way of setting it up but oh well
-            newObject.SetResourceCount(Random.Range(0, newObject.GetResourceRequirement()));
+            newObject.SetParentQuestGiver(this);
+            //newObject.SetResourceCount(Random.Range(0, newObject.GetResourceRequirement()));
         }
 
         quests.Add(newObject);
@@ -50,13 +52,32 @@ public class QuestGiver : MonoBehaviour
 
     }
 
-    public void RemoveQuest(QuestObject removeObject)
+    public void RemoveQuestFromGiver(QuestObject removeObject, RemoveType removeType)
     {
-        quests.Remove(removeObject);
-        //Destroy(removeObject); //huh
-        //remove something to the scrollQuestParent
-
-        //I need to show a confirmation prompt to the plyer to make sure they want to adandon the quest.
+        switch (removeType)
+        {
+            case RemoveType.Remove:
+                currentSettlement.LoseMeter(removeObject.GetUpKeepGain()); //might change this later to lesser values
+                quests.Remove(removeObject);
+                Destroy(removeObject); //huh 
+                break;
+            case RemoveType.Hand_In:
+                if ((float)removeObject.GetResourceCount() / (float)removeObject.GetResourceRequirement() > 0f)
+                {
+                    currentSettlement.GainMeter(removeObject.GetUpKeepGain() * removeObject.GetResourceCount() / removeObject.GetResourceRequirement());
+                    quests.Remove(removeObject);
+                    Destroy(removeObject); //huh 
+                }
+                else
+                {
+                    RemoveQuestFromGiver(removeObject, RemoveType.Remove);
+                }
+                break;
+            case RemoveType.Clear:
+                quests.Remove(removeObject);
+                Destroy(removeObject); //huh 
+                break;
+        }
     }
 
 
@@ -78,6 +99,7 @@ public class QuestGiver : MonoBehaviour
             //pass in the quests list and remake the settlement quest board based on it
             settlementQuestBoard.SetCurrentViewingSettlement(this);
             settlementQuestBoard.SetQuests(quests);
+            Debug.Log("twice?");
             settlementQuestBoard.gameObject.SetActive(true);
         }
             

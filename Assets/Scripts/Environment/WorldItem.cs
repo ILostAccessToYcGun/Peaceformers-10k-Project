@@ -23,7 +23,7 @@ public class WorldItem : BaseInteractable
         if (playerInventory != null)
         {
             playerInventory.AddItemToInventory(inventoryItem, 1);
-            Debug.Log(inventoryItem);
+            Debug.Log("Item is about to be destroyed");
             Destroy(this.gameObject);
         }
         else

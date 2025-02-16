@@ -5,7 +5,8 @@ using UnityEngine.UI;
 public class QuestDisplay : MonoBehaviour
 {
     public QuestObject questObject;
-    public QuestBoard questBoard;
+    public QuestBoard parentQuestBoard; //this is the quest board that the quest display belongs to
+    public QuestBoard otherQuestBoard; 
     public Image settlementIcon;
     public TextMeshProUGUI description;
     public Slider completionSlider;
@@ -38,9 +39,14 @@ public class QuestDisplay : MonoBehaviour
         SetUpQuestDisplay();
     }
 
-    public void SetQuestBoard(QuestBoard newBoard)
+    public void SetParentQuestBoard(QuestBoard newBoard)
     {
-        questBoard = newBoard;
+        parentQuestBoard = newBoard;
+    }
+
+    public void SetOtherQuestBoard(QuestBoard newBoard)
+    {
+        otherQuestBoard = newBoard;
     }
 
     #region _Button_
@@ -64,7 +70,8 @@ public class QuestDisplay : MonoBehaviour
     {
         Debug.Log("quest, not settlement");
         abandonVerification.SetActive(false);
-        questBoard.RemoveQuest(this);
+        parentQuestBoard.RemoveQuestFromBoard(this, QuestBoard.RemoveType.Remove);
+        otherQuestBoard.RemoveQuestFromBoard(this, QuestBoard.RemoveType.Remove);
 
         //update the settlement quest giver to not hold the quest anymore
         //do the upkeep damage

@@ -1,26 +1,23 @@
 using System.Reflection;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
 
 [CreateAssetMenu(fileName = "New Quest", menuName = "Quest")]
 
 public class QuestObject : ScriptableObject
 {
-    /*//Quests have a 
-     * time limit
-     * complete percentage
-     * parent settlement
-     * random material required
-     * completed bool
+    public enum QuestState { Avalible, InProgress, Completed }
 
-     */
     [Header("Other Objects")]
     public Settlement parentSettlement;
+    public QuestGiver parentQuestGiver;
     public DayNightCycleManager time;
     public CalendarManger calendar;
+    public QuestDisplay correspondingPlayerQuestDisplayUI;
     [Space]
     [Header("Completion")]
-    [SerializeField] bool isCompleted;
+    [SerializeField] public QuestState state;
     [SerializeField] int resourceCount;
     [SerializeField] int resourcesRequired;
     [SerializeField] float completionPercentage;
@@ -35,19 +32,31 @@ public class QuestObject : ScriptableObject
     [SerializeField] string description;
 
 
-    #region _Parent_Settlement_
+    #region _Other_Objects_
 
     public void SetParentSettlement(Settlement newSettlement) { parentSettlement = newSettlement; SetDescription(); }
     public Settlement GetParentSettlement() { return parentSettlement; }
+
+    public void SetParentQuestGiver(QuestGiver newQuestGiver) { parentQuestGiver = newQuestGiver; }
+    public QuestGiver GetParentQuestGiver() { return parentQuestGiver; }
+
+    public void SetTimeManager() { time = FindAnyObjectByType<DayNightCycleManager>(); ; }
+    public DayNightCycleManager GetTimeManager() { return time; }
+
+    public void SetCalenderManaager() { calendar = FindAnyObjectByType<CalendarManger>(); }
+    public CalendarManger GetCalenderManager() { return calendar; }
+
+    public void SetCorrespondingPlayerQuestDisplayUI(QuestDisplay newDisplay) { correspondingPlayerQuestDisplayUI = newDisplay; }
+    public QuestDisplay GetCorrespondingPlayerQuestDisplayUI() { return correspondingPlayerQuestDisplayUI; }
 
     #endregion
 
     #region _Completion_
 
-    public void ToggleCompletionStatus(bool toggle)
+    public void SetState(QuestState newState)
     {
-        isCompleted = toggle;
-        //TODO: update UI here
+        state = newState;
+        //TODO: update UI here ???
     }
    
     public void SetResourceCount(int _resourceCount) { resourceCount = _resourceCount; }
@@ -94,6 +103,7 @@ public class QuestObject : ScriptableObject
     public int GetDayDue() { return dayDue; }
     public void RandomizeDayDue(int min, int max)
     {
+        if (calendar == null) { return; }
         int currentDate = calendar.date;
         SetDayDue(Random.Range(currentDate + min, currentDate + max + 1));
     }
@@ -131,9 +141,9 @@ public class QuestObject : ScriptableObject
 
     public void SetUpQuest(int minResource, int maxResource)
     {
-        
+
         //SetParentSettlement();
-        ToggleCompletionStatus(false);
+        SetState(QuestState.Avalible);
         RandomizeResource();
         RandomizeResourceRequirement(minResource, maxResource);
         RandomizeDayDue(3, 5);
@@ -181,8 +191,8 @@ public class QuestObject : ScriptableObject
     private void Awake()
     {
         Debug.Log("Roo");
-        time = FindAnyObjectByType<DayNightCycleManager>();
-        calendar = FindAnyObjectByType<CalendarManger>();
+        SetTimeManager();
+        SetCalenderManaager();
         SetUpQuest(1, 10);
     }
 }

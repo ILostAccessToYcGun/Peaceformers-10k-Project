@@ -19,61 +19,85 @@ public class QuestBoard : MonoBehaviour
      * 
      
      */
+    [SerializeField] public enum RemoveType { Remove, Hand_In, Clear }
 
+    [Space]
+    [Header("OtherObjects")]
     [SerializeField] protected GameObject scrollContent;
-    public enum QuestStatus { InProgress, Completed } //????
+    [SerializeField] protected QuestBoard otherQuestBoard;
+    [SerializeField] protected Inventory playerInventory;
 
+    [Space]
+    [Header("Quests")]
     [SerializeField] protected List<QuestDisplay> quests;
 
+    [Space]
+    [Header("Base Objects")]
     [SerializeField] protected GameObject baseQuestUI;
     [SerializeField] protected QuestObject baseQuestObject;
 
+    [Space]
+    [Header("Abandon Stuff")]
     [SerializeField] protected GameObject abandonVerification;
     [SerializeField] protected Button abandonConfirmButton;
 
-    //public void ToggleQuestBoardVisibility()
-    //{
-    //    if (this.gameObject.activeSelf)
-    //        this.gameObject.SetActive(false);
-    //    else
-    //        this.gameObject.SetActive(true);
-    //}
-    public virtual void AddQuest(QuestObject newObject = null)
+    #region _Quests_
+
+    public virtual QuestDisplay AddQuestToBoard(QuestObject newObject = null)
     {
         Debug.Log(baseQuestObject);
         if (newObject == null)
         {
             newObject = Instantiate(baseQuestObject);
-            newObject.SetResourceCount(Random.Range(0, newObject.GetResourceRequirement()));
+            //newObject.SetResourceCount(Random.Range(0, newObject.GetResourceRequirement()));
         }
-            
+
         GameObject questUI = Instantiate(baseQuestUI, scrollContent.transform);
         QuestDisplay newDisplay = questUI.GetComponent<QuestDisplay>();
 
+        newObject.SetCorrespondingPlayerQuestDisplayUI(newDisplay);
 
         newDisplay.SetAbandonVerification(abandonVerification);
         newDisplay.SetAbandonConfirmButton(abandonConfirmButton);
-        newDisplay.SetQuestBoard(this); //streamline this eventually
+        newDisplay.SetParentQuestBoard(this); //streamline this eventually
+        newDisplay.SetOtherQuestBoard(otherQuestBoard);
         newDisplay.SetQuestObject(newObject);
         quests.Add(newDisplay);
-
-        
-        //instantiate quest UI
-        //add something to the scrollQuestParent
+        UpdateQuests();
+        return newDisplay;
     }
 
-    public void RemoveQuest(QuestDisplay removeQuest)
+    public virtual void RemoveQuestFromBoard(QuestDisplay removeQuest, RemoveType removeType = RemoveType.Clear)
     {
+        Debug.Log(removeQuest);
         if (removeQuest == null) { return; }
         quests.Remove(removeQuest);
         Destroy(removeQuest.gameObject);
-        //remove something to the scrollQuestParent
-
-        //I need to show a confirmation prompt to the plyer to make sure they want to adandon the quest.
     }
+
+    public void UpdateQuests()
+    {
+        //update the quest object resource count
+        foreach (QuestDisplay display in quests) //loop through the player's quests
+        {
+            Debug.Log("updating...");
+            Item.Name resourceToFind = display.questObject.GetResource();//find the needed material name/type
+            Debug.Log("resourceToFind = " + resourceToFind);
+            int newResourceCount = playerInventory.FindItemCountOfName(resourceToFind);
+            Debug.Log("newResourceCount = " + newResourceCount);
+
+            display.questObject.SetResourceCount(newResourceCount);
+            display.UpdateSliderUI();
+        }
+    }
+
+    #endregion
+
 
     public void AbortAbandon()
     {
         abandonVerification.SetActive(false);
     }
+
+
 }

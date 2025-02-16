@@ -18,11 +18,11 @@ public class TemporaryQuestAccessor : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.J))
         {
-            questBoard.AddQuest();
+            questBoard.AddQuestToBoard();
         }
         if (Input.GetKeyDown(KeyCode.K))
         {
-            questGivingSettlement.AddQuest();
+            questGivingSettlement.AddQuestToGiver();
         }
     }
 }
