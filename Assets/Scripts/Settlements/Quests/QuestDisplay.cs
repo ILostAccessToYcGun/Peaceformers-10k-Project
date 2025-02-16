@@ -65,6 +65,9 @@ public class QuestDisplay : MonoBehaviour
         Debug.Log("quest, not settlement");
         abandonVerification.SetActive(false);
         questBoard.RemoveQuest(this);
+
+        //update the settlement quest giver to not hold the quest anymore
+        //do the upkeep damage
     }
 
     
