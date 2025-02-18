@@ -38,6 +38,7 @@ public class SettlementQuestDisplay : QuestDisplay
         AddButtonHandIn();
         AddButtonAbandon();
 
+        parentQuestBoard.UpdateQuests();
         //parentQuestBoard.AddQuestToBoard(this.questObject);
         correspondingPlayerBoardDisplay = otherQuestBoard.AddQuestToBoard(this.questObject);
         // update settlement quest board
