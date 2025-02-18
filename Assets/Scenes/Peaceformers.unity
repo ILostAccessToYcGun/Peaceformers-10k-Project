@@ -5496,6 +5496,7 @@ GameObject:
   m_Component:
   - component: {fileID: 974890185}
   - component: {fileID: 974890186}
+  - component: {fileID: 974890187}
   m_Layer: 0
   m_Name: Settlement 1
   m_TagString: Settlement
@@ -5551,6 +5552,22 @@ MonoBehaviour:
   watchOutColor: {r: 0.9843138, g: 0.41960788, b: 0.1137255, a: 1}
   criticalColor: {r: 1, g: 0.25, b: 0.25, a: 1}
   questGiver: {fileID: 0}
+--- !u!114 &974890187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 974890184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da13efce586cd94cbfaf27a78a0f275, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentSettlement: {fileID: 0}
+  settlementQuestBoard: {fileID: 1008345537}
+  quests: []
+  baseQuestObject: {fileID: 11400000, guid: 77eee3b92dacd3049a59a2bfb0acc93d, type: 2}
 --- !u!1 &984346779
 GameObject:
   m_ObjectHideFlags: 0
@@ -10242,6 +10259,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1854132510}
   - component: {fileID: 1854132513}
+  - component: {fileID: 1854132514}
   m_Layer: 0
   m_Name: Settlement 3
   m_TagString: Settlement
@@ -10297,6 +10315,22 @@ MonoBehaviour:
   watchOutColor: {r: 0.9843138, g: 0.41960788, b: 0.1137255, a: 1}
   criticalColor: {r: 1, g: 0.25, b: 0.25, a: 1}
   questGiver: {fileID: 0}
+--- !u!114 &1854132514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1854132509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da13efce586cd94cbfaf27a78a0f275, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentSettlement: {fileID: 0}
+  settlementQuestBoard: {fileID: 1008345537}
+  quests: []
+  baseQuestObject: {fileID: 11400000, guid: 77eee3b92dacd3049a59a2bfb0acc93d, type: 2}
 --- !u!114 &1860563500 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1159016942043050867, guid: 78c73e9ed0554a540af6616d1180f0fe, type: 3}
