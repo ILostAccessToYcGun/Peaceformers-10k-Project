@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
 
 public class QuestBoard : MonoBehaviour
 {
@@ -18,25 +19,85 @@ public class QuestBoard : MonoBehaviour
      * 
      
      */
+    [SerializeField] public enum RemoveType { Remove, Hand_In, Clear }
 
-    public GameObject scrollQuestParent;
-    public enum QuestStatus { InProgress, Completed }
+    [Space]
+    [Header("OtherObjects")]
+    [SerializeField] protected GameObject scrollContent;
+    [SerializeField] protected QuestBoard otherQuestBoard;
+    [SerializeField] protected Inventory playerInventory;
 
-    public List<Quest> quests;
+    [Space]
+    [Header("Quests")]
+    [SerializeField] protected List<QuestDisplay> quests;
 
+    [Space]
+    [Header("Base Objects")]
+    [SerializeField] protected GameObject baseQuestUI;
+    [SerializeField] protected QuestObject baseQuestObject;
 
-    public void AddQuest(Quest newQuest)
+    [Space]
+    [Header("Abandon Stuff")]
+    [SerializeField] protected GameObject abandonVerification;
+    [SerializeField] protected Button abandonConfirmButton;
+
+    #region _Quests_
+
+    public virtual QuestDisplay AddQuestToBoard(QuestObject newObject = null)
     {
-        quests.Add(newQuest);
-        //add something to the scrollQuestParent
+        Debug.Log(baseQuestObject);
+        if (newObject == null)
+        {
+            newObject = Instantiate(baseQuestObject);
+            //newObject.SetResourceCount(Random.Range(0, newObject.GetResourceRequirement()));
+        }
+
+        GameObject questUI = Instantiate(baseQuestUI, scrollContent.transform);
+        QuestDisplay newDisplay = questUI.GetComponent<QuestDisplay>();
+
+        newObject.SetCorrespondingPlayerQuestDisplayUI(newDisplay);
+
+        newDisplay.SetAbandonVerification(abandonVerification);
+        newDisplay.SetAbandonConfirmButton(abandonConfirmButton);
+        newDisplay.SetParentQuestBoard(this); //streamline this eventually
+        newDisplay.SetOtherQuestBoard(otherQuestBoard);
+        newDisplay.SetQuestObject(newObject);
+        quests.Add(newDisplay);
+        UpdateQuests();
+        return newDisplay;
     }
 
-    public void RemoveQuest(Quest removeQuest)
+    public virtual void RemoveQuestFromBoard(QuestDisplay removeQuest, RemoveType removeType = RemoveType.Clear)
     {
+        Debug.Log(removeQuest);
+        if (removeQuest == null) { return; }
         quests.Remove(removeQuest);
-        //remove something to the scrollQuestParent
+        Destroy(removeQuest.gameObject);
     }
 
+    public void UpdateQuests()
+    {
+        //update the quest object resource count
+        foreach (QuestDisplay display in quests) //loop through the player's quests
+        {
+            Debug.Log("updating...");
+            Item.Name resourceToFind = display.questObject.GetResource();//find the needed material name/type
+            Debug.Log("resourceToFind = " + resourceToFind);
+            int newResourceCount = playerInventory.FindItemCountOfName(resourceToFind);
+            Debug.Log("newResourceCount = " + newResourceCount);
+
+            display.questObject.SetResourceCount(newResourceCount);
+            display.UpdateSliderUI();
+        }
+    }
+
+    #endregion
+
+
+    public void AbortAbandon()
+    {
+        abandonVerification.SetActive(false);
+    }
 
 
 }

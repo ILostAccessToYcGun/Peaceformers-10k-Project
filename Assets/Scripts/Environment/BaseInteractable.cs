@@ -38,7 +38,6 @@ public class BaseInteractable : MonoBehaviour
         }
         else
         {
-            Debug.Log(":OOOOOOOOOOOOO");
             interactionPrompt.SetHold(false);
             interactionPrompt.SetRequest(false);
         }

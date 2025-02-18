@@ -24,9 +24,12 @@ public class Inventory : MonoBehaviour
     public Item testItem;
     [Space]
     public bool isPlayerInventory = true;
-
     public List<List<InventorySlot>> inventory = new List<List<InventorySlot>>(); //lists because later we will change the size
-    //public List<List<InventorySlot>> emptyInventory = new List<List<InventorySlot>>(); //lists because later we will change the size
+    [Space]
+    [SerializeField] QuestBoard playerQuestBoard; //this is set manually
+    
+
+    #region _General_Inventory_
 
     public void ShowInventory()
     {
@@ -55,7 +58,7 @@ public class Inventory : MonoBehaviour
     {
         if (cells == null)
             cells = FindObjectsByType<InventorySlot>(FindObjectsSortMode.None);
-            
+
         foreach (InventorySlot cell in cells)
         {
             if (!cell.isTrashSlot)
@@ -68,7 +71,7 @@ public class Inventory : MonoBehaviour
                     inventory[(int)cell.inventoryPosition.y][(int)cell.inventoryPosition.x] = cell;
                 }
             }
-                
+
         }
     }
     public void GenerateInventory(int width, int height, int cellWidth, int cellHeight)
@@ -89,7 +92,7 @@ public class Inventory : MonoBehaviour
         #region _List_Size_
         //look at milinote for a diagram of the lists
         inventory.Capacity = height;
-        
+
         for (int j = 0; j < inventory.Capacity; j++)
         {
             inventory.Add(new List<InventorySlot>());
@@ -136,12 +139,14 @@ public class Inventory : MonoBehaviour
             trashImg.color = new Color(1f, 60f / 255f, 60f / 255f, 1f);
             trashSlot.SetInventoryPosition(new Vector2(tempWidth, tempHeight - 1));
         }
-        
+
 
         #endregion
     }
 
-  
+    #endregion
+
+    #region _Item_Stacking_
 
     public void DecreaseItemStackAmount(InventorySlot itemToDecrease, int amount)
     {
@@ -151,6 +156,10 @@ public class Inventory : MonoBehaviour
     {
         itemToIncrease.GetHeldItem().IncreaseStackAmount(amount);
     }
+
+    #endregion
+
+    #region _Search_Inventory_
 
     public InventorySlot FindTopSlotWithItem(Item itemToFind)
     {
@@ -216,7 +225,7 @@ public class Inventory : MonoBehaviour
                             }
                         }
                     }
-                    
+
                     if (isValidSpot)
                         return inventory[j][i];
                 }
@@ -224,6 +233,47 @@ public class Inventory : MonoBehaviour
         }
         return null;
     }
+
+    public int FindItemCountOfName(Item.Name nameToFind)
+    {
+        int itemSearchCount = 0;
+        List<Item> itemSearchHistory = new List<Item>();
+        for (int j = 0; j < inventory.Capacity; j++)
+        {
+            for (int i = 0; i < inventory[j].Capacity; i++) //loop though the inventory 
+            {
+                InventorySlot slot = inventory[j][i];
+                Item currentItem = slot.GetHeldItem();
+
+                bool currentItemIsAlreadyCounted = false;
+                if (itemSearchHistory.Count != 0)
+                {
+                    foreach (Item item in itemSearchHistory)
+                    {
+                        if (item == currentItem)
+                        {
+                            currentItemIsAlreadyCounted = true;
+                        }
+                    }
+                }
+                if (currentItem != null)
+                {
+                    if (currentItem.itemName == nameToFind && !currentItemIsAlreadyCounted) //make sure to ignore item components, if item = item from before ignore
+                    {
+                        itemSearchCount++; //count the number of items of that type
+                        itemSearchHistory.Add(currentItem);
+                    }
+                }
+                
+            }
+        }
+        Debug.Log("itemSearchCount=" + itemSearchCount);
+        return itemSearchCount;
+    }
+
+    #endregion
+
+    #region _Inventory_Management_
 
     public void AddItemToInventory(Item itemToFind, int amount)
     {
@@ -239,13 +289,26 @@ public class Inventory : MonoBehaviour
             if (!inventoryPanel.gameObject.activeSelf)
                 added.SetActive(false);
         }
+
+        if (playerQuestBoard != null)
+            Debug.Log("we should be updating the quests");
+            playerQuestBoard.UpdateQuests();
     }
     public void RemoveItemFromInventory(Item itemToFind, int amount)
     {
         InventorySlot findSlot = FindTopSlotWithItem(itemToFind);
         if (findSlot == null) { return; }
         if (findSlot.GetHeldItem() != null) { DecreaseItemStackAmount(findSlot, amount); }
+
+        if (playerQuestBoard != null)
+            playerQuestBoard.UpdateQuests();
     }
+
+    #endregion
+
+
+
+
 
     private void Update()
     {
