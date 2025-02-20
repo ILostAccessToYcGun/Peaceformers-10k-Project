@@ -16,6 +16,8 @@ public class QuestDisplay : MonoBehaviour
     [SerializeField] protected GameObject abandonVerification;
     [SerializeField] Button abandonConfirmButton;
 
+    [SerializeField] public QuestDisplay correspondingDisplay;
+
 
     public void SetUpQuestDisplay()
     {
@@ -71,7 +73,7 @@ public class QuestDisplay : MonoBehaviour
         Debug.Log("quest, not settlement");
         abandonVerification.SetActive(false);
         parentQuestBoard.RemoveQuestFromBoard(this, QuestBoard.RemoveType.Remove);
-        otherQuestBoard.RemoveQuestFromBoard(this, QuestBoard.RemoveType.Remove);
+        otherQuestBoard.RemoveQuestFromBoard(questObject.GetCorrespondingSettlementQuestDisplayUI(), QuestBoard.RemoveType.Remove);
 
         //update the settlement quest giver to not hold the quest anymore
         //do the upkeep damage
@@ -101,7 +103,9 @@ public class QuestDisplay : MonoBehaviour
     public void UpdateDaysLeft()
     {
         Debug.Log(questObject.GetDayDue());
-        daysLeft.text = (questObject.GetDayDue() - questObject.calendar.GetDayCount()).ToString();
+        questObject.correspondingPlayerQuestDisplayUI.daysLeft.text = (questObject.GetDayDue() - questObject.calendar.GetDayCount()).ToString();
+        if (questObject.correspondingSettlementQuestDisplayUI != null)
+            questObject.correspondingSettlementQuestDisplayUI.daysLeft.text = (questObject.GetDayDue() - questObject.calendar.GetDayCount()).ToString();
     }
 
 

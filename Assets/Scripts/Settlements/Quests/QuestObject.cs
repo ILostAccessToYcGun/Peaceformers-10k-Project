@@ -15,6 +15,7 @@ public class QuestObject : ScriptableObject
     public DayNightCycleManager time;
     public CalendarManger calendar;
     public QuestDisplay correspondingPlayerQuestDisplayUI;
+    public QuestDisplay correspondingSettlementQuestDisplayUI;
     [Space]
     [Header("Completion")]
     [SerializeField] public QuestState state;
@@ -48,6 +49,9 @@ public class QuestObject : ScriptableObject
 
     public void SetCorrespondingPlayerQuestDisplayUI(QuestDisplay newDisplay) { correspondingPlayerQuestDisplayUI = newDisplay; }
     public QuestDisplay GetCorrespondingPlayerQuestDisplayUI() { return correspondingPlayerQuestDisplayUI; }
+
+    public void SetCorrespondingSettlementQuestDisplayUI(QuestDisplay newDisplay) { correspondingSettlementQuestDisplayUI = newDisplay; }
+    public QuestDisplay GetCorrespondingSettlementQuestDisplayUI() { return correspondingSettlementQuestDisplayUI; }
 
     #endregion
 
@@ -130,8 +134,11 @@ public class QuestObject : ScriptableObject
             suffix = "th";
 
         description = "Collect " + resourcesRequired + " " + desiredResourceName + " and Deliver to " + parentSettlement.GetSettlementName()
-            + " before " + timeDue.x + ":" + (timeDue.y < 10 ? "0" : "") + timeDue.y + " on the " + dayDue + suffix + " of November.\n\n" +
-            "Will add " + GetUpKeepGain() +  "% to the settlement's upkeep meter";
+            + " before the " + dayDue + suffix + " of November.\n\n" + "Will add " + GetUpKeepGain() +  "% to the settlement's upkeep meter";
+
+        //description = "Collect " + resourcesRequired + " " + desiredResourceName + " and Deliver to " + parentSettlement.GetSettlementName()
+        //    + " before " + timeDue.x + ":" + (timeDue.y < 10 ? "0" : "") + timeDue.y + " on the " + dayDue + suffix + " of November.\n\n" +
+        //    "Will add " + GetUpKeepGain() + "% to the settlement's upkeep meter";
     }
 
     public string GetDescription() { return description; }
@@ -141,13 +148,12 @@ public class QuestObject : ScriptableObject
 
     public void SetUpQuest(int minResource, int maxResource)
     {
-
         //SetParentSettlement();
         SetState(QuestState.Avalible);
         RandomizeResource();
         RandomizeResourceRequirement(minResource, maxResource);
-        RandomizeDayDue(3, 5);
-        RandomizeGain(10, 30);
+        RandomizeDayDue(3, 4);
+        RandomizeGain(10, 30);  
         SetDescription(); //kinda pointless here
     }
 

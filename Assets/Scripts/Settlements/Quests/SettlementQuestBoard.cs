@@ -56,7 +56,7 @@ public class SettlementQuestBoard : QuestBoard
 
     public void ResetQuests()
     {
-        for (int i = 0; i < quests.Count; i++)
+        for (int i = 0; i < questsDisplays.Count; i++)
         {
             RemoveQuestFromBoard(scrollContent.GetComponentInChildren<QuestDisplay>(), RemoveType.Clear);
         }
@@ -74,12 +74,14 @@ public class SettlementQuestBoard : QuestBoard
         GameObject questUI = Instantiate(baseQuestUI, scrollContent.transform);
         SettlementQuestDisplay newDisplay = questUI.GetComponent<SettlementQuestDisplay>();
 
+        newObject.SetCorrespondingSettlementQuestDisplayUI(newDisplay);
+
         newDisplay.SetAbandonVerification(abandonVerification);
         newDisplay.SetAbandonConfirmButton(abandonConfirmButton);
         newDisplay.SetParentQuestBoard(this); //streamline this eventually
         newDisplay.SetOtherQuestBoard(otherQuestBoard);
         newDisplay.SetQuestObject(newObject);
-        quests.Add(newDisplay);
+        questsDisplays.Add(newDisplay);
 
         switch (newObject.state)
         {
@@ -100,11 +102,11 @@ public class SettlementQuestBoard : QuestBoard
         return newDisplay;
     }
 
-    public override void RemoveQuestFromBoard(QuestDisplay removeQuest, RemoveType removeType = RemoveType.Clear)
+    public override void RemoveQuestFromBoard(QuestDisplay removeQuest, RemoveType removeType = RemoveType.Clear, bool isDestroyQuest = true)
     {
 
         if (removeQuest == null) { return; }
-        quests.Remove(removeQuest);
+        questsDisplays.Remove(removeQuest);
 
         switch(removeType)
         {
@@ -126,7 +128,8 @@ public class SettlementQuestBoard : QuestBoard
                 //currentViewingQuestGiver.RemoveQuestFromGiver(removeQuest.questObject, removeType);
                 break;
         }
-        Destroy(removeQuest.gameObject);
+        if (isDestroyQuest)
+            Destroy(removeQuest.gameObject);
 
     }
 

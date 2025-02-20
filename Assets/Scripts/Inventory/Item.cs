@@ -215,8 +215,10 @@ public class Item : MonoBehaviour, IPointerClickHandler
     public void SearchAndMoveToNearestInventorySlot()
     {
         //Search
-        InventorySlot[] inventorySlots = FindObjectsByType<InventorySlot>(FindObjectsSortMode.None);
+        //InventorySlot[] inventorySlots = FindObjectsByType<InventorySlot>(FindObjectsSortMode.None);
+        InventorySlot[] inventorySlots = FindObjectsByType<InventorySlot>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         if (inventorySlots.Length < 1) { return; }
+        
 
         InventorySlot nearestInventorySlot = inventorySlots[0]; ////
         float nearestDistance = 300f;////
@@ -228,7 +230,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
 
         if (inventorySlots.Length > 1) //if there is more than one inventory slot on screen, find the closest
         {
-            float compareDistance;
+            float compareDistance; 
             foreach (InventorySlot slot in inventorySlots)
             {
                 Vector2 slotPosition = slot.inventoryPosition;
@@ -368,7 +370,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
                 && this.transform.position.y > currentInventory.inventoryPanel.gameObject.transform.position.y - currentInventory.inventoryPanel.sizeDelta.y 
                 && this.transform.position.y < currentInventory.inventoryPanel.gameObject.transform.position.y + currentInventory.inventoryPanel.sizeDelta.y)
             {
-                //Debug.Log("Previous");
+                Debug.Log("Previous");
                 if (previousInventorySlot == null)
                     return;
                 currentInventorySlot = previousInventorySlot;
@@ -386,13 +388,11 @@ public class Item : MonoBehaviour, IPointerClickHandler
                     OnDestroy();
                 }
                 
-            }
-
-            
+            } 
         }
         else
         {
-            //Debug.Log("next");
+            Debug.Log("next");
             currentInventorySlot = nearestInventorySlot;
             if (currentInventorySlot != null)
                 previousInventorySlot = currentInventorySlot;

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -36,6 +37,9 @@ public class DayNightCycleManager : MonoBehaviour
     [Space]
     [Header("Inbetween")]
     public Image dayEndPanel;
+
+    [Space]
+    [SerializeField] QuestBoard playerQuestBoard;
 
     public void DisableTime() { updateTime = false; }
     public void EnableTime() {  updateTime = true; }
@@ -152,9 +156,22 @@ public class DayNightCycleManager : MonoBehaviour
     {
         if (hour == 12 && twelveHourClock == twelveHour.AM)
         {
+            BeginDay();
             cm.IncrementDayCount();
             //do something like upgrades
-            BeginDay();
+            List<QuestDisplay> currentQuests = playerQuestBoard.GetQuests();
+            for (int i = 0; i < currentQuests.Count; i++)
+            {
+                currentQuests[i].UpdateDaysLeft();
+                if (!currentQuests[i].questObject.CheckQuestValidity())
+                {
+                    //quest has expired, immediatly abandon it
+                    currentQuests[i].otherQuestBoard.RemoveQuestFromBoard(currentQuests[i].questObject.GetCorrespondingSettlementQuestDisplayUI(), QuestBoard.RemoveType.Remove);
+                    currentQuests[i].parentQuestBoard.RemoveQuestFromBoard(currentQuests[i].questObject.GetCorrespondingPlayerQuestDisplayUI(), QuestBoard.RemoveType.Remove);
+                    
+                    i--;
+                }
+            }
         }
             
     }

@@ -19,7 +19,7 @@ public class WorldItem : BaseInteractable
 
     protected override void OpenPrompt()
     {
-        print("Open Item prompt");
+        //print("Open Item prompt");
         if (playerInventory != null)
         {
             playerInventory.AddItemToInventory(inventoryItem, 1);

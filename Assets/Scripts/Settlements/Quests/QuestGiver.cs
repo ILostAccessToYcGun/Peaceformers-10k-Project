@@ -23,6 +23,7 @@ public class QuestGiver : MonoBehaviour
     //this script will be given to the settlements
     [SerializeField] Settlement currentSettlement;
     [SerializeField] SettlementQuestBoard settlementQuestBoard;
+    [SerializeField] QuestBoard playerQuestBoard;
     //[SerializeField] Slider settlementUpKeepMeter;
     //[SerializeField] Image settlementIcon;
     //[SerializeField] float currentSettlementMaxUpkeep;
@@ -42,6 +43,15 @@ public class QuestGiver : MonoBehaviour
             newObject.SetParentQuestGiver(this);
             //newObject.SetResourceCount(Random.Range(0, newObject.GetResourceRequirement()));
         }
+
+        Debug.Log("Quest accepted");
+        newObject.SetState(QuestObject.QuestState.InProgress);
+        playerQuestBoard.AddQuestToBoard(newObject);
+        playerQuestBoard.UpdateQuests();
+        settlementQuestBoard.AddQuestToBoard(newObject);
+        settlementQuestBoard.UpdateQuests();
+            //correspondingPlayerBoardDisplay = otherQuestBoard.AddQuestToBoard(this.questObject);
+
 
         quests.Add(newObject);
 

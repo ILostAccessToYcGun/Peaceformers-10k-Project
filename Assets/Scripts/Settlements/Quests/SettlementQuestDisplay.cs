@@ -9,7 +9,7 @@ public class SettlementQuestDisplay : QuestDisplay
     [SerializeField] Button acceptButton;
     [SerializeField] Button abandonButton;
     [SerializeField] Button handInButton;
-    [SerializeField] QuestDisplay correspondingPlayerBoardDisplay;
+    
 
     public override void ConfirmAbandon()
     {
@@ -40,7 +40,7 @@ public class SettlementQuestDisplay : QuestDisplay
 
         parentQuestBoard.UpdateQuests();
         //parentQuestBoard.AddQuestToBoard(this.questObject);
-        correspondingPlayerBoardDisplay = otherQuestBoard.AddQuestToBoard(this.questObject);
+        correspondingDisplay = otherQuestBoard.AddQuestToBoard(this.questObject);
         // update settlement quest board
         // update player quest board
     }
