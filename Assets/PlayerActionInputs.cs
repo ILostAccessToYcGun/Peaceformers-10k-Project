@@ -628,6 +628,15 @@ public partial class @PlayerActionInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""InventoryUI"",
+                    ""type"": ""Button"",
+                    ""id"": ""41436be8-5059-4691-af17-0d1283eeaa47"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1059,6 +1068,17 @@ public partial class @PlayerActionInputs: IInputActionCollection2, IDisposable
                     ""action"": ""SettlementUI"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""600d9bfa-4ee7-4b04-a359-c9752132d10f"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""InventoryUI"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1151,6 +1171,7 @@ public partial class @PlayerActionInputs: IInputActionCollection2, IDisposable
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
         m_UI_SettlementUI = m_UI.FindAction("SettlementUI", throwIfNotFound: true);
+        m_UI_InventoryUI = m_UI.FindAction("InventoryUI", throwIfNotFound: true);
     }
 
     ~@PlayerActionInputs()
@@ -1438,6 +1459,7 @@ public partial class @PlayerActionInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_TrackedDevicePosition;
     private readonly InputAction m_UI_TrackedDeviceOrientation;
     private readonly InputAction m_UI_SettlementUI;
+    private readonly InputAction m_UI_InventoryUI;
     /// <summary>
     /// Provides access to input actions defined in input action map "UI".
     /// </summary>
@@ -1493,6 +1515,10 @@ public partial class @PlayerActionInputs: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "UI/SettlementUI".
         /// </summary>
         public InputAction @SettlementUI => m_Wrapper.m_UI_SettlementUI;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/InventoryUI".
+        /// </summary>
+        public InputAction @InventoryUI => m_Wrapper.m_UI_InventoryUI;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1552,6 +1578,9 @@ public partial class @PlayerActionInputs: IInputActionCollection2, IDisposable
             @SettlementUI.started += instance.OnSettlementUI;
             @SettlementUI.performed += instance.OnSettlementUI;
             @SettlementUI.canceled += instance.OnSettlementUI;
+            @InventoryUI.started += instance.OnInventoryUI;
+            @InventoryUI.performed += instance.OnInventoryUI;
+            @InventoryUI.canceled += instance.OnInventoryUI;
         }
 
         /// <summary>
@@ -1596,6 +1625,9 @@ public partial class @PlayerActionInputs: IInputActionCollection2, IDisposable
             @SettlementUI.started -= instance.OnSettlementUI;
             @SettlementUI.performed -= instance.OnSettlementUI;
             @SettlementUI.canceled -= instance.OnSettlementUI;
+            @InventoryUI.started -= instance.OnInventoryUI;
+            @InventoryUI.performed -= instance.OnInventoryUI;
+            @InventoryUI.canceled -= instance.OnInventoryUI;
         }
 
         /// <summary>
@@ -1856,5 +1888,12 @@ public partial class @PlayerActionInputs: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSettlementUI(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "InventoryUI" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnInventoryUI(InputAction.CallbackContext context);
     }
 }

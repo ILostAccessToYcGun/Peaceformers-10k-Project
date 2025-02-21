@@ -33,6 +33,8 @@ public class QuestGiver : MonoBehaviour
     //[SerializeField] GameObject baseQuestUI;
     [SerializeField] QuestObject baseQuestObject;
 
+    [SerializeField] UIManager uiManager;
+
     public void AddQuestToGiver(QuestObject newObject = null)
     {
         Debug.Log(baseQuestObject);
@@ -101,6 +103,7 @@ public class QuestGiver : MonoBehaviour
         if (settlementQuestBoard.gameObject.activeSelf)
         {
             settlementQuestBoard.ResetCurrentViewingSettlement();
+            uiManager.SetUIOpenBool(false);
             settlementQuestBoard.gameObject.SetActive(false);
         }
             
@@ -110,11 +113,16 @@ public class QuestGiver : MonoBehaviour
             settlementQuestBoard.SetCurrentViewingSettlement(this);
             settlementQuestBoard.SetQuests(quests);
             Debug.Log("twice?");
+            uiManager.SetUIOpenBool(true);
             settlementQuestBoard.gameObject.SetActive(true);
         }
             
     }
 
+    private void Start()
+    {
+        uiManager = FindAnyObjectByType<UIManager>();
+    }
     private void Awake()
     {
         //settlementQuestBoard = FindAnyObjectByType<SettlementQuestBoard>();

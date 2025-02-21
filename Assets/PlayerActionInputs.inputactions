@@ -542,6 +542,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "InventoryUI",
+                    "type": "Button",
+                    "id": "41436be8-5059-4691-af17-0d1283eeaa47",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -971,6 +980,17 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "SettlementUI",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "600d9bfa-4ee7-4b04-a359-c9752132d10f",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "InventoryUI",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

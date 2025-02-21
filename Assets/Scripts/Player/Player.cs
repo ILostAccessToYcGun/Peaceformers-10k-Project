@@ -16,6 +16,8 @@ public class Player : MonoBehaviour
     [SerializeField] private List<InteractionPrompt> interactionPrompts;
     [SerializeField] private List<float> interactionDistances;
     [SerializeField] private float closestPrompt;
+    [Space]
+    [SerializeField] private UIManager uiManager;
 
     private PlayerActionInputs _inputActions;
 
@@ -57,6 +59,7 @@ public class Player : MonoBehaviour
     {
         _inputActions = new PlayerActionInputs();
         _inputActions.Enable();
+        uiManager = FindAnyObjectByType<UIManager>();
 
         //initialize other scripts
         playerCharacter.Initialize();
@@ -100,13 +103,20 @@ public class Player : MonoBehaviour
             Reload = input.Reload.WasPressedThisFrame()
         };
         playerGun.RotateGunTowardsMouse();
-        playerGun.UseWeapon(combatInput);
+        if (!uiManager.GetUIOpenBool())
+            playerGun.UseWeapon(combatInput);
 
         if(ui.SettlementUI.WasPressedThisFrame())
         {
             playerUIToggler.ToggleSettlementUI();
         }
         interactionPrompt.SetHold(input.Interact.IsPressed());
+
+        if (ui.InventoryUI.WasPressedThisFrame())
+        {
+            playerUIToggler.ToggleInventoryUI();
+        }
+
     }
 
     void LateUpdate()

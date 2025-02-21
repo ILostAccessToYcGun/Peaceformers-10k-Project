@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6398434180376619896}
   - component: {fileID: 5636125126361760169}
   m_Layer: 5
-  m_Name: Wood
+  m_Name: AmmoCrate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -61,7 +61,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: 0e6d27323016a0f49b20ed4aade2b7df, type: 2}
+  m_Material: {fileID: 2100000, guid: a43aced6910264047bfb55fff2a3b0d2, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -91,10 +91,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f64e8504e2e9154ab4d8355a96ff06f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemType: 0
-  itemName: 0
+  itemType: 2
+  itemName: 3
   itemWidth: 1
-  itemHeight: 3
+  itemHeight: 1
   itemComponents: []
   singleComponent: {fileID: 2686435426259607568, guid: a7f2d3ace108e5b47842f25e896d399d, type: 3}
   img: {fileID: 6003361459494350507}
@@ -106,9 +106,9 @@ MonoBehaviour:
   player: {fileID: 0}
   parent: {fileID: 0}
   currentInventory: {fileID: 0}
-  worldItem: {fileID: 8154398913341998294, guid: bf655943204a01144a2bfd77b73e451d, type: 3}
-  stackAmount: 1
-  stackLimit: 20
+  worldItem: {fileID: 8154398913341998294, guid: 960ee631a2b57394dbea7d490a1bf3d8, type: 3}
+  stackAmount: 3
+  stackLimit: 5
   stackText: {fileID: 2430252357916042962}
 --- !u!114 &6398434180376619896
 MonoBehaviour:
@@ -228,7 +228,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 5
+  m_text: 3
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ebcf30964bc8fdd4d8255b662e39a350, type: 2}
   m_sharedMaterial: {fileID: 5627060112372618412, guid: ebcf30964bc8fdd4d8255b662e39a350, type: 2}

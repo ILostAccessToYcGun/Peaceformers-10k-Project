@@ -9,6 +9,7 @@ using static UnityEditor.Progress;
 public class Inventory : MonoBehaviour
 {
     //TODO: change access modifiers at some point
+    [SerializeField] UIManager uiManager;
     [Space]
     public int inventoryWidth;
     public int inventoryHeight;
@@ -22,6 +23,7 @@ public class Inventory : MonoBehaviour
     public GameObject parent;
     public GameObject inventorySlot;
     public Item testItem;
+    public GameObject itemParent;
     [Space]
     public bool isPlayerInventory = true;
     public List<List<InventorySlot>> inventory = new List<List<InventorySlot>>(); //lists because later we will change the size
@@ -42,6 +44,7 @@ public class Inventory : MonoBehaviour
 
     private void ToggleInventoryVisiblity(bool toggle)
     {
+        uiManager.SetUIOpenBool(toggle);
         inventoryPanel.gameObject.SetActive(toggle);
         for (int j = 0; j < inventory.Count; ++j)
         {
@@ -57,7 +60,7 @@ public class Inventory : MonoBehaviour
     public void SetInventory(InventorySlot[] cells)
     {
         if (cells == null)
-            cells = FindObjectsByType<InventorySlot>(FindObjectsSortMode.None);
+            cells = FindObjectsByType<InventorySlot>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 
         foreach (InventorySlot cell in cells)
         {
@@ -277,9 +280,6 @@ public class Inventory : MonoBehaviour
 
     public void AddItemToInventory(Item itemToFind, int amount)
     {
-        
-
-        //im pretty sure i implemented a feature that didnt need to be so im gonna leave it for now and come back to it later
         int decreaseAmount = amount;
         for (int i = amount; i > 0;)
         {
@@ -303,7 +303,11 @@ public class Inventory : MonoBehaviour
                 
                 if (findSlot.currentHeldItem.stackAmount + amount > findSlot.currentHeldItem.stackLimit)
                 {
-                    decreaseAmount = findSlot.currentHeldItem.stackLimit;
+                    //Debug.Log(decreaseAmount);
+
+                    //findSlot.currentHeldItem.stackLimit - findSlot.currentHeldItem.stackAmount;
+                    decreaseAmount = findSlot.currentHeldItem.stackLimit - findSlot.currentHeldItem.stackAmount;
+                    Debug.Log(decreaseAmount);
                     IncreaseItemStackAmount(findSlot, findSlot.currentHeldItem.stackLimit);
                 }
                 else
@@ -343,6 +347,7 @@ public class Inventory : MonoBehaviour
                 playerQuestBoard.UpdateQuests();
             }
 
+            amount -= decreaseAmount;
             i -= decreaseAmount;
         }
 
@@ -362,28 +367,41 @@ public class Inventory : MonoBehaviour
 
 
 
+    //private void Start()
+    //{
+        
+    //    //ShowInventory();
+    //    HideInventory();
+        
+    //}
 
+    private void Awake()
+    {
+        uiManager = FindAnyObjectByType<UIManager>();
+        GenerateInventory(inventoryWidth, inventoryHeight, cellWidth, cellHeight);
+        SetInventory(null);
+    }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
-        { 
-            if (!inventoryPanel.gameObject.activeSelf)
-            {
-                ShowInventory();
-            }
-            else
-            {
-                HideInventory();
-            }
-        }
+        //if (Input.GetKeyDown(KeyCode.Tab))
+        //{ 
+        //    if (!inventoryPanel.gameObject.activeSelf)
+        //    {
+        //        ShowInventory();
+        //    }
+        //    else
+        //    {
+        //        HideInventory();
+        //    }
+        //}
 
 
         if (Input.GetKeyDown(KeyCode.E) && inventoryPanel.gameObject.activeSelf)
         {
             if (inventory.Count == 0)
             {
-                GenerateInventory(inventoryWidth, inventoryHeight, cellWidth, cellHeight);
+                
                 SetInventory(null);
             }
         }
