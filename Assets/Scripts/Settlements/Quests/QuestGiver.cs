@@ -105,7 +105,7 @@ public class QuestGiver : MonoBehaviour
             settlementQuestBoard.ResetCurrentViewingSettlement();
             uiManager.SetUIOpenBool(false);
             settlementQuestBoard.gameObject.SetActive(false);
-            settlementQuestBoard.ClearScrollContent();
+            settlementQuestBoard.ClearQuestBoard();
         }
             
         else

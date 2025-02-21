@@ -97,12 +97,13 @@ public class QuestBoard : MonoBehaviour
     #endregion
 
 
-    public void ClearScrollContent()
+    public void ClearQuestBoard()
     {
-        for (int i = 0; i < questsDisplays.Count;)
+        for (int i = 0; i < questsDisplays.Count; i++)
         {
             Destroy(questsDisplays[i].gameObject);
         }
+        questsDisplays.Clear();
     }
 
     public void AbortAbandon()
