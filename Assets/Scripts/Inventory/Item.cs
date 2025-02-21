@@ -570,7 +570,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
         currentInventory = FindAnyObjectByType<Inventory>();
 
 
-        parent = currentInventory.itemParent;
+        parent = currentInventory.parent;
 
         img = GetComponent<Image>();
         stackAmount = 1;

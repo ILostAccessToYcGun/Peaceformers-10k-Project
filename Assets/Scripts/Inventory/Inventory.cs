@@ -23,7 +23,6 @@ public class Inventory : MonoBehaviour
     public GameObject parent;
     public GameObject inventorySlot;
     public Item testItem;
-    public GameObject itemParent;
     [Space]
     public bool isPlayerInventory = true;
     public List<List<InventorySlot>> inventory = new List<List<InventorySlot>>(); //lists because later we will change the size

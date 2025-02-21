@@ -46,7 +46,10 @@ public class PlayerGun : MonoBehaviour
 
     private bool _requestedReload;
     private bool isReloading = false;
-    
+    private bool hasAmmo = true;
+
+    [SerializeField] private Inventory ammoInventory;
+
 
     void Start()
     {
@@ -86,7 +89,7 @@ public class PlayerGun : MonoBehaviour
 
     public void UseWeapon(CombatInput input)
     {
-        _requestedShoot = input.Shoot && !isReloading;
+        _requestedShoot = input.Shoot && !isReloading && hasAmmo;
 
         _requestedReload = input.Reload;
 
