@@ -36,8 +36,8 @@ public class QuestGiver : MonoBehaviour
     [SerializeField] UIManager uiManager;
 
     public void AddQuestToGiver(QuestObject newObject = null)
-    {
-        Debug.Log(baseQuestObject);
+    {   
+        //Debug.Log("add quest");
         if (newObject == null)
         {
             newObject = Instantiate(baseQuestObject, this.transform);
@@ -59,7 +59,7 @@ public class QuestGiver : MonoBehaviour
 
         if (settlementQuestBoard.GetCurrentViewingSettlement() == currentSettlement)
         {
-            settlementQuestBoard.SetQuests(quests);
+            //settlementQuestBoard.SetQuests(quests);
         }
 
     }
@@ -105,6 +105,7 @@ public class QuestGiver : MonoBehaviour
             settlementQuestBoard.ResetCurrentViewingSettlement();
             uiManager.SetUIOpenBool(false);
             settlementQuestBoard.gameObject.SetActive(false);
+            settlementQuestBoard.ClearScrollContent();
         }
             
         else

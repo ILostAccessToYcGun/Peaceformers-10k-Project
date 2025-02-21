@@ -25,7 +25,7 @@ public class QuestBoard : MonoBehaviour
     [Header("OtherObjects")]
     [SerializeField] protected GameObject scrollContent;
     [SerializeField] protected QuestBoard otherQuestBoard;
-    [SerializeField] protected Inventory playerInventory;
+    [SerializeField] public Inventory playerInventory;
 
     [Space]
     [Header("Quests")]
@@ -96,6 +96,14 @@ public class QuestBoard : MonoBehaviour
 
     #endregion
 
+
+    public void ClearScrollContent()
+    {
+        for (int i = 0; i < questsDisplays.Count;)
+        {
+            Destroy(questsDisplays[i].gameObject);
+        }
+    }
 
     public void AbortAbandon()
     {

@@ -179,6 +179,24 @@ public class Inventory : MonoBehaviour
         }
         return null;
     }
+
+    public InventorySlot FindTopSlotWithItem(Item.Name itemToFind)
+    {
+        for (int j = 0; j < inventory.Capacity; j++)
+        {
+            for (int i = 0; i < inventory[j].Capacity; i++)
+            {
+                InventorySlot slot = inventory[j][i];
+                if (slot.GetHeldItem() != null)
+                {
+                    if (slot.GetHeldItem().itemName == itemToFind)
+                        return slot;
+                }
+            }
+        }
+        return null;
+    }
+
     public InventorySlot FindPartialyFilledItemOrEmptySlot(Item itemToFind)
     {
         Debug.Log(itemToFind.itemName);
@@ -381,7 +399,37 @@ public class Inventory : MonoBehaviour
             i -= decreaseAmount;
         }
         return removeCount;
+    }
 
+    public int RemoveItemFromInventory(Item.Name itemToFind, int amount)
+    {
+        int decreaseAmount = 0;
+        int removeCount = 0;
+        for (int i = amount; i > 0;)
+        {
+            InventorySlot findSlot = FindTopSlotWithItem(itemToFind);
+            if (findSlot == null) { return removeCount; }
+            if (findSlot.GetHeldItem() != null)
+            {
+                if (amount > findSlot.GetHeldItem().stackAmount)
+                {
+                    decreaseAmount = findSlot.GetHeldItem().stackAmount;
+                }
+                else
+                {
+                    decreaseAmount = amount;
+                }
+                DecreaseItemStackAmount(findSlot, amount);
+                amount -= decreaseAmount;
+                removeCount += decreaseAmount;
+
+                if (playerQuestBoard != null)
+                    playerQuestBoard.UpdateQuests();
+            }
+
+            i -= decreaseAmount;
+        }
+        return removeCount;
     }
 
     #endregion
@@ -390,10 +438,10 @@ public class Inventory : MonoBehaviour
 
     //private void Start()
     //{
-        
+
     //    //ShowInventory();
     //    HideInventory();
-        
+
     //}
 
     private void Awake()
