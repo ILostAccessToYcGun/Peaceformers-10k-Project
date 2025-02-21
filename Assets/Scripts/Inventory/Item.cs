@@ -369,8 +369,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
             {
                 if (player != null)
                 {
-                    Instantiate(worldItem.gameObject, player.transform.position + new Vector3(0, 0, 2f), player.transform.rotation);
-                    OnDestroy();
+                    InstantiateWorldObject(stackAmount);
                 }
                 
             } 
@@ -402,16 +401,10 @@ public class Item : MonoBehaviour, IPointerClickHandler
             else
             {
                 if (isKeepHolding)
-                {
                     PickUpItemInInventory();
-                }
                 else
-                {
                     AddComponentSlots(inventorySlots);
-                }
-                
             }
-                
         }
     }
 
@@ -446,6 +439,15 @@ public class Item : MonoBehaviour, IPointerClickHandler
         componentSlots.Clear();
     }
 
+    public void InstantiateWorldObject(int worldStackAmount)
+    {
+        GameObject newDroppedItem = Instantiate(worldItem.gameObject, player.transform.position + new Vector3(0, 0, 2f), player.transform.rotation);
+        WorldItem newWorldItem = newDroppedItem.GetComponent<WorldItem>();
+
+        newWorldItem.InitializeWorldObject(worldStackAmount, 0, 0);
+        OnDestroy();
+    }
+
     #endregion
 
     #region _Stack_
@@ -462,20 +464,25 @@ public class Item : MonoBehaviour, IPointerClickHandler
             stackAmount += increase;
             UpdateStackText();
         }
-            
+        else
+            SetStackAmount(stackLimit);
     }
     public void DecreaseStackAmount(int decrease) 
     {
         stackAmount -= decrease;
         UpdateStackText();
         if (stackAmount == 0)
-        {
-            
             OnDestroy();
-        }
-            
     }
-    public void SetStackAmount(int amount) { stackAmount = amount; UpdateStackText(); }
+    public void SetStackAmount(int amount) 
+    { 
+        if (amount > stackLimit)
+            stackAmount = stackLimit;
+        else
+            stackAmount = amount; 
+
+        UpdateStackText(); 
+    }
     public void UpdateStackText()
     {
         stackText.text = stackAmount.ToString();
