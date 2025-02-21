@@ -102,9 +102,19 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
     private float _timeSinceJumpRequest;
     private bool _ungroundedDueToJump;
 
+    private Vector3 startPos;
+
+    public void ResetPos()
+    {
+        print("Resetting position");
+        this.transform.position = startPos;
+    }
+
 
     public void Initialize()
     {
+        startPos = this.transform.position;
+
         _lastState = _state;
 
         dashes = maxDashes;
