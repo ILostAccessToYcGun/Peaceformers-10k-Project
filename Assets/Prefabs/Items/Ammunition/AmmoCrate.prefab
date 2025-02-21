@@ -107,8 +107,8 @@ MonoBehaviour:
   parent: {fileID: 0}
   currentInventory: {fileID: 0}
   worldItem: {fileID: 8154398913341998294, guid: 960ee631a2b57394dbea7d490a1bf3d8, type: 3}
-  stackAmount: 3
-  stackLimit: 5
+  stackAmount: 60
+  stackLimit: 60
   stackText: {fileID: 2430252357916042962}
 --- !u!114 &6398434180376619896
 MonoBehaviour:
@@ -228,7 +228,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 3
+  m_text: 1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ebcf30964bc8fdd4d8255b662e39a350, type: 2}
   m_sharedMaterial: {fileID: 5627060112372618412, guid: ebcf30964bc8fdd4d8255b662e39a350, type: 2}

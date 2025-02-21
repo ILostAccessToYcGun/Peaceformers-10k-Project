@@ -352,14 +352,36 @@ public class Inventory : MonoBehaviour
 
         
     }
-    public void RemoveItemFromInventory(Item itemToFind, int amount)
+    public int RemoveItemFromInventory(Item itemToFind, int amount)
     {
-        InventorySlot findSlot = FindTopSlotWithItem(itemToFind);
-        if (findSlot == null) { return; }
-        if (findSlot.GetHeldItem() != null) { DecreaseItemStackAmount(findSlot, amount); }
+        int decreaseAmount = 0;
+        int removeCount = 0;
+        for (int i = amount; i > 0;)
+        {
+            InventorySlot findSlot = FindTopSlotWithItem(itemToFind);
+            if (findSlot == null) { return removeCount; }
+            if (findSlot.GetHeldItem() != null)
+            {
+                if (amount > findSlot.GetHeldItem().stackAmount)
+                {
+                    decreaseAmount = findSlot.GetHeldItem().stackAmount;
+                }
+                else
+                {
+                    decreaseAmount = amount;
+                }
+                DecreaseItemStackAmount(findSlot, amount);
+                amount -= decreaseAmount;
+                removeCount += decreaseAmount;
 
-        if (playerQuestBoard != null)
-            playerQuestBoard.UpdateQuests();
+                if (playerQuestBoard != null)
+                    playerQuestBoard.UpdateQuests();
+            }
+
+            i -= decreaseAmount;
+        }
+        return removeCount;
+
     }
 
     #endregion

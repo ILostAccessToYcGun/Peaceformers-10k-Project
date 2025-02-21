@@ -46,9 +46,9 @@ public class PlayerGun : MonoBehaviour
 
     private bool _requestedReload;
     private bool isReloading = false;
-    private bool hasAmmo = true;
 
     [SerializeField] private Inventory ammoInventory;
+    [SerializeField] private Item ammo;
 
 
     void Start()
@@ -89,7 +89,7 @@ public class PlayerGun : MonoBehaviour
 
     public void UseWeapon(CombatInput input)
     {
-        _requestedShoot = input.Shoot && !isReloading && hasAmmo;
+        _requestedShoot = input.Shoot && !isReloading;
 
         _requestedReload = input.Reload;
 
@@ -224,10 +224,15 @@ public class PlayerGun : MonoBehaviour
         }
 
         reloadCircle.fillAmount = 1f;
-        currentAmmo = maxAmmo;
+        currentAmmo += GetAmmo();
         isReloading = false;
         reloadCircle.gameObject.SetActive(false);
         ammoText.gameObject.SetActive(true);
         Debug.Log("Done Reloading.");
+    }
+
+    private int GetAmmo()
+    {
+        return ammoInventory.RemoveItemFromInventory(ammo, maxAmmo - currentAmmo);
     }
 }

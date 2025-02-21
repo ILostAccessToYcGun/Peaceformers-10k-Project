@@ -487,9 +487,13 @@ public class Item : MonoBehaviour, IPointerClickHandler
     }
     public void DecreaseStackAmount(int decrease) 
     {
-        stackAmount -= decrease;
+        
+        if (decrease >= stackAmount)
+            stackAmount -= stackLimit;
+        else
+            stackAmount -= decrease;
         UpdateStackText();
-        if (stackAmount == 0)
+        if (stackAmount <= 0)
             OnDestroy();
     }
     public void SetStackAmount(int amount) 
