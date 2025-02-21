@@ -172,14 +172,10 @@ public class Item : MonoBehaviour, IPointerClickHandler
                                         //if (h == (int)startPos.y)
                                         {
                                             if (currentItem.itemName == this.itemName && currentItem.stackAmount < currentItem.stackLimit) //hmmm will need some work
-                                            {
                                                 firstCellisLikeItem = true;
-                                            }
                                         }
                                         else
-                                        {
                                             itemDoesNotCollideWithOtherItems = false;
-                                        }
                                     }
                                 }
                             }
@@ -197,9 +193,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
                         }
                     }
                     else
-                    {
                         nearestDistance = compareDistance;
-                    }
                 }
             }
         }
@@ -218,15 +212,14 @@ public class Item : MonoBehaviour, IPointerClickHandler
         //InventorySlot[] inventorySlots = FindObjectsByType<InventorySlot>(FindObjectsSortMode.None);
         InventorySlot[] inventorySlots = FindObjectsByType<InventorySlot>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         if (inventorySlots.Length < 1) { return; }
-        
 
-        InventorySlot nearestInventorySlot = inventorySlots[0]; ////
-        float nearestDistance = 300f;////
+        InventorySlot nearestInventorySlot = inventorySlots[0];
+        float nearestDistance = 300f;
 
-        bool isStacking = false;///
+        bool isStacking = false;
         bool isKeepHolding = false;
         bool isTrashing = false;
-        Item stackingItem = inventorySlots[0].GetHeldItem();///
+        Item stackingItem = inventorySlots[0].GetHeldItem();
 
         if (inventorySlots.Length > 1) //if there is more than one inventory slot on screen, find the closest
         {
@@ -243,13 +236,9 @@ public class Item : MonoBehaviour, IPointerClickHandler
                         bool itemDoesFitInsideInventoryFrame = true; //check if the item size will fit in that spot
 
                         if (slotPosition.x + itemWidth > currentInventory.inventoryWidth)
-                        {
                             itemDoesFitInsideInventoryFrame = false;
-                        }
                         if (slotPosition.y + itemHeight > currentInventory.inventoryHeight)
-                        {
                             itemDoesFitInsideInventoryFrame = false;
-                        }
 
                         bool itemDoesNotCollideWithOtherItems = true;
                         bool firstCellisLikeItem = false;
@@ -268,14 +257,10 @@ public class Item : MonoBehaviour, IPointerClickHandler
                                         //if (h == (int)startPos.y)
                                         {
                                             if (currentItem.itemName == this.itemName && currentItem.stackAmount < currentItem.stackLimit) //hmmm will need some work
-                                            {
                                                 firstCellisLikeItem = true;
-                                            }
                                         }
                                         else
-                                        {
                                             itemDoesNotCollideWithOtherItems = false;
-                                        }
                                     }
                                 }
                             }
@@ -436,11 +421,11 @@ public class Item : MonoBehaviour, IPointerClickHandler
         {
             if (slot.inventoryPosition.x >= currentInventorySlot.inventoryPosition.x && slot.inventoryPosition.x < currentInventorySlot.inventoryPosition.x + itemWidth)
             {
-                if (slot.inventoryPosition.y >= currentInventorySlot.inventoryPosition.y && slot.inventoryPosition.y < currentInventorySlot.inventoryPosition.y + itemWidth)
+                if (slot.inventoryPosition.y >= currentInventorySlot.inventoryPosition.y && slot.inventoryPosition.y < currentInventorySlot.inventoryPosition.y + itemHeight)
                 {
                     slot.SetHeldItem(this);
                     componentSlots.Add(slot);
-                    //Debug.Log("component slot added");
+                    Debug.Log("component slot added");
                 }
             }
         }
