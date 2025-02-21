@@ -2595,18 +2595,6 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1676149430}
         m_TargetAssemblyTypeName: DayNightCycleManager, Assembly-CSharp
-        m_MethodName: DisableTime
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1676149430}
-        m_TargetAssemblyTypeName: DayNightCycleManager, Assembly-CSharp
         m_MethodName: DayEndPanel
         m_Mode: 6
         m_Arguments:
@@ -6212,6 +6200,7 @@ MonoBehaviour:
   goodHealthColor: {r: 0.3882353, g: 0.78039217, b: 0.3019608, a: 1}
   watchOutColor: {r: 0.9843137, g: 0.41960785, b: 0.11372549, a: 1}
   criticalColor: {r: 1, g: 0.2509804, b: 0.2509804, a: 1}
+  dayNightCycleManager: {fileID: 1676149430}
 --- !u!1 &1008345532
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,6 +17,9 @@ public class PlayerBattery : MonoBehaviour
     [SerializeField] private Color watchOutColor;
     [SerializeField] private Color criticalColor;
 
+    [Space]
+    [SerializeField] private DayNightCycleManager dayNightCycleManager;
+
 
     void Start()
     {
@@ -26,11 +29,13 @@ public class PlayerBattery : MonoBehaviour
 
     void Update()
     {
+        //LoseBattery(0.29166f);
         LoseBattery(0.29166f/100f/2f);
 
         if (currentBattery <= 0f)
         {
             //end day
+            dayNightCycleManager.DayEndPanel(true);
         }
     }
 
@@ -59,9 +64,9 @@ public class PlayerBattery : MonoBehaviour
         batteryFill.fillAmount = healthRatio;
 
 
-        if (currentBattery > (maxBattery / 2))
+        if (currentBattery > 30)
             batteryFill.color = goodHealthColor;
-        else if (currentBattery > (maxBattery / 4))
+        else if (currentBattery > 20)
             batteryFill.color = watchOutColor;
         else
             batteryFill.color = criticalColor;
