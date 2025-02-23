@@ -563,7 +563,8 @@ public class Item : MonoBehaviour, IPointerClickHandler
                 }
             }
         }
-        
+
+        currentInventory.playerQuestBoard.UpdateQuests();
         
         Destroy(gameObject);
     }

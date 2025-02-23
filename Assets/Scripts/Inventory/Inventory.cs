@@ -27,7 +27,7 @@ public class Inventory : MonoBehaviour
     public bool isPlayerInventory = true;
     public List<List<InventorySlot>> inventory = new List<List<InventorySlot>>(); //lists because later we will change the size
     [Space]
-    [SerializeField] QuestBoard playerQuestBoard; //this is set manually
+    [SerializeField] public QuestBoard playerQuestBoard; //this is set manually
     
 
     #region _General_Inventory_
@@ -280,7 +280,7 @@ public class Inventory : MonoBehaviour
                 {
                     if (currentItem.itemName == nameToFind && !currentItemIsAlreadyCounted) //make sure to ignore item components, if item = item from before ignore
                     {
-                        itemSearchCount++; //count the number of items of that type
+                        itemSearchCount += currentItem.stackAmount; //count the number of items of that type
                         itemSearchHistory.Add(currentItem);
                     }
                 }

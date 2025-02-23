@@ -39,10 +39,7 @@ public class SettlementQuestDisplay : QuestDisplay
         AddButtonAbandon();
 
         parentQuestBoard.UpdateQuests();
-        //parentQuestBoard.AddQuestToBoard(this.questObject);
         correspondingDisplay = otherQuestBoard.AddQuestToBoard(this.questObject);
-        // update settlement quest board
-        // update player quest board
     }
 
 
@@ -54,13 +51,13 @@ public class SettlementQuestDisplay : QuestDisplay
         RemoveButtonHandIn();
         AddButtonAccept();
 
-        // remove the quest from the settlement quest list
-        // update player quest board
-
         parentQuestBoard.RemoveQuestFromBoard(this, QuestBoard.RemoveType.Hand_In);
         otherQuestBoard.RemoveQuestFromBoard(questObject.GetCorrespondingPlayerQuestDisplayUI(), QuestBoard.RemoveType.Hand_In);
 
         parentQuestBoard.playerInventory.RemoveItemFromInventory(questObject.GetResource(), questObject.GetResourceCount());
+
+        parentQuestBoard.UpdateQuests();
+        otherQuestBoard.UpdateQuests();
     }
 
     
