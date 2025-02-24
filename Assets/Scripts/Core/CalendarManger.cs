@@ -45,7 +45,11 @@ public class CalendarManger : MonoBehaviour
         UpdateDateText();
         CheckIfEndDayCountReached();
     }
+
+    public int GetDayCount() { return date; }
+    
     public void SetEndDayCount(int count) { endDate = count; }
+    public int GetEndDayCount() { return endDate; }
 
 
 

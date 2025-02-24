@@ -352,7 +352,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
                         nearestDistance = compareDistance;
                         nearestInventorySlot = slot;
                         stackingItem = null;
-                        Debug.Log("trash " + nearestDistance);
+                        //Debug.Log("trash " + nearestDistance);
                     }
                     
                 }
@@ -440,7 +440,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
                 {
                     slot.SetHeldItem(this);
                     componentSlots.Add(slot);
-                    Debug.Log("component slot added");
+                    //Debug.Log("component slot added");
                 }
             }
         }
