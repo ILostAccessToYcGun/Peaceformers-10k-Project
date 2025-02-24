@@ -51,10 +51,17 @@ public class SettlementQuestDisplay : QuestDisplay
         RemoveButtonHandIn();
         AddButtonAccept();
 
+        
+
         parentQuestBoard.RemoveQuestFromBoard(this, QuestBoard.RemoveType.Hand_In);
         otherQuestBoard.RemoveQuestFromBoard(questObject.GetCorrespondingPlayerQuestDisplayUI(), QuestBoard.RemoveType.Hand_In);
 
+        Debug.Log(questObject.GetResourceCount());
+
         parentQuestBoard.playerInventory.RemoveItemFromInventory(questObject.GetResource(), questObject.GetResourceCount());
+        Destroy(questObject);
+        
+
 
         parentQuestBoard.UpdateQuests();
         otherQuestBoard.UpdateQuests();

@@ -551,6 +551,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "QuestUI",
+                    "type": "Button",
+                    "id": "7d52a7a4-8510-450b-b5af-71ca8643267b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "BackOut",
+                    "type": "Button",
+                    "id": "29e058c7-af56-4f01-82eb-9130a2e48365",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -991,6 +1009,28 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "InventoryUI",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4df70445-b4bf-430d-9be9-c2839a675975",
+                    "path": "<Keyboard>/u",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "QuestUI",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1f539390-82d6-4491-8e0d-e1bea5e9b783",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "BackOut",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -4,12 +4,13 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using static UnityEditor.Progress;
+using UnityEngine.InputSystem;
 //using UnityEngine.UIElements;
 
 public class Inventory : MonoBehaviour
 {
     //TODO: change access modifiers at some point
-    [SerializeField] UIManager uiManager;
+    [SerializeField] PlayerUIToggler playerUIToggler;
     [Space]
     public int inventoryWidth;
     public int inventoryHeight;
@@ -43,7 +44,6 @@ public class Inventory : MonoBehaviour
 
     private void ToggleInventoryVisiblity(bool toggle)
     {
-        uiManager.SetUIOpenBool(toggle);
         inventoryPanel.gameObject.SetActive(toggle);
         for (int j = 0; j < inventory.Count; ++j)
         {
@@ -446,7 +446,6 @@ public class Inventory : MonoBehaviour
 
     private void Awake()
     {
-        uiManager = FindAnyObjectByType<UIManager>();
         GenerateInventory(inventoryWidth, inventoryHeight, cellWidth, cellHeight);
         SetInventory(null);
     }

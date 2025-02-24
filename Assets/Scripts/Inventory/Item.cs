@@ -459,7 +459,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
 
     public void InstantiateWorldObject(int worldStackAmount)
     {
-        GameObject newDroppedItem = Instantiate(worldItem.gameObject, player.transform.position + new Vector3(0, 0, 2f), player.transform.rotation);
+        GameObject newDroppedItem = Instantiate(worldItem.gameObject, player.transform.position + new Vector3(0, 2f, 0), player.transform.rotation);
         WorldItem newWorldItem = newDroppedItem.GetComponent<WorldItem>();
 
         newWorldItem.InitializeWorldObject(worldStackAmount, 0, 0);

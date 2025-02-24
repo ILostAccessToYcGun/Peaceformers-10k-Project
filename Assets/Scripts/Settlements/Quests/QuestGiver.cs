@@ -33,7 +33,7 @@ public class QuestGiver : MonoBehaviour
     //[SerializeField] GameObject baseQuestUI;
     [SerializeField] QuestObject baseQuestObject;
 
-    [SerializeField] UIManager uiManager;
+    [SerializeField] PlayerUIToggler playerUIToggler;
 
     public void AddQuestToGiver(QuestObject newObject = null)
     {   
@@ -78,7 +78,7 @@ public class QuestGiver : MonoBehaviour
                 {
                     currentSettlement.GainMeter(removeObject.GetUpKeepGain() * removeObject.GetResourceCount() / removeObject.GetResourceRequirement());
                     quests.Remove(removeObject);
-                    Destroy(removeObject); //huh 
+                    //Destroy(removeObject); //huh 
                 }
                 else
                 {
@@ -92,9 +92,6 @@ public class QuestGiver : MonoBehaviour
         }
     }
 
-
-
-    //the idea is that this is one piece of UI that will switch which settlement to look at based on which one you interact with.
     public void SetSettlement() { currentSettlement = GetComponent<Settlement>(); }
     public Settlement GetSettlement() { return currentSettlement; }
 
@@ -103,8 +100,8 @@ public class QuestGiver : MonoBehaviour
         if (settlementQuestBoard.gameObject.activeSelf)
         {
             settlementQuestBoard.ResetCurrentViewingSettlement();
-            uiManager.SetUIOpenBool(false);
-            settlementQuestBoard.gameObject.SetActive(false);
+            playerUIToggler.ToggleSettlementQuestUI();
+            //settlementQuestBoard.gameObject.SetActive(false);
             settlementQuestBoard.ClearQuestBoard();
         }
             
@@ -113,16 +110,15 @@ public class QuestGiver : MonoBehaviour
             //pass in the quests list and remake the settlement quest board based on it
             settlementQuestBoard.SetCurrentViewingSettlement(this);
             settlementQuestBoard.SetQuests(quests);
-            Debug.Log("twice?");
-            uiManager.SetUIOpenBool(true);
-            settlementQuestBoard.gameObject.SetActive(true);
+            playerUIToggler.ToggleSettlementQuestUI();
+            //settlementQuestBoard.gameObject.SetActive(true);
         }
             
     }
 
     private void Start()
     {
-        uiManager = FindAnyObjectByType<UIManager>();
+        playerUIToggler = FindAnyObjectByType<PlayerUIToggler>();
     }
     private void Awake()
     {

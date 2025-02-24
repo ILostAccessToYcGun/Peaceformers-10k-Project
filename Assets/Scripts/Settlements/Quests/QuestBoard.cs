@@ -87,7 +87,11 @@ public class QuestBoard : MonoBehaviour
             int newResourceCount = playerInventory.FindItemCountOfName(resourceToFind);
             Debug.Log("newResourceCount = " + newResourceCount);
 
-            display.questObject.SetResourceCount(newResourceCount);
+            if (newResourceCount > display.questObject.GetResourceRequirement())
+                display.questObject.SetResourceCount(display.questObject.GetResourceRequirement());
+            else
+                display.questObject.SetResourceCount(newResourceCount);
+
             display.UpdateSliderUI();
         }
     }

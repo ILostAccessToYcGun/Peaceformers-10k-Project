@@ -637,6 +637,24 @@ public partial class @PlayerActionInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""QuestUI"",
+                    ""type"": ""Button"",
+                    ""id"": ""7d52a7a4-8510-450b-b5af-71ca8643267b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BackOut"",
+                    ""type"": ""Button"",
+                    ""id"": ""29e058c7-af56-4f01-82eb-9130a2e48365"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1079,6 +1097,28 @@ public partial class @PlayerActionInputs: IInputActionCollection2, IDisposable
                     ""action"": ""InventoryUI"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4df70445-b4bf-430d-9be9-c2839a675975"",
+                    ""path"": ""<Keyboard>/u"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""QuestUI"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1f539390-82d6-4491-8e0d-e1bea5e9b783"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""BackOut"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1172,6 +1212,8 @@ public partial class @PlayerActionInputs: IInputActionCollection2, IDisposable
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
         m_UI_SettlementUI = m_UI.FindAction("SettlementUI", throwIfNotFound: true);
         m_UI_InventoryUI = m_UI.FindAction("InventoryUI", throwIfNotFound: true);
+        m_UI_QuestUI = m_UI.FindAction("QuestUI", throwIfNotFound: true);
+        m_UI_BackOut = m_UI.FindAction("BackOut", throwIfNotFound: true);
     }
 
     ~@PlayerActionInputs()
@@ -1460,6 +1502,8 @@ public partial class @PlayerActionInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_TrackedDeviceOrientation;
     private readonly InputAction m_UI_SettlementUI;
     private readonly InputAction m_UI_InventoryUI;
+    private readonly InputAction m_UI_QuestUI;
+    private readonly InputAction m_UI_BackOut;
     /// <summary>
     /// Provides access to input actions defined in input action map "UI".
     /// </summary>
@@ -1519,6 +1563,14 @@ public partial class @PlayerActionInputs: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "UI/InventoryUI".
         /// </summary>
         public InputAction @InventoryUI => m_Wrapper.m_UI_InventoryUI;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/QuestUI".
+        /// </summary>
+        public InputAction @QuestUI => m_Wrapper.m_UI_QuestUI;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/BackOut".
+        /// </summary>
+        public InputAction @BackOut => m_Wrapper.m_UI_BackOut;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1581,6 +1633,12 @@ public partial class @PlayerActionInputs: IInputActionCollection2, IDisposable
             @InventoryUI.started += instance.OnInventoryUI;
             @InventoryUI.performed += instance.OnInventoryUI;
             @InventoryUI.canceled += instance.OnInventoryUI;
+            @QuestUI.started += instance.OnQuestUI;
+            @QuestUI.performed += instance.OnQuestUI;
+            @QuestUI.canceled += instance.OnQuestUI;
+            @BackOut.started += instance.OnBackOut;
+            @BackOut.performed += instance.OnBackOut;
+            @BackOut.canceled += instance.OnBackOut;
         }
 
         /// <summary>
@@ -1628,6 +1686,12 @@ public partial class @PlayerActionInputs: IInputActionCollection2, IDisposable
             @InventoryUI.started -= instance.OnInventoryUI;
             @InventoryUI.performed -= instance.OnInventoryUI;
             @InventoryUI.canceled -= instance.OnInventoryUI;
+            @QuestUI.started -= instance.OnQuestUI;
+            @QuestUI.performed -= instance.OnQuestUI;
+            @QuestUI.canceled -= instance.OnQuestUI;
+            @BackOut.started -= instance.OnBackOut;
+            @BackOut.performed -= instance.OnBackOut;
+            @BackOut.canceled -= instance.OnBackOut;
         }
 
         /// <summary>
@@ -1895,5 +1959,19 @@ public partial class @PlayerActionInputs: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnInventoryUI(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "QuestUI" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnQuestUI(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "BackOut" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBackOut(InputAction.CallbackContext context);
     }
 }

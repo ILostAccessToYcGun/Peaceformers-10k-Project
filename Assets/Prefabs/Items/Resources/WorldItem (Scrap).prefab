@@ -271,6 +271,7 @@ MonoBehaviour:
   initializeAction: 0
   interactHoldTime: 0.25
   inventoryItem: {fileID: 8345865606624636533, guid: ddcbfc1da3fea2e42a16f185b3deebf7, type: 3}
+  itemStackCount: 1
   interactionCanvas: {fileID: 0}
   playerInventory: {fileID: 0}
   worldItemStackCount: {fileID: 8028084527815662160}

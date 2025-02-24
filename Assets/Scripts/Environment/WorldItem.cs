@@ -15,6 +15,7 @@ public class WorldItem : BaseInteractable
      */
 
     [SerializeField] public Item inventoryItem;
+    [SerializeField] private int itemStackCount;
     [SerializeField] private Canvas interactionCanvas;
     [SerializeField] private Inventory playerInventory;
     [SerializeField] private TextMeshProUGUI worldItemStackCount;
@@ -26,8 +27,8 @@ public class WorldItem : BaseInteractable
         //print("Open Item prompt");
         if (playerInventory != null)
         {
-            playerInventory.AddItemToInventory(inventoryItem, inventoryItem.stackAmount);
-            Debug.Log("inventoryItem.stackAmount = " + inventoryItem.stackAmount);
+            playerInventory.AddItemToInventory(inventoryItem, itemStackCount);
+            Debug.Log("itemStackCount = " + itemStackCount);
             Destroy(this.gameObject);
         }
         else
@@ -53,12 +54,12 @@ public class WorldItem : BaseInteractable
 
     protected void UpdateStackCount()
     {
-        worldItemStackCount.text = inventoryItem.stackAmount.ToString();
+        worldItemStackCount.text = itemStackCount.ToString();
     }
 
-    public void InitializeWorldObject(int worldStackAmount, float minForce, float maxForce)
+    public void InitializeWorldObject(int worldStackAmount, float minForce = 500f, float maxForce = 700f)
     {
-        inventoryItem.SetStackAmount(worldStackAmount);
+        itemStackCount = worldStackAmount;
         UpdateStackCount();
         AddPopUpForce(minForce, maxForce);
     }
