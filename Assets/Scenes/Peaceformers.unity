@@ -5736,6 +5736,8 @@ MonoBehaviour:
   watchOutColor: {r: 0.9843138, g: 0.41960788, b: 0.1137255, a: 1}
   criticalColor: {r: 1, g: 0.25, b: 0.25, a: 1}
   questGiver: {fileID: 0}
+  panicEnemiesGO: 0
+  currentlyEndangered: 0
 --- !u!114 &866025023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6194,6 +6196,7 @@ GameObject:
   - component: {fileID: 974890185}
   - component: {fileID: 974890186}
   - component: {fileID: 974890187}
+  - component: {fileID: 974890188}
   m_Layer: 0
   m_Name: Settlement 1
   m_TagString: Settlement
@@ -6249,6 +6252,8 @@ MonoBehaviour:
   watchOutColor: {r: 0.9843138, g: 0.41960788, b: 0.1137255, a: 1}
   criticalColor: {r: 1, g: 0.25, b: 0.25, a: 1}
   questGiver: {fileID: 0}
+  panicEnemiesGO: 0
+  currentlyEndangered: 0
 --- !u!114 &974890187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6267,6 +6272,29 @@ MonoBehaviour:
   quests: []
   baseQuestObject: {fileID: 11400000, guid: 77eee3b92dacd3049a59a2bfb0acc93d, type: 2}
   playerUIToggler: {fileID: 0}
+--- !u!136 &974890188
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 974890184}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 12
+  m_Height: 5
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &984346779
 GameObject:
   m_ObjectHideFlags: 0
@@ -10828,6 +10856,10 @@ MonoBehaviour:
   moonLightAngle: 0
   dayEndPanel: {fileID: 1972416446}
   playerQuestBoard: {fileID: 1660312074}
+  settlements:
+  - {fileID: 974890186}
+  - {fileID: 866025022}
+  - {fileID: 1854132513}
 --- !u!4 &1676149431
 Transform:
   m_ObjectHideFlags: 0
@@ -12265,6 +12297,7 @@ GameObject:
   - component: {fileID: 1854132510}
   - component: {fileID: 1854132513}
   - component: {fileID: 1854132514}
+  - component: {fileID: 1854132515}
   m_Layer: 0
   m_Name: Settlement 3
   m_TagString: Settlement
@@ -12320,6 +12353,8 @@ MonoBehaviour:
   watchOutColor: {r: 0.9843138, g: 0.41960788, b: 0.1137255, a: 1}
   criticalColor: {r: 1, g: 0.25, b: 0.25, a: 1}
   questGiver: {fileID: 0}
+  panicEnemiesGO: 0
+  currentlyEndangered: 0
 --- !u!114 &1854132514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12338,6 +12373,29 @@ MonoBehaviour:
   quests: []
   baseQuestObject: {fileID: 11400000, guid: 77eee3b92dacd3049a59a2bfb0acc93d, type: 2}
   playerUIToggler: {fileID: 0}
+--- !u!136 &1854132515
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1854132509}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 12
+  m_Height: 5
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1860563500 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1159016942043050867, guid: 78c73e9ed0554a540af6616d1180f0fe, type: 3}
@@ -13032,7 +13090,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5427910253662536891, guid: be1be77bab19fdb41bd17ae7a3635930, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -38.05
+      value: -32.24
       objectReference: {fileID: 0}
     - target: {fileID: 5427910253662536891, guid: be1be77bab19fdb41bd17ae7a3635930, type: 3}
       propertyPath: m_LocalPosition.y
@@ -13040,7 +13098,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5427910253662536891, guid: be1be77bab19fdb41bd17ae7a3635930, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 453.53
+      value: 460.26
       objectReference: {fileID: 0}
     - target: {fileID: 5427910253662536891, guid: be1be77bab19fdb41bd17ae7a3635930, type: 3}
       propertyPath: m_LocalRotation.w

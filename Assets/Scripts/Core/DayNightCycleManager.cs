@@ -39,7 +39,9 @@ public class DayNightCycleManager : MonoBehaviour
     public Image dayEndPanel;
 
     [Space]
+    [Header("Other Elements")]
     [SerializeField] QuestBoard playerQuestBoard;
+    [SerializeField] List<Settlement> settlements;
 
     public void DisableTime() { updateTime = false; }
     public void EnableTime() {  updateTime = true; }
@@ -159,6 +161,15 @@ public class DayNightCycleManager : MonoBehaviour
             BeginDay();
             cm.IncrementDayCount();
             //do something like upgrades
+
+            WorldItem[] itemsOnTheGround = FindObjectsByType<WorldItem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+
+            for (int i = 0; i < itemsOnTheGround.Length; i++)
+            {
+                Destroy(itemsOnTheGround[i].gameObject);
+            }
+            
+
             List<QuestDisplay> currentQuests = playerQuestBoard.GetQuests();
             for (int i = 0; i < currentQuests.Count; i++)
             {
@@ -172,6 +183,17 @@ public class DayNightCycleManager : MonoBehaviour
                     i--;
                 }
             }
+
+            foreach (Settlement settlement in settlements)
+            {
+                if (settlement.currentlyEndangered)
+                {
+                    settlement.panicEnemiesGO = true;
+                    settlement.currentlyEndangered = false;
+                }
+            }
+
+            //spawn Settlement enemies
         }
             
     }

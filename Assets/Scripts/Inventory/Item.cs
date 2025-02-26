@@ -449,9 +449,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
             if (slot.inventoryPosition.x >= currentInventorySlot.inventoryPosition.x && slot.inventoryPosition.x <= currentInventorySlot.inventoryPosition.x + itemWidth)
             {
                 if (slot.inventoryPosition.y >= currentInventorySlot.inventoryPosition.y && slot.inventoryPosition.y <= currentInventorySlot.inventoryPosition.y + itemHeight)
-                {
                     slot.ClearHeldItem();
-                }
             }
         }
         componentSlots.Clear();
