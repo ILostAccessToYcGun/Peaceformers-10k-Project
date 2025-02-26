@@ -153,6 +153,7 @@ public class PlayerGun : MonoBehaviour
         GameObject b = Instantiate(bulletPrefab, muzzlePoint.position, Quaternion.LookRotation(direction));
         b.GetComponent<Rigidbody>().linearVelocity = direction * bulletForce;
         b.GetComponent<Bullet>().baseDmg = baseDmg;
+        b.GetComponent<Bullet>().source = GetComponentInParent<PlayerMovement>().transform;
 
         Destroy(b, 5f);
 
