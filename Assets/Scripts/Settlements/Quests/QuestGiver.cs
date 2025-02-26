@@ -15,18 +15,11 @@ public class QuestGiver : MonoBehaviour
      *  into the right spots and instantiate the right quest objects
      *  
      * this other script will be very similar to the QuestBoard script, but different because of the different layout
-     
-     
-     
      */
 
-    //this script will be given to the settlements
     [SerializeField] Settlement currentSettlement;
     [SerializeField] SettlementQuestBoard settlementQuestBoard;
     [SerializeField] QuestBoard playerQuestBoard;
-    //[SerializeField] Slider settlementUpKeepMeter;
-    //[SerializeField] Image settlementIcon;
-    //[SerializeField] float currentSettlementMaxUpkeep;
 
     public enum QuestStatus { InProgress, Completed } //????
     [SerializeField] List<QuestObject> quests;
@@ -97,7 +90,7 @@ public class QuestGiver : MonoBehaviour
 
     public void ToggleSettlementQuestBoardVisibility()
     {
-        if (settlementQuestBoard.gameObject.activeSelf)
+        if (playerUIToggler.GetSettlementQuestBool())
         {
             settlementQuestBoard.ResetCurrentViewingSettlement();
             playerUIToggler.ToggleSettlementQuestUI();

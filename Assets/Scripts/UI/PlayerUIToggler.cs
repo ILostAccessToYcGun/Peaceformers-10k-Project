@@ -13,17 +13,23 @@ public class PlayerUIToggler : MonoBehaviour
 
     [Space]
     [Header("InventoryUI")]
-    [SerializeField] private Inventory inventoryUI;
+    [SerializeField] private RectTransform playerInventoryUI;
+    [SerializeField] private Vector3 shownPos_inv;
+    [SerializeField] private Vector3 hiddenPos_inv;
     [SerializeField] private bool inventoryIsShowing = false;
 
     [Space]
     [Header("PlayerQuestUI")]
-    [SerializeField] private QuestBoard playerQuestBoard;
+    [SerializeField] private RectTransform playerQuestBoardUI;
+    [SerializeField] private Vector3 shownPos_pqb;
+    [SerializeField] private Vector3 hiddenPos_pqb;
     [SerializeField] private bool playerQuestIsShowing = false;
 
     [Space]
     [Header("SettlementQuestUI")]
-    [SerializeField] private SettlementQuestBoard settlementQuestBoard;
+    [SerializeField] private RectTransform settlementQuestBoardUI;
+    [SerializeField] private Vector3 shownPos_sqb;
+    [SerializeField] private Vector3 hiddenPos_sqb;
     [SerializeField] private bool settlementQuestIsShowing = false;
 
     [Space]
@@ -53,25 +59,15 @@ public class PlayerUIToggler : MonoBehaviour
         BackOutOfCurrentUI(1);
         if (inventoryIsShowing)
         {
-            inventoryUI.HideInventory();
+            LeanTween.move(playerInventoryUI, hiddenPos_inv, timeToMove).setEase(LeanTweenType.easeOutCubic);
             SetUIOpenBool(false);
         }
         else
         {
-            inventoryUI.ShowInventory();
+            LeanTween.move(playerInventoryUI, shownPos_inv, timeToMove / 2).setEase(LeanTweenType.easeOutBack);
             SetUIOpenBool(true);
         }
         inventoryIsShowing = !inventoryIsShowing;
-        //if (settlementIsShowing)
-        //{
-        //    LeanTween.move(settlementUI, hiddenPos, timeToMove).setEase(LeanTweenType.easeOutCubic);
-        //}
-        //else
-        //{
-        //    LeanTween.move(settlementUI, shownPos, timeToMove / 2).setEase(LeanTweenType.easeOutBack);
-        //}
-        //
-        //settlementIsShowing = !settlementIsShowing;
     }
 
     public void TogglePlayerQuestUI()
@@ -79,36 +75,35 @@ public class PlayerUIToggler : MonoBehaviour
         BackOutOfCurrentUI(2);
         if (playerQuestIsShowing)
         {
-            playerQuestBoard.gameObject.SetActive(false);
+            LeanTween.move(playerQuestBoardUI, hiddenPos_pqb, timeToMove).setEase(LeanTweenType.easeOutCubic);
             SetUIOpenBool(false);
         }
-            
         else
         {
-            playerQuestBoard.gameObject.SetActive(true);
+            LeanTween.move(playerQuestBoardUI, shownPos_pqb, timeToMove / 2).setEase(LeanTweenType.easeOutBack);
             SetUIOpenBool(true);
         }
-        playerQuestIsShowing = !playerQuestIsShowing;
+        playerQuestIsShowing = !playerQuestIsShowing; 
     }
-    
-    
+
     public void ToggleSettlementQuestUI()
     {
         BackOutOfCurrentUI(3);
+
         if (settlementQuestIsShowing)
         {
-            settlementQuestBoard.gameObject.SetActive(false);
+            LeanTween.move(settlementQuestBoardUI, hiddenPos_pqb, timeToMove).setEase(LeanTweenType.easeOutCubic);
             SetUIOpenBool(false);
         }
-            
         else
         {
-            settlementQuestBoard.gameObject.SetActive(true);
+            LeanTween.move(settlementQuestBoardUI, shownPos_pqb, timeToMove / 2).setEase(LeanTweenType.easeOutBack);
             SetUIOpenBool(true);
         }
         settlementQuestIsShowing = !settlementQuestIsShowing;
     }
 
+    public bool GetSettlementQuestBool() { return settlementQuestIsShowing; }
     public void BackOutOfCurrentUI(int blackList = -1)
     {
         if (settlementIsShowing && blackList != 0)
