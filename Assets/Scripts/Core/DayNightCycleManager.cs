@@ -42,6 +42,7 @@ public class DayNightCycleManager : MonoBehaviour
 
     public void DayEndPanel(bool enable)
     {
+        DisableTime();
         dayEndPanel.gameObject.SetActive(enable);
     }
 

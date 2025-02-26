@@ -489,92 +489,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 1
---- !u!1 &69188367
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 69188368}
-  - component: {fileID: 69188370}
-  - component: {fileID: 69188369}
-  m_Layer: 7
-  m_Name: BlobShadow
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &69188368
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 69188367}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.34, y: 1.34, z: 1.34}
-  m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 1678360443}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &69188369
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 69188367}
-  m_Enabled: 1
-  m_CastShadows: 3
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &69188370
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 69188367}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &101681235
 GameObject:
   m_ObjectHideFlags: 0
@@ -2681,18 +2595,6 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1676149430}
         m_TargetAssemblyTypeName: DayNightCycleManager, Assembly-CSharp
-        m_MethodName: DisableTime
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1676149430}
-        m_TargetAssemblyTypeName: DayNightCycleManager, Assembly-CSharp
         m_MethodName: DayEndPanel
         m_Mode: 6
         m_Arguments:
@@ -2706,6 +2608,18 @@ MonoBehaviour:
       - m_Target: {fileID: 798244627}
         m_TargetAssemblyTypeName: Camp, Assembly-CSharp
         m_MethodName: ClosePrompt
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1678360442}
+        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
+        m_MethodName: ResetPos
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6195,6 +6109,7 @@ GameObject:
   - component: {fileID: 1001539035}
   - component: {fileID: 1001539034}
   - component: {fileID: 1001539036}
+  - component: {fileID: 1001539037}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -6265,6 +6180,27 @@ MonoBehaviour:
   testItem: {fileID: 0}
   isPlayerInventory: 1
   playerQuestBoard: {fileID: 1660312074}
+--- !u!114 &1001539037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001539033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 040a8ac20d3c10d409876005d037ecdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainBar: {fileID: 626781129}
+  batteryFill: {fileID: 823034905}
+  batteryLoss: {fileID: 431790269}
+  lossLerpSpeed: 2
+  currentBattery: 0
+  goodHealthColor: {r: 0.3882353, g: 0.78039217, b: 0.3019608, a: 1}
+  watchOutColor: {r: 0.9843137, g: 0.41960785, b: 0.11372549, a: 1}
+  criticalColor: {r: 1, g: 0.2509804, b: 0.2509804, a: 1}
+  dayNightCycleManager: {fileID: 1676149430}
 --- !u!1 &1008345532
 GameObject:
   m_ObjectHideFlags: 0
@@ -8137,7 +8073,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 21ca8723c11d2d34abf1e9e595b0942a, type: 2}
+  - {fileID: 2100000, guid: a5f936264d3948b4bb6490c253c48d60, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -10445,7 +10381,6 @@ GameObject:
   - component: {fileID: 1678360442}
   - component: {fileID: 1678360445}
   - component: {fileID: 1678360444}
-  - component: {fileID: 1678360446}
   m_Layer: 7
   m_Name: Character
   m_TagString: Player
@@ -10518,7 +10453,6 @@ Transform:
   - {fileID: 833486679}
   - {fileID: 159832065}
   - {fileID: 459834556}
-  - {fileID: 69188368}
   - {fileID: 402238340}
   - {fileID: 543989165}
   - {fileID: 124136976}
@@ -10589,20 +10523,6 @@ CapsuleCollider:
   m_Height: 2.04
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &1678360446
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1678360441}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd2460d5a8433aa4cb9eda3a24846d01, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shadow: {fileID: 69188367}
-  offset: 0
 --- !u!1 &1692320052
 GameObject:
   m_ObjectHideFlags: 0
