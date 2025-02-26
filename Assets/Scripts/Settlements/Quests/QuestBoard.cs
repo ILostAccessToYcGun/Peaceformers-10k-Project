@@ -25,11 +25,11 @@ public class QuestBoard : MonoBehaviour
     [Header("OtherObjects")]
     [SerializeField] protected GameObject scrollContent;
     [SerializeField] protected QuestBoard otherQuestBoard;
-    [SerializeField] protected Inventory playerInventory;
+    [SerializeField] public Inventory playerInventory;
 
     [Space]
     [Header("Quests")]
-    [SerializeField] protected List<QuestDisplay> quests;
+    [SerializeField] protected List<QuestDisplay> questsDisplays;
 
     [Space]
     [Header("Base Objects")]
@@ -62,23 +62,24 @@ public class QuestBoard : MonoBehaviour
         newDisplay.SetParentQuestBoard(this); //streamline this eventually
         newDisplay.SetOtherQuestBoard(otherQuestBoard);
         newDisplay.SetQuestObject(newObject);
-        quests.Add(newDisplay);
+        questsDisplays.Add(newDisplay);
         UpdateQuests();
         return newDisplay;
     }
 
-    public virtual void RemoveQuestFromBoard(QuestDisplay removeQuest, RemoveType removeType = RemoveType.Clear)
+    public virtual void RemoveQuestFromBoard(QuestDisplay removeQuest, RemoveType removeType = RemoveType.Clear, bool isDestroyQuest = true)
     {
         Debug.Log(removeQuest);
         if (removeQuest == null) { return; }
-        quests.Remove(removeQuest);
-        Destroy(removeQuest.gameObject);
+        questsDisplays.Remove(removeQuest);
+        if (isDestroyQuest)
+            Destroy(removeQuest.gameObject);
     }
 
     public void UpdateQuests()
     {
         //update the quest object resource count
-        foreach (QuestDisplay display in quests) //loop through the player's quests
+        foreach (QuestDisplay display in questsDisplays) //loop through the player's quests
         {
             Debug.Log("updating...");
             Item.Name resourceToFind = display.questObject.GetResource();//find the needed material name/type
@@ -86,13 +87,28 @@ public class QuestBoard : MonoBehaviour
             int newResourceCount = playerInventory.FindItemCountOfName(resourceToFind);
             Debug.Log("newResourceCount = " + newResourceCount);
 
-            display.questObject.SetResourceCount(newResourceCount);
+            if (newResourceCount > display.questObject.GetResourceRequirement())
+                display.questObject.SetResourceCount(display.questObject.GetResourceRequirement());
+            else
+                display.questObject.SetResourceCount(newResourceCount);
+
             display.UpdateSliderUI();
         }
     }
 
+    public List<QuestDisplay> GetQuests() { return questsDisplays; }
+
     #endregion
 
+
+    public void ClearQuestBoard()
+    {
+        for (int i = 0; i < questsDisplays.Count; i++)
+        {
+            Destroy(questsDisplays[i].gameObject);
+        }
+        questsDisplays.Clear();
+    }
 
     public void AbortAbandon()
     {

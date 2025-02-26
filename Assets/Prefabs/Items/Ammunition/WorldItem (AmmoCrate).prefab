@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8154398913341998294}
   - component: {fileID: 7729954075659427171}
   m_Layer: 0
-  m_Name: WorldItem (Wood)
+  m_Name: WorldItem (AmmoCrate)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -68,7 +68,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0e6d27323016a0f49b20ed4aade2b7df, type: 2}
+  - {fileID: 2100000, guid: a43aced6910264047bfb55fff2a3b0d2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -132,8 +132,8 @@ MonoBehaviour:
   requestedInteract: 0
   initializeAction: 0
   interactHoldTime: 0.25
-  inventoryItem: {fileID: 8345865606624636533, guid: 1ee3bc1c3b684b54e97bc74f6e1cd01b, type: 3}
-  itemStackCount: 1
+  inventoryItem: {fileID: 8345865606624636533, guid: 7806c030d3e128648b12c38c26309c62, type: 3}
+  itemStackCount: 60
   interactionCanvas: {fileID: 0}
   playerInventory: {fileID: 0}
   worldItemStackCount: {fileID: 4429775753820734089}

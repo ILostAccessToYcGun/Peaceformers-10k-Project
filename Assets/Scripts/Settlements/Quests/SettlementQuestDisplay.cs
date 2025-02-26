@@ -9,7 +9,7 @@ public class SettlementQuestDisplay : QuestDisplay
     [SerializeField] Button acceptButton;
     [SerializeField] Button abandonButton;
     [SerializeField] Button handInButton;
-    [SerializeField] QuestDisplay correspondingPlayerBoardDisplay;
+    
 
     public override void ConfirmAbandon()
     {
@@ -38,10 +38,8 @@ public class SettlementQuestDisplay : QuestDisplay
         AddButtonHandIn();
         AddButtonAbandon();
 
-        //parentQuestBoard.AddQuestToBoard(this.questObject);
-        correspondingPlayerBoardDisplay = otherQuestBoard.AddQuestToBoard(this.questObject);
-        // update settlement quest board
-        // update player quest board
+        parentQuestBoard.UpdateQuests();
+        correspondingDisplay = otherQuestBoard.AddQuestToBoard(this.questObject);
     }
 
 
@@ -53,11 +51,20 @@ public class SettlementQuestDisplay : QuestDisplay
         RemoveButtonHandIn();
         AddButtonAccept();
 
-        // remove the quest from the settlement quest list
-        // update player quest board
+        
 
         parentQuestBoard.RemoveQuestFromBoard(this, QuestBoard.RemoveType.Hand_In);
         otherQuestBoard.RemoveQuestFromBoard(questObject.GetCorrespondingPlayerQuestDisplayUI(), QuestBoard.RemoveType.Hand_In);
+
+        Debug.Log(questObject.GetResourceCount());
+
+        parentQuestBoard.playerInventory.RemoveItemFromInventory(questObject.GetResource(), questObject.GetResourceCount());
+        Destroy(questObject);
+        
+
+
+        parentQuestBoard.UpdateQuests();
+        otherQuestBoard.UpdateQuests();
     }
 
     

@@ -10,7 +10,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
 {
     //This is the base Item class, all items will derrive from this class
     public enum Type { Resource, Weapon, Ammunition, Supplies };
-    public enum Name { Wood, Stone, Scrap };
+    public enum Name { Wood, Stone, Scrap, AmmoCrate };
 
     [Header("Categories")]
     [SerializeField] Type itemType = Type.Resource;
@@ -105,12 +105,14 @@ public class Item : MonoBehaviour, IPointerClickHandler
         }
         itemIsPickedUpByMouse = !itemIsPickedUpByMouse;
         this.ItemComponentSetSiblingLast();
+        
         if (itemIsPickedUpByMouse)
         {
             if (currentInventorySlot != null)
             {
                 currentInventorySlot.ClearHeldItem();
                 ClearComponentSlots();
+                //this.transform.SetAsLastSibling();
             }
         }
         else
@@ -172,14 +174,10 @@ public class Item : MonoBehaviour, IPointerClickHandler
                                         //if (h == (int)startPos.y)
                                         {
                                             if (currentItem.itemName == this.itemName && currentItem.stackAmount < currentItem.stackLimit) //hmmm will need some work
-                                            {
                                                 firstCellisLikeItem = true;
-                                            }
                                         }
                                         else
-                                        {
                                             itemDoesNotCollideWithOtherItems = false;
-                                        }
                                     }
                                 }
                             }
@@ -197,9 +195,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
                         }
                     }
                     else
-                    {
                         nearestDistance = compareDistance;
-                    }
                 }
             }
         }
@@ -215,39 +211,35 @@ public class Item : MonoBehaviour, IPointerClickHandler
     public void SearchAndMoveToNearestInventorySlot()
     {
         //Search
-        InventorySlot[] inventorySlots = FindObjectsByType<InventorySlot>(FindObjectsSortMode.None);
+        //InventorySlot[] inventorySlots = FindObjectsByType<InventorySlot>(FindObjectsSortMode.None);
+        InventorySlot[] inventorySlots = FindObjectsByType<InventorySlot>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         if (inventorySlots.Length < 1) { return; }
 
-        InventorySlot nearestInventorySlot = inventorySlots[0]; ////
-        float nearestDistance = 300f;////
+        InventorySlot nearestInventorySlot = inventorySlots[0];
+        float nearestDistance = 300f;
 
-        bool isStacking = false;///
+        bool isStacking = false;
         bool isKeepHolding = false;
         bool isTrashing = false;
-        Item stackingItem = inventorySlots[0].GetHeldItem();///
+        Item stackingItem = inventorySlots[0].GetHeldItem();
 
         if (inventorySlots.Length > 1) //if there is more than one inventory slot on screen, find the closest
         {
-            float compareDistance;
+            float compareDistance; 
             foreach (InventorySlot slot in inventorySlots)
             {
                 Vector2 slotPosition = slot.inventoryPosition;
                 compareDistance = (slot.transform.position - this.transform.position).magnitude;
                 if (compareDistance < nearestDistance)
                 {
-
                     if (!slot.isTrashSlot)
                     {
                         bool itemDoesFitInsideInventoryFrame = true; //check if the item size will fit in that spot
 
                         if (slotPosition.x + itemWidth > currentInventory.inventoryWidth)
-                        {
                             itemDoesFitInsideInventoryFrame = false;
-                        }
                         if (slotPosition.y + itemHeight > currentInventory.inventoryHeight)
-                        {
                             itemDoesFitInsideInventoryFrame = false;
-                        }
 
                         bool itemDoesNotCollideWithOtherItems = true;
                         bool firstCellisLikeItem = false;
@@ -266,14 +258,10 @@ public class Item : MonoBehaviour, IPointerClickHandler
                                         //if (h == (int)startPos.y)
                                         {
                                             if (currentItem.itemName == this.itemName && currentItem.stackAmount < currentItem.stackLimit) //hmmm will need some work
-                                            {
                                                 firstCellisLikeItem = true;
-                                            }
                                         }
                                         else
-                                        {
                                             itemDoesNotCollideWithOtherItems = false;
-                                        }
                                     }
                                 }
                             }
@@ -360,39 +348,53 @@ public class Item : MonoBehaviour, IPointerClickHandler
         }
 
         //Move
-        if (nearestDistance > 200f)// * ( itemHeight > itemWidth ? itemHeight : itemWidth)) //if the item is really far away from the inventory slot, probably dont do anything
+        if (nearestDistance > 150) //if the item is really far away from the inventory slot, probably dont do anything
         {
             //check if the item's location is still inside the current inventory   
-            if (this.transform.position.x > currentInventory.inventoryPanel.gameObject.transform.position.x - currentInventory.inventoryPanel.sizeDelta.x 
-                && this.transform.position.x < currentInventory.inventoryPanel.gameObject.transform.position.x + currentInventory.inventoryPanel.sizeDelta.x 
-                && this.transform.position.y > currentInventory.inventoryPanel.gameObject.transform.position.y - currentInventory.inventoryPanel.sizeDelta.y 
-                && this.transform.position.y < currentInventory.inventoryPanel.gameObject.transform.position.y + currentInventory.inventoryPanel.sizeDelta.y)
+            if (this.transform.position.x > currentInventory.inventoryPanel.gameObject.transform.position.x - currentInventory.inventoryPanel.sizeDelta.x / 2 
+                && this.transform.position.x < currentInventory.inventoryPanel.gameObject.transform.position.x + currentInventory.inventoryPanel.sizeDelta.x / 2
+                && this.transform.position.y > currentInventory.inventoryPanel.gameObject.transform.position.y - currentInventory.inventoryPanel.sizeDelta.y / 2
+                && this.transform.position.y < currentInventory.inventoryPanel.gameObject.transform.position.y + currentInventory.inventoryPanel.sizeDelta.y / 2)
             {
-                //Debug.Log("Previous");
+                Debug.Log("Previous");
                 if (previousInventorySlot == null)
                     return;
-                currentInventorySlot = previousInventorySlot;
-                transform.position = currentInventorySlot.transform.position;
-                currentInventorySlot.currentHeldItem = this; //need to do more with this
-                currentInventorySlot.SetHeldItem(this);
 
-                AddComponentSlots(inventorySlots);
+                //if the distance is greater than 200 but we are still inside the inventory we go to the previous slot.
+                //if the previous slot has the same Item name, we want to stack
+
+                if (previousInventorySlot.GetHeldItem() != null)
+                {
+                    if (previousInventorySlot.GetHeldItem().itemName == itemName)
+                    {
+                        stackingItem = previousInventorySlot.GetHeldItem();
+                        stackingItem.IncreaseStackAmount(stackAmount);
+                        stackingItem.AddComponentSlots(inventorySlots);
+                        stackingItem.currentInventorySlot.SetHeldItem(stackingItem);
+                        Destroy(this.gameObject);
+                    }
+                }
+                else
+                {
+                    currentInventorySlot = previousInventorySlot;
+                    transform.position = currentInventorySlot.transform.position;
+                    currentInventorySlot.currentHeldItem = this; //need to do more with this
+                    currentInventorySlot.SetHeldItem(this);
+                    AddComponentSlots(inventorySlots);
+                }
             }
             else //outside of the current inventory
             {
                 if (player != null)
                 {
-                    Instantiate(worldItem.gameObject, player.transform.position + new Vector3(0, 0, 2f), player.transform.rotation);
-                    OnDestroy();
+                    InstantiateWorldObject(stackAmount);
                 }
                 
-            }
-
-            
+            } 
         }
         else
         {
-            //Debug.Log("next");
+            Debug.Log("next");
             currentInventorySlot = nearestInventorySlot;
             if (currentInventorySlot != null)
                 previousInventorySlot = currentInventorySlot;
@@ -417,16 +419,10 @@ public class Item : MonoBehaviour, IPointerClickHandler
             else
             {
                 if (isKeepHolding)
-                {
                     PickUpItemInInventory();
-                }
                 else
-                {
                     AddComponentSlots(inventorySlots);
-                }
-                
             }
-                
         }
     }
 
@@ -436,11 +432,11 @@ public class Item : MonoBehaviour, IPointerClickHandler
         {
             if (slot.inventoryPosition.x >= currentInventorySlot.inventoryPosition.x && slot.inventoryPosition.x < currentInventorySlot.inventoryPosition.x + itemWidth)
             {
-                if (slot.inventoryPosition.y >= currentInventorySlot.inventoryPosition.y && slot.inventoryPosition.y < currentInventorySlot.inventoryPosition.y + itemWidth)
+                if (slot.inventoryPosition.y >= currentInventorySlot.inventoryPosition.y && slot.inventoryPosition.y < currentInventorySlot.inventoryPosition.y + itemHeight)
                 {
                     slot.SetHeldItem(this);
                     componentSlots.Add(slot);
-                    //Debug.Log("component slot added");
+                    Debug.Log("component slot added");
                 }
             }
         }
@@ -452,13 +448,20 @@ public class Item : MonoBehaviour, IPointerClickHandler
         {
             if (slot.inventoryPosition.x >= currentInventorySlot.inventoryPosition.x && slot.inventoryPosition.x <= currentInventorySlot.inventoryPosition.x + itemWidth)
             {
-                if (slot.inventoryPosition.y >= currentInventorySlot.inventoryPosition.y && slot.inventoryPosition.y <= currentInventorySlot.inventoryPosition.y + itemWidth)
-                {
+                if (slot.inventoryPosition.y >= currentInventorySlot.inventoryPosition.y && slot.inventoryPosition.y <= currentInventorySlot.inventoryPosition.y + itemHeight)
                     slot.ClearHeldItem();
-                }
             }
         }
         componentSlots.Clear();
+    }
+
+    public void InstantiateWorldObject(int worldStackAmount)
+    {
+        GameObject newDroppedItem = Instantiate(worldItem.gameObject, player.transform.position + new Vector3(0, 2f, 0), player.transform.rotation);
+        WorldItem newWorldItem = newDroppedItem.GetComponent<WorldItem>();
+
+        newWorldItem.InitializeWorldObject(worldStackAmount, 0, 0);
+        OnDestroy();
     }
 
     #endregion
@@ -466,7 +469,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
     #region _Stack_
     [Space]
     public int stackAmount;
-    public int stackLimit = 5;
+    public int stackLimit;
     public TextMeshProUGUI stackText;
 
     public void SetStackLimit(int newLimit) { stackLimit = newLimit; UpdateStackText(); }
@@ -477,20 +480,29 @@ public class Item : MonoBehaviour, IPointerClickHandler
             stackAmount += increase;
             UpdateStackText();
         }
-            
+        else
+            SetStackAmount(stackLimit);
     }
     public void DecreaseStackAmount(int decrease) 
     {
-        stackAmount -= decrease;
+        
+        if (decrease >= stackAmount)
+            stackAmount -= stackLimit;
+        else
+            stackAmount -= decrease;
         UpdateStackText();
-        if (stackAmount == 0)
-        {
-            
+        if (stackAmount <= 0)
             OnDestroy();
-        }
-            
     }
-    public void SetStackAmount(int amount) { stackAmount = amount; UpdateStackText(); }
+    public void SetStackAmount(int amount) 
+    { 
+        if (amount > stackLimit)
+            stackAmount = stackLimit;
+        else
+            stackAmount = amount; 
+
+        UpdateStackText(); 
+    }
     public void UpdateStackText()
     {
         stackText.text = stackAmount.ToString();
@@ -539,8 +551,19 @@ public class Item : MonoBehaviour, IPointerClickHandler
     private void OnDestroy()
     {
         if (currentInventorySlot != null)
-            currentInventorySlot.ClearHeldItem();
-        ClearComponentSlots();
+        {
+            if (currentInventorySlot.GetHeldItem() != null)
+            {
+                if (currentInventorySlot.GetHeldItem() == this)
+                {
+                    currentInventorySlot.ClearHeldItem();
+                    ClearComponentSlots();
+                }
+            }
+        }
+
+        currentInventory.playerQuestBoard.UpdateQuests();
+        
         Destroy(gameObject);
     }
 
@@ -548,10 +571,13 @@ public class Item : MonoBehaviour, IPointerClickHandler
     {
         this.gameObject.name = itemName.ToString();
         currentInventory = FindAnyObjectByType<Inventory>();
-        parent = GetComponentInParent<Canvas>().gameObject; //huh i
+
+
+        parent = currentInventory.parent;
+
         img = GetComponent<Image>();
         stackAmount = 1;
-        SetStackLimit(5);
+        //SetStackLimit(5);
         player = FindAnyObjectByType<PlayerMovement>();
         //componentDistance = 100;
         if (itemComponents.Count < (itemWidth * itemHeight) - 1)

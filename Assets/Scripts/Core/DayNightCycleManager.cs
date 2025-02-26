@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -36,6 +37,11 @@ public class DayNightCycleManager : MonoBehaviour
     [Space]
     [Header("Inbetween")]
     public Image dayEndPanel;
+
+    [Space]
+    [Header("Other Elements")]
+    [SerializeField] QuestBoard playerQuestBoard;
+    [SerializeField] List<Settlement> settlements;
 
     public void DisableTime() { updateTime = false; }
     public void EnableTime() {  updateTime = true; }
@@ -153,9 +159,42 @@ public class DayNightCycleManager : MonoBehaviour
     {
         if (hour == 12 && twelveHourClock == twelveHour.AM)
         {
+            BeginDay();
             cm.IncrementDayCount();
             //do something like upgrades
-            BeginDay();
+
+            WorldItem[] itemsOnTheGround = FindObjectsByType<WorldItem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+
+            for (int i = 0; i < itemsOnTheGround.Length; i++)
+            {
+                Destroy(itemsOnTheGround[i].gameObject);
+            }
+            
+
+            List<QuestDisplay> currentQuests = playerQuestBoard.GetQuests();
+            for (int i = 0; i < currentQuests.Count; i++)
+            {
+                currentQuests[i].UpdateDaysLeft();
+                if (!currentQuests[i].questObject.CheckQuestValidity())
+                {
+                    //quest has expired, immediatly abandon it
+                    currentQuests[i].otherQuestBoard.RemoveQuestFromBoard(currentQuests[i].questObject.GetCorrespondingSettlementQuestDisplayUI(), QuestBoard.RemoveType.Remove);
+                    currentQuests[i].parentQuestBoard.RemoveQuestFromBoard(currentQuests[i].questObject.GetCorrespondingPlayerQuestDisplayUI(), QuestBoard.RemoveType.Remove);
+                    
+                    i--;
+                }
+            }
+
+            foreach (Settlement settlement in settlements)
+            {
+                if (settlement.currentlyEndangered)
+                {
+                    settlement.panicEnemiesGO = true;
+                    settlement.currentlyEndangered = false;
+                }
+            }
+
+            //spawn Settlement enemies
         }
             
     }

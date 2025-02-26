@@ -46,7 +46,10 @@ public class PlayerGun : MonoBehaviour
 
     private bool _requestedReload;
     private bool isReloading = false;
-    
+
+    [SerializeField] private Inventory ammoInventory;
+    [SerializeField] private Item ammo;
+
 
     void Start()
     {
@@ -150,6 +153,7 @@ public class PlayerGun : MonoBehaviour
         GameObject b = Instantiate(bulletPrefab, muzzlePoint.position, Quaternion.LookRotation(direction));
         b.GetComponent<Rigidbody>().linearVelocity = direction * bulletForce;
         b.GetComponent<Bullet>().baseDmg = baseDmg;
+        b.GetComponent<Bullet>().source = GetComponentInParent<PlayerMovement>().transform;
 
         Destroy(b, 5f);
 
@@ -221,10 +225,15 @@ public class PlayerGun : MonoBehaviour
         }
 
         reloadCircle.fillAmount = 1f;
-        currentAmmo = maxAmmo;
+        currentAmmo += GetAmmo();
         isReloading = false;
         reloadCircle.gameObject.SetActive(false);
         ammoText.gameObject.SetActive(true);
         Debug.Log("Done Reloading.");
+    }
+
+    private int GetAmmo()
+    {
+        return ammoInventory.RemoveItemFromInventory(ammo, maxAmmo - currentAmmo);
     }
 }

@@ -100,13 +100,36 @@ public class Player : MonoBehaviour
             Reload = input.Reload.WasPressedThisFrame()
         };
         playerGun.RotateGunTowardsMouse();
-        playerGun.UseWeapon(combatInput);
+        if (!playerUIToggler.GetUIOpenBool())
+            playerGun.UseWeapon(combatInput);
 
-        if(ui.SettlementUI.WasPressedThisFrame())
+
+        #region _UI_
+
+        if (ui.SettlementUI.WasPressedThisFrame())
         {
             playerUIToggler.ToggleSettlementUI();
         }
         interactionPrompt.SetHold(input.Interact.IsPressed());
+
+        if (ui.InventoryUI.WasPressedThisFrame())
+        {
+            playerUIToggler.ToggleInventoryUI();
+        }
+
+        if (ui.QuestUI.WasPressedThisFrame())
+        {
+            playerUIToggler.TogglePlayerQuestUI();
+        }
+
+        if (ui.BackOut.WasPressedThisFrame())
+        {
+            playerUIToggler.BackOutOfCurrentUI();
+        }
+
+        #endregion
+
+
     }
 
     void LateUpdate()

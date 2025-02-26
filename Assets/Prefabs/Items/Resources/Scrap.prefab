@@ -107,7 +107,7 @@ MonoBehaviour:
   parent: {fileID: 0}
   currentInventory: {fileID: 0}
   worldItem: {fileID: 8154398913341998294, guid: e64b25b68280b9f448a8f87c0afbb7bf, type: 3}
-  stackAmount: 0
+  stackAmount: 1
   stackLimit: 10
   stackText: {fileID: 2430252357916042962}
 --- !u!114 &6398434180376619896

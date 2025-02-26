@@ -4,11 +4,13 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using static UnityEditor.Progress;
+using UnityEngine.InputSystem;
 //using UnityEngine.UIElements;
 
 public class Inventory : MonoBehaviour
 {
     //TODO: change access modifiers at some point
+    [SerializeField] PlayerUIToggler playerUIToggler;
     [Space]
     public int inventoryWidth;
     public int inventoryHeight;
@@ -26,7 +28,7 @@ public class Inventory : MonoBehaviour
     public bool isPlayerInventory = true;
     public List<List<InventorySlot>> inventory = new List<List<InventorySlot>>(); //lists because later we will change the size
     [Space]
-    [SerializeField] QuestBoard playerQuestBoard; //this is set manually
+    [SerializeField] public QuestBoard playerQuestBoard; //this is set manually
     
 
     #region _General_Inventory_
@@ -57,7 +59,7 @@ public class Inventory : MonoBehaviour
     public void SetInventory(InventorySlot[] cells)
     {
         if (cells == null)
-            cells = FindObjectsByType<InventorySlot>(FindObjectsSortMode.None);
+            cells = FindObjectsByType<InventorySlot>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 
         foreach (InventorySlot cell in cells)
         {
@@ -177,6 +179,24 @@ public class Inventory : MonoBehaviour
         }
         return null;
     }
+
+    public InventorySlot FindTopSlotWithItem(Item.Name itemToFind)
+    {
+        for (int j = 0; j < inventory.Capacity; j++)
+        {
+            for (int i = 0; i < inventory[j].Capacity; i++)
+            {
+                InventorySlot slot = inventory[j][i];
+                if (slot.GetHeldItem() != null)
+                {
+                    if (slot.GetHeldItem().itemName == itemToFind)
+                        return slot;
+                }
+            }
+        }
+        return null;
+    }
+
     public InventorySlot FindPartialyFilledItemOrEmptySlot(Item itemToFind)
     {
         Debug.Log(itemToFind.itemName);
@@ -260,7 +280,7 @@ public class Inventory : MonoBehaviour
                 {
                     if (currentItem.itemName == nameToFind && !currentItemIsAlreadyCounted) //make sure to ignore item components, if item = item from before ignore
                     {
-                        itemSearchCount++; //count the number of items of that type
+                        itemSearchCount += currentItem.stackAmount; //count the number of items of that type
                         itemSearchHistory.Add(currentItem);
                     }
                 }
@@ -277,59 +297,179 @@ public class Inventory : MonoBehaviour
 
     public void AddItemToInventory(Item itemToFind, int amount)
     {
-        InventorySlot findSlot = FindPartialyFilledItemOrEmptySlot(itemToFind);
-        if (findSlot == null) { return; }
-        if (findSlot.GetHeldItem() != null) { IncreaseItemStackAmount(findSlot, amount); }
-        else
+        int decreaseAmount = amount;
+        for (int i = amount; i > 0;)
         {
-            GameObject added = Instantiate(itemToFind.gameObject, findSlot.transform.position + new Vector3(0, 0, 1), findSlot.transform.rotation, parent.transform);
-            added.transform.localScale = Vector3.one;
-            Item addedItem = added.GetComponent<Item>();
-            addedItem.SearchAndMoveToNearestInventorySlot();
-            if (!inventoryPanel.gameObject.activeSelf)
-                added.SetActive(false);
+            InventorySlot findSlot = FindPartialyFilledItemOrEmptySlot(itemToFind);
+            if (findSlot == null) 
+            {
+                if (amount > itemToFind.stackLimit)
+                {
+                    decreaseAmount = itemToFind.stackLimit;
+                    itemToFind.InstantiateWorldObject(itemToFind.stackLimit);
+                }
+                else
+                {
+                    decreaseAmount = amount;
+                    itemToFind.InstantiateWorldObject(amount);
+                }
+            }
+
+            if (findSlot.GetHeldItem() != null)
+            {
+                
+                if (findSlot.currentHeldItem.stackAmount + amount > findSlot.currentHeldItem.stackLimit)
+                {
+                    //Debug.Log(decreaseAmount);
+
+                    //findSlot.currentHeldItem.stackLimit - findSlot.currentHeldItem.stackAmount;
+                    decreaseAmount = findSlot.currentHeldItem.stackLimit - findSlot.currentHeldItem.stackAmount;
+                    Debug.Log(decreaseAmount);
+                    IncreaseItemStackAmount(findSlot, findSlot.currentHeldItem.stackLimit);
+                }
+                else
+                {
+                    IncreaseItemStackAmount(findSlot, amount);
+                    decreaseAmount = amount;
+                }
+                
+                
+            }
+            else
+            {
+                GameObject added = Instantiate(itemToFind.gameObject, findSlot.transform.position + new Vector3(0, 0, 1), findSlot.transform.rotation, parent.transform);
+                added.transform.localScale = Vector3.one;
+                Item addedItem = added.GetComponent<Item>();
+
+                if (amount > addedItem.stackLimit)
+                {
+                    decreaseAmount = addedItem.stackLimit;
+                    addedItem.SetStackAmount(addedItem.stackLimit);
+                }
+                else
+                {
+                    addedItem.SetStackAmount(amount);
+                    decreaseAmount = amount;
+                }
+
+                
+                addedItem.SearchAndMoveToNearestInventorySlot();
+                if (!inventoryPanel.gameObject.activeSelf)
+                    added.SetActive(false);
+            }
+
+            if (playerQuestBoard != null)
+            {
+                Debug.Log("we should be updating the quests");
+                playerQuestBoard.UpdateQuests();
+            }
+
+            amount -= decreaseAmount;
+            i -= decreaseAmount;
         }
 
-        if (playerQuestBoard != null)
-            Debug.Log("we should be updating the quests");
-            playerQuestBoard.UpdateQuests();
+        
     }
-    public void RemoveItemFromInventory(Item itemToFind, int amount)
+    public int RemoveItemFromInventory(Item itemToFind, int amount)
     {
-        InventorySlot findSlot = FindTopSlotWithItem(itemToFind);
-        if (findSlot == null) { return; }
-        if (findSlot.GetHeldItem() != null) { DecreaseItemStackAmount(findSlot, amount); }
+        int decreaseAmount = 0;
+        int removeCount = 0;
+        for (int i = amount; i > 0;)
+        {
+            InventorySlot findSlot = FindTopSlotWithItem(itemToFind);
+            if (findSlot == null) { return removeCount; }
+            if (findSlot.GetHeldItem() != null)
+            {
+                if (amount > findSlot.GetHeldItem().stackAmount)
+                {
+                    decreaseAmount = findSlot.GetHeldItem().stackAmount;
+                }
+                else
+                {
+                    decreaseAmount = amount;
+                }
+                DecreaseItemStackAmount(findSlot, amount);
+                amount -= decreaseAmount;
+                removeCount += decreaseAmount;
 
-        if (playerQuestBoard != null)
-            playerQuestBoard.UpdateQuests();
+                if (playerQuestBoard != null)
+                    playerQuestBoard.UpdateQuests();
+            }
+
+            i -= decreaseAmount;
+        }
+        return removeCount;
+    }
+
+    public int RemoveItemFromInventory(Item.Name itemToFind, int amount)
+    {
+        int decreaseAmount = 0;
+        int removeCount = 0;
+        for (int i = amount; i > 0;)
+        {
+            InventorySlot findSlot = FindTopSlotWithItem(itemToFind);
+            if (findSlot == null) { return removeCount; }
+            if (findSlot.GetHeldItem() != null)
+            {
+                if (amount > findSlot.GetHeldItem().stackAmount)
+                {
+                    decreaseAmount = findSlot.GetHeldItem().stackAmount;
+                }
+                else
+                {
+                    decreaseAmount = amount;
+                }
+                DecreaseItemStackAmount(findSlot, amount);
+                amount -= decreaseAmount;
+                removeCount += decreaseAmount;
+
+                if (playerQuestBoard != null)
+                    playerQuestBoard.UpdateQuests();
+            }
+
+            i -= decreaseAmount;
+        }
+        return removeCount;
     }
 
     #endregion
 
 
 
+    //private void Start()
+    //{
 
+    //    //ShowInventory();
+    //    HideInventory();
+
+    //}
+
+    private void Awake()
+    {
+        GenerateInventory(inventoryWidth, inventoryHeight, cellWidth, cellHeight);
+        SetInventory(null);
+    }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
-        { 
-            if (!inventoryPanel.gameObject.activeSelf)
-            {
-                ShowInventory();
-            }
-            else
-            {
-                HideInventory();
-            }
-        }
+        //if (Input.GetKeyDown(KeyCode.Tab))
+        //{ 
+        //    if (!inventoryPanel.gameObject.activeSelf)
+        //    {
+        //        ShowInventory();
+        //    }
+        //    else
+        //    {
+        //        HideInventory();
+        //    }
+        //}
 
 
         if (Input.GetKeyDown(KeyCode.E) && inventoryPanel.gameObject.activeSelf)
         {
             if (inventory.Count == 0)
             {
-                GenerateInventory(inventoryWidth, inventoryHeight, cellWidth, cellHeight);
+                
                 SetInventory(null);
             }
         }
