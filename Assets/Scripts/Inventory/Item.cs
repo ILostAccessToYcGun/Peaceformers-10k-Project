@@ -471,6 +471,8 @@ public class Item : MonoBehaviour, IPointerClickHandler
         OnDestroy();
     }
 
+    public InventorySlot GetCurrentInventorySlot() { return currentInventorySlot; }
+
     #endregion
 
     #region _Stack_

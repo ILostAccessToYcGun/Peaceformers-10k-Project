@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine.UI;
 using static UnityEditor.Progress;
 using UnityEngine.InputSystem;
+using static UnityEditor.Timeline.Actions.MenuPriority;
 //using UnityEngine.UIElements;
 
 public class Inventory : MonoBehaviour
@@ -367,9 +368,8 @@ public class Inventory : MonoBehaviour
             amount -= decreaseAmount;
             i -= decreaseAmount;
         }
-
-        
     }
+
     public int RemoveItemFromInventory(Item itemToFind, int amount)
     {
         int decreaseAmount = 0;
@@ -432,6 +432,66 @@ public class Inventory : MonoBehaviour
         return removeCount;
     }
 
+    //this feature is pretty much only for the secondary inventory
+    public void CopyInventory(List<Item> inventoryToCopy)
+    {
+        /*basically we are going to:
+         *loop through this list
+         *loop through this inventory
+            *if we find a position in this inventory that matches the item in the copy list
+            *then we instantiate a new item of that type there, if we dont, just add it regularly
+         * but ideally the secondary inventory will be getting reset a lot when you swap between them
+
+        */
+        foreach (Item item in inventoryToCopy)
+        {
+            bool foundCorrespondingPosition = false;
+            Vector2 itemPosition = item.GetCurrentInventorySlot().inventoryPosition;
+
+            for (int j = 0; j < inventory.Capacity; j++)
+            {
+                for (int i = 0; i < inventory[j].Capacity; i++)
+                {
+                    if (foundCorrespondingPosition) { break; }
+
+                    InventorySlot slot = inventory[j][i];
+                    if (slot.inventoryPosition == itemPosition)
+                    {
+                        GameObject copied = Instantiate(item.gameObject, slot.transform.position + new Vector3(0, 0, 1), slot.transform.rotation, parent.transform);
+                        copied.transform.localScale = Vector3.one;
+
+                        Item copiedItem = copied.GetComponent<Item>();
+                        copiedItem.currentInventory = this;
+                        copiedItem.SetStackAmount(item.stackAmount);
+                        copiedItem.SearchAndMoveToNearestInventorySlot();
+                        foundCorrespondingPosition = true;
+                    }
+                }
+            }
+
+            if (!foundCorrespondingPosition)
+            {
+                AddItemToInventory(item, item.stackAmount);
+            }
+        }
+    }
+
+    public void ClearInventory()
+    {
+        for (int j = 0; j < inventory.Capacity; j++)
+        {
+            for (int i = 0; i < inventory[j].Capacity; i++)
+            {
+                InventorySlot slot = inventory[j][i];
+                Item currentItem = slot.GetHeldItem();
+                if (currentItem != null)
+                {
+                    currentItem.DecreaseStackAmount(currentItem.stackAmount);
+                }
+            }
+        }
+    }
+
     #endregion
 
 
@@ -449,40 +509,4 @@ public class Inventory : MonoBehaviour
         GenerateInventory(inventoryWidth, inventoryHeight, cellWidth, cellHeight);
         SetInventory(null);
     }
-
-    private void Update()
-    {
-        //if (Input.GetKeyDown(KeyCode.Tab))
-        //{ 
-        //    if (!inventoryPanel.gameObject.activeSelf)
-        //    {
-        //        ShowInventory();
-        //    }
-        //    else
-        //    {
-        //        HideInventory();
-        //    }
-        //}
-
-
-        if (Input.GetKeyDown(KeyCode.E) && inventoryPanel.gameObject.activeSelf)
-        {
-            if (inventory.Count == 0)
-            {
-                
-                SetInventory(null);
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            AddItemToInventory(testItem, 1);
-        }
-
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            RemoveItemFromInventory(testItem, 1);
-        }
-    }
-
 }
