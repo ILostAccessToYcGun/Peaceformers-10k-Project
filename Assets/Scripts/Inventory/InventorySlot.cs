@@ -25,10 +25,8 @@ public class InventorySlot : MonoBehaviour
         currentHeldItem = null;
         //parentInventory.inventory[(int)inventoryPosition.x][(int)inventoryPosition.y] = null ;
     }
-
-
     private void Awake()
     {
-        parentInventory = FindAnyObjectByType<Inventory>();
+        //parentInventory = FindAnyObjectByType<Inventory>();
     }
 }

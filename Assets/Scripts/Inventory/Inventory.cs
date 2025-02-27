@@ -25,7 +25,7 @@ public class Inventory : MonoBehaviour
     public GameObject inventorySlot;
     public Item testItem;
     [Space]
-    public bool isPlayerInventory = true;
+    public bool isPlayerInventory;
     public List<List<InventorySlot>> inventory = new List<List<InventorySlot>>(); //lists because later we will change the size
     [Space]
     [SerializeField] public QuestBoard playerQuestBoard; //this is set manually
@@ -78,9 +78,6 @@ public class Inventory : MonoBehaviour
     }
     public void GenerateInventory(int width, int height, int cellWidth, int cellHeight)
     {
-        //TODO: change this
-        isPlayerInventory = true;
-
         #region _Grid_Layout_
         gridLayout.padding.left = 10;
         gridLayout.padding.right = 10;
@@ -125,6 +122,7 @@ public class Inventory : MonoBehaviour
                 slotLocation = inventoryPanel.transform.position + new Vector3(-350 + cellDistance * x, 350 - cellDistance * y, inventoryPanel.transform.position.z);
                 GameObject inventorySlotGameObject = Instantiate(inventorySlot, slotLocation, inventoryPanel.transform.rotation, inventoryPanel.transform);
                 InventorySlot invSlot = inventorySlotGameObject.GetComponent<InventorySlot>();
+                invSlot.parentInventory = this;
 
                 invSlot.SetInventoryPosition(new Vector2(x, y));
             }
@@ -136,6 +134,7 @@ public class Inventory : MonoBehaviour
             //Instantiate(inventorySlot, slotLocation, inventoryPanel.transform.rotation, inventoryPanel.transform);
             GameObject trashSlotGameObject = Instantiate(inventorySlot, slotLocation, inventoryPanel.transform.rotation, inventoryPanel.transform);
             InventorySlot trashSlot = trashSlotGameObject.GetComponent<InventorySlot>();
+            trashSlot.parentInventory = this;
             trashSlot.isTrashSlot = true;
             Image trashImg = trashSlot.GetComponent<Image>();
             trashImg.color = new Color(1f, 60f / 255f, 60f / 255f, 1f);
@@ -340,6 +339,7 @@ public class Inventory : MonoBehaviour
                 GameObject added = Instantiate(itemToFind.gameObject, findSlot.transform.position + new Vector3(0, 0, 1), findSlot.transform.rotation, parent.transform);
                 added.transform.localScale = Vector3.one;
                 Item addedItem = added.GetComponent<Item>();
+                addedItem.currentInventory = this;
 
                 if (amount > addedItem.stackLimit)
                 {
