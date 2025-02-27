@@ -69,7 +69,16 @@ public class WorldItem : BaseInteractable
         base.Awake();
         interactionCanvas = GetComponentInChildren<Canvas>();
         interactionCanvas.worldCamera = Camera.main;
-        playerInventory = FindAnyObjectByType<Inventory>(); //chnage later
+
+
+        playerInventory = FindAnyObjectByType<Inventory>();
+
+        foreach (Inventory inventory in FindObjectsByType<Inventory>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            if (inventory.isPlayerInventory)
+                playerInventory = inventory;
+        }
+
         this.name = "WorldItem (" + inventoryItem.name + ")";
         UpdateStackCount();
     }

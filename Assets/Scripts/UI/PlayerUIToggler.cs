@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Collections;
 using UnityEngine;
 
 public class PlayerUIToggler : MonoBehaviour
@@ -17,6 +18,13 @@ public class PlayerUIToggler : MonoBehaviour
     [SerializeField] private Vector3 shownPos_inv;
     [SerializeField] private Vector3 hiddenPos_inv;
     [SerializeField] private bool inventoryIsShowing = false;
+
+    [Space]
+    [Header("SecondaryInventoryUI")]
+    [SerializeField] private RectTransform secondaryInventoryUI;
+    [SerializeField] private Vector3 shownPos_Sinv;
+    [SerializeField] private Vector3 hiddenPos_Sinv;
+    [SerializeField] private bool secondaryInventoryIsShowing = false;
 
     [Space]
     [Header("PlayerQuestUI")]
@@ -56,6 +64,13 @@ public class PlayerUIToggler : MonoBehaviour
 
     public void ToggleInventoryUI()
     {
+        if (secondaryInventoryIsShowing)
+        {
+            LeanTween.move(secondaryInventoryUI, hiddenPos_Sinv, timeToMove).setEase(LeanTweenType.easeOutCubic);
+            SetUIOpenBool(false);
+            secondaryInventoryIsShowing = false;
+        }
+
         BackOutOfCurrentUI(1);
         if (inventoryIsShowing)
         {
@@ -68,11 +83,69 @@ public class PlayerUIToggler : MonoBehaviour
             SetUIOpenBool(true);
         }
         inventoryIsShowing = !inventoryIsShowing;
+
+        
+    }
+
+    public bool GetPlayerInventoryShowingBool() { return inventoryIsShowing; }
+
+    public void ToggleSecondaryInventoryUI()
+    {
+        BackOutOfCurrentUI(2);
+        if (secondaryInventoryIsShowing)
+        {
+            LeanTween.move(secondaryInventoryUI, hiddenPos_Sinv, timeToMove).setEase(LeanTweenType.easeOutCubic);
+            SetUIOpenBool(false);
+        }
+        else
+        {
+            LeanTween.move(secondaryInventoryUI, shownPos_Sinv, timeToMove / 2).setEase(LeanTweenType.easeOutBack);
+            SetUIOpenBool(true);
+        }
+        secondaryInventoryIsShowing = !secondaryInventoryIsShowing;
+    }
+
+    public bool GetSecondaryInventoryShowingBool() { return inventoryIsShowing; }
+
+    public void ToggleInventoryUIs()
+    {
+        if (settlementIsShowing) { ToggleSettlementUI(); }
+        if (playerQuestIsShowing) { TogglePlayerQuestUI(); }
+        if (settlementQuestIsShowing) { ToggleSettlementQuestUI(); }
+
+        if (inventoryIsShowing && secondaryInventoryIsShowing)
+        {
+            LeanTween.move(playerInventoryUI, hiddenPos_inv, timeToMove).setEase(LeanTweenType.easeOutCubic);
+            LeanTween.move(secondaryInventoryUI, hiddenPos_Sinv, timeToMove).setEase(LeanTweenType.easeOutCubic);
+            SetUIOpenBool(false);
+            inventoryIsShowing = false;
+            secondaryInventoryIsShowing = false;
+        }
+        else if (inventoryIsShowing && !secondaryInventoryIsShowing)
+        {
+            LeanTween.move(secondaryInventoryUI, shownPos_Sinv, timeToMove / 2).setEase(LeanTweenType.easeOutBack);
+            SetUIOpenBool(true);
+            secondaryInventoryIsShowing = true;
+        }
+        else if (!inventoryIsShowing && secondaryInventoryIsShowing)
+        {
+            LeanTween.move(playerInventoryUI, shownPos_inv, timeToMove / 2).setEase(LeanTweenType.easeOutBack);
+            SetUIOpenBool(true);
+            inventoryIsShowing = true;
+        }
+        else
+        {
+            LeanTween.move(secondaryInventoryUI, shownPos_Sinv, timeToMove / 2).setEase(LeanTweenType.easeOutBack);
+            LeanTween.move(playerInventoryUI, shownPos_inv, timeToMove / 2).setEase(LeanTweenType.easeOutBack);
+            SetUIOpenBool(true);
+            inventoryIsShowing = true;
+            secondaryInventoryIsShowing = true;
+        }
     }
 
     public void TogglePlayerQuestUI()
     {
-        BackOutOfCurrentUI(2);
+        BackOutOfCurrentUI(3);
         if (playerQuestIsShowing)
         {
             LeanTween.move(playerQuestBoardUI, hiddenPos_pqb, timeToMove).setEase(LeanTweenType.easeOutCubic);
@@ -88,7 +161,7 @@ public class PlayerUIToggler : MonoBehaviour
 
     public void ToggleSettlementQuestUI()
     {
-        BackOutOfCurrentUI(3);
+        BackOutOfCurrentUI(4);
 
         if (settlementQuestIsShowing)
         {
@@ -104,6 +177,7 @@ public class PlayerUIToggler : MonoBehaviour
     }
 
     public bool GetSettlementQuestBool() { return settlementQuestIsShowing; }
+
     public void BackOutOfCurrentUI(int blackList = -1)
     {
         if (settlementIsShowing && blackList != 0)
@@ -116,13 +190,18 @@ public class PlayerUIToggler : MonoBehaviour
             ToggleInventoryUI();
             return;
         }
-        if (playerQuestIsShowing && blackList != 2)
+        if (secondaryInventoryIsShowing && blackList != 2)
+        {
+            ToggleSecondaryInventoryUI();
+            return;
+        }
+        if (playerQuestIsShowing && blackList != 3)
         {
             //Debug.Log("weeee");
             TogglePlayerQuestUI();
             return;
         }
-        if (settlementQuestIsShowing && blackList != 3)
+        if (settlementQuestIsShowing && blackList != 4)
         {
             ToggleSettlementQuestUI();
             return;

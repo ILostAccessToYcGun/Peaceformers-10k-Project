@@ -35,8 +35,8 @@ public class Item : MonoBehaviour, IPointerClickHandler
     [Space]
     [Header("Connected Objects")]
     [SerializeField] PlayerMovement player;
-    [SerializeField] public GameObject parent;
-    [SerializeField] Inventory currentInventory;
+    [SerializeField] public GameObject parentInventory;
+    [SerializeField] public Inventory currentInventory;
     [SerializeField] WorldItem worldItem;
     
     #region _Item_Pickup_in_Menu_
@@ -56,7 +56,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
                 if (itemIsPickedUpByMouse) //if we right click with item in hand DROP
                 {
                     DecreaseStackAmount(1);
-                    GameObject dropped = Instantiate(this.gameObject, this.transform.position, this.transform.rotation, parent.transform);
+                    GameObject dropped = Instantiate(this.gameObject, this.transform.position, this.transform.rotation, parentInventory.transform);
                     dropped.transform.localScale = Vector3.one;
                     Item droppedItem = dropped.GetComponent<Item>();
                     droppedItem.SetStackAmount(1);
@@ -75,7 +75,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
                     UpdateStackText();
                     PickUpItemInInventory();
 
-                    GameObject dropped = Instantiate(this.gameObject, this.transform.position, this.transform.rotation, parent.transform);
+                    GameObject dropped = Instantiate(this.gameObject, this.transform.position, this.transform.rotation, parentInventory.transform);
                     dropped.transform.localScale = Vector3.one;
                     Item droppedItem = dropped.GetComponent<Item>();
                     droppedItem.SetStackAmount(equalAmounts);
@@ -104,7 +104,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
             }
         }
         itemIsPickedUpByMouse = !itemIsPickedUpByMouse;
-        this.ItemComponentSetSiblingLast();
+        
         
         if (itemIsPickedUpByMouse)
         {
@@ -112,11 +112,14 @@ public class Item : MonoBehaviour, IPointerClickHandler
             {
                 currentInventorySlot.ClearHeldItem();
                 ClearComponentSlots();
+                SetParentInventoryObject(null);
                 //this.transform.SetAsLastSibling();
             }
         }
         else
             SearchAndMoveToNearestInventorySlot();
+
+        this.ItemComponentSetSiblingLast();
     }
 
     public void MoveToMouse()
@@ -130,7 +133,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
     public bool SearchForNearestValidInventorySlot()
     {
         //Search
-        InventorySlot[] inventorySlots = FindObjectsByType<InventorySlot>(FindObjectsSortMode.None);
+        InventorySlot[] inventorySlots = FindObjectsByType<InventorySlot>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         if (inventorySlots.Length < 1) { return false; }
 
         float nearestDistance = 300f;
@@ -235,10 +238,10 @@ public class Item : MonoBehaviour, IPointerClickHandler
                     if (!slot.isTrashSlot)
                     {
                         bool itemDoesFitInsideInventoryFrame = true; //check if the item size will fit in that spot
-
-                        if (slotPosition.x + itemWidth > currentInventory.inventoryWidth)
+                        
+                        if (slotPosition.x + itemWidth > slot.parentInventory.inventoryWidth)
                             itemDoesFitInsideInventoryFrame = false;
-                        if (slotPosition.y + itemHeight > currentInventory.inventoryHeight)
+                        if (slotPosition.y + itemHeight > slot.parentInventory.inventoryHeight)
                             itemDoesFitInsideInventoryFrame = false;
 
                         bool itemDoesNotCollideWithOtherItems = true;
@@ -251,7 +254,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
                             {
                                 for (int w = (int)slotPosition.x; w < (int)slotPosition.x + itemWidth; w++)
                                 {
-                                    Item currentItem = currentInventory.inventory[h][w].GetHeldItem();
+                                    Item currentItem = slot.parentInventory.inventory[h][w].GetHeldItem();
                                     if (currentItem != null) //if there is something inside the checking cells
                                     {
                                         if (w == (int)slotPosition.x && h == (int)slotPosition.y)
@@ -402,6 +405,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
             currentInventorySlot.currentHeldItem = this; //need to do more with this
             currentInventorySlot.SetHeldItem(this);
             currentInventory = currentInventorySlot.parentInventory;
+            SetParentInventoryObject(currentInventory.parent);
             //Debug.Log(currentInventorySlot.inventoryPosition);
 
             if (isTrashing)
@@ -430,13 +434,16 @@ public class Item : MonoBehaviour, IPointerClickHandler
     {
         foreach (InventorySlot slot in inventorySlots)
         {
-            if (slot.inventoryPosition.x >= currentInventorySlot.inventoryPosition.x && slot.inventoryPosition.x < currentInventorySlot.inventoryPosition.x + itemWidth)
+            if (slot.parentInventory == currentInventory)
             {
-                if (slot.inventoryPosition.y >= currentInventorySlot.inventoryPosition.y && slot.inventoryPosition.y < currentInventorySlot.inventoryPosition.y + itemHeight)
+                if (slot.inventoryPosition.x >= currentInventorySlot.inventoryPosition.x && slot.inventoryPosition.x < currentInventorySlot.inventoryPosition.x + itemWidth)
                 {
-                    slot.SetHeldItem(this);
-                    componentSlots.Add(slot);
-                    Debug.Log("component slot added");
+                    if (slot.inventoryPosition.y >= currentInventorySlot.inventoryPosition.y && slot.inventoryPosition.y < currentInventorySlot.inventoryPosition.y + itemHeight)
+                    {
+                        slot.SetHeldItem(this);
+                        componentSlots.Add(slot);
+                        Debug.Log("component slot added");
+                    }
                 }
             }
         }
@@ -562,9 +569,24 @@ public class Item : MonoBehaviour, IPointerClickHandler
             }
         }
 
-        currentInventory.playerQuestBoard.UpdateQuests();
+        if (currentInventory.playerQuestBoard != null)
+            currentInventory.playerQuestBoard.UpdateQuests();
         
         Destroy(gameObject);
+    }
+
+    public void SetParentInventoryObject(GameObject newParent)
+    {
+        if (newParent != null)
+        {
+            parentInventory = newParent;
+        }
+        else
+        {
+            parentInventory = FindAnyObjectByType<PlayerUIToggler>().gameObject;
+        }
+        
+        this.transform.parent = parentInventory.transform;
     }
 
     private void Awake()
@@ -572,8 +594,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
         this.gameObject.name = itemName.ToString();
         currentInventory = FindAnyObjectByType<Inventory>();
 
-
-        parent = currentInventory.parent;
+        SetParentInventoryObject(currentInventory.parent);
 
         img = GetComponent<Image>();
         stackAmount = 1;
