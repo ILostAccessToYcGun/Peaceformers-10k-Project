@@ -105,7 +105,7 @@ public class PlayerUIToggler : MonoBehaviour
         secondaryInventoryIsShowing = !secondaryInventoryIsShowing;
     }
 
-    public bool GetSecondaryInventoryShowingBool() { return inventoryIsShowing; }
+    public bool GetSecondaryInventoryShowingBool() { return secondaryInventoryIsShowing; }
 
     public void ToggleInventoryUIs()
     {

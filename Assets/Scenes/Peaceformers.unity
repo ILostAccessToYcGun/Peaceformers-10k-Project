@@ -1546,6 +1546,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7610219238577047877, guid: 872431d2735e4924b957d7855d6c490f, type: 3}
+      propertyPath: m_CellSize.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7610219238577047877, guid: 872431d2735e4924b957d7855d6c490f, type: 3}
+      propertyPath: m_CellSize.y
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7880,22 +7888,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   playerMovement: {fileID: 0}
-  playerDetectionRange: 0
-  interactionPrompt: {fileID: 0}
-  interactionPromptImage: {fileID: 0}
-  interactionFill: {fileID: 0}
+  playerDetectionRange: 5
+  interactionPrompt: {fileID: 10167186}
+  interactionPromptImage: {fileID: 764354405}
+  interactionFill: {fileID: 764354404}
   requestedInteract: 0
   initializeAction: 0
-  interactHoldTime: 0
-  playerUIToggler: {fileID: 0}
-  ItemSelection:
-  - {fileID: 8345865606624636533, guid: 1ee3bc1c3b684b54e97bc74f6e1cd01b, type: 3}
-  - {fileID: 8345865606624636533, guid: 625d9943155c27249b52953d8fb1f6d4, type: 3}
-  - {fileID: 8345865606624636533, guid: ddcbfc1da3fea2e42a16f185b3deebf7, type: 3}
-  - {fileID: 8345865606624636533, guid: 7806c030d3e128648b12c38c26309c62, type: 3}
-  baseNumberOfItems: 0
-  inventory: {fileID: 0}
-  inventoryPanel: {fileID: 0}
+  interactHoldTime: 1
+  playerUIToggler: {fileID: 10167185}
+  itemSelection:
+  - {fileID: 1515575751944225772, guid: 1ee3bc1c3b684b54e97bc74f6e1cd01b, type: 3}
+  - {fileID: 1515575751944225772, guid: 625d9943155c27249b52953d8fb1f6d4, type: 3}
+  - {fileID: 1515575751944225772, guid: ddcbfc1da3fea2e42a16f185b3deebf7, type: 3}
+  - {fileID: 1515575751944225772, guid: 7806c030d3e128648b12c38c26309c62, type: 3}
+  itemInventory: []
+  TotalItemValue: 20
+  currentValue: 0
+  inventory: {fileID: 1937666467}
+  inventoryPanel: {fileID: 1287416807}
 --- !u!65 &1186874661
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13189,7 +13199,7 @@ MonoBehaviour:
   parent: {fileID: 1937666465}
   inventorySlot: {fileID: 3976304327754479419, guid: 65242ffa900d7c24aa6d2a8eb49ee4ac, type: 3}
   testItem: {fileID: 0}
-  isPlayerInventory: 1
+  isPlayerInventory: 0
   playerQuestBoard: {fileID: 0}
 --- !u!1 &1961934997
 GameObject:

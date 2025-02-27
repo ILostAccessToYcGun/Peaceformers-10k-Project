@@ -16,8 +16,10 @@ public class InteractableInventory : BaseInteractable
     */
     [SerializeField] PlayerUIToggler playerUIToggler;
 
-    [SerializeField] public List<Item> ItemSelection;
-    [SerializeField] int baseNumberOfItems;
+    [SerializeField] public List<GameObject> itemSelection;
+    [SerializeField] public List<GameObject> itemInventory;
+    [SerializeField] int TotalItemValue;
+    [SerializeField] int currentValue;
 
 
     [SerializeField] Inventory inventory;
@@ -37,34 +39,50 @@ public class InteractableInventory : BaseInteractable
         //{
         //    playerUIToggler.ToggleSecondaryInventoryUI();
         //}
+
         playerUIToggler.ToggleInventoryUIs();
+        //if (playerUIToggler.GetSecondaryInventoryShowingBool()) //this wasnt working before, kept instantly closing the UI
+        //{
+            //inventory.CopyInventory(itemInventory);
+        //}
+        //else
+        //{
+            //inventory.ClearInventory();
+        //}
     }
 
-    public void SetUpInventory()
+    public void RandomizeInventoryLoot()
     {
         //FOR NOW this will add a random amount of random items into the inventory
 
-        for (int i = 0; i < baseNumberOfItems;)
+        while (currentValue < TotalItemValue)
         {
-            int itemSelect = Random.Range(0, ItemSelection.Count); //choose a random item from our selection to add
-            Item addingItem = ItemSelection[itemSelect];
-            int itemStackAmount = Random.Range(0, baseNumberOfItems - i);
-            int itemValue = itemStackAmount;
+            int itemSelect = Random.Range(0, itemSelection.Count); //choose a random item from our selection to add
+            Item addingItem = itemSelection[itemSelect].GetComponent<Item>();
+            int itemAmount = Random.Range(0, TotalItemValue - currentValue + 1);
+
+            currentValue += itemAmount;
 
             if (addingItem.itemName == Item.Name.AmmoCrate)
             {
-                itemValue /= 4; //basically if we're adding bullets they have 0.25 value instead of 1 value, you get 4 bullets per 1 resource
+                itemAmount *= 4;
             }
-            inventory.AddItemToInventory(addingItem, itemStackAmount);
+            inventory.AddItemToInventory(addingItem, itemAmount); //randomize grid location later
+            itemInventory.Add(itemSelection[itemSelect]);
 
-
-
-            i += itemValue;
+            //i += itemValue;
         }
+        Debug.Log("Inventory is set up and should have items");
     }
 
     private void Start()
     {
-        SetUpInventory();
+        //if (inventory.inventory == null)
+
+        //else
+        //{
+        //    SetUpInventory();
+        //}
+        Invoke("RandomizeInventoryLoot", 0.1f);
     }
 }
