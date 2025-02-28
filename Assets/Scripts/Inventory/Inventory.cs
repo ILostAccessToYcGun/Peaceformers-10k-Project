@@ -112,7 +112,7 @@ public class Inventory : MonoBehaviour
             inventory.Add(new List<InventorySlot>());
             inventory[j].Capacity = width;
 
-            for (int i = 0; i < inventory[0].Capacity; i++)
+            for (int i = 0; i < inventory[j].Capacity; i++)
             {
                 inventory[j].Add(null);
             }
@@ -160,7 +160,7 @@ public class Inventory : MonoBehaviour
         {
             for (int i = 0; i < inventory[0].Capacity; i++)
             {
-                Destroy(inventory[i][j].gameObject);
+                Destroy(inventory[j][i].gameObject);
                 //if (i == inventory[j].Capacity - 1)
                 //{
                 //    inventory[i].Clear();
