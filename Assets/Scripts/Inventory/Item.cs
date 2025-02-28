@@ -365,10 +365,6 @@ public class Item : MonoBehaviour, IPointerClickHandler
                     //find a slot
                     previousInventorySlot = currentInventory.FindPartialyFilledItemOrEmptySlot(this);
                 }
-                    
-
-                //if the distance is greater than 200 but we are still inside the inventory we go to the previous slot.
-                //if the previous slot has the same Item name, we want to stack
                 if (previousInventorySlot != null)
                 {
                     if (previousInventorySlot.GetHeldItem() != null)
