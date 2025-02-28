@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using static UnityEditor.Progress;
 using UnityEngine.InputSystem;
 using static UnityEditor.Timeline.Actions.MenuPriority;
+using Unity.VisualScripting;
 //using UnityEngine.UIElements;
 
 public class Inventory : MonoBehaviour
@@ -30,7 +31,7 @@ public class Inventory : MonoBehaviour
     public List<List<InventorySlot>> inventory = new List<List<InventorySlot>>(); //lists because later we will change the size
     [Space]
     [SerializeField] public QuestBoard playerQuestBoard; //this is set manually
-    
+
 
     #region _General_Inventory_
 
@@ -60,18 +61,30 @@ public class Inventory : MonoBehaviour
     public void SetInventory(InventorySlot[] cells)
     {
         if (cells == null)
-            cells = FindObjectsByType<InventorySlot>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        {
+            //cells = FindObjectsByType<InventorySlot>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            cells = inventoryPanel.GetComponentsInChildren<InventorySlot>();
+        }
+            
+
+        
 
         foreach (InventorySlot cell in cells)
         {
             if (!cell.isTrashSlot)
             {
-                if (cell.transform.position.x > inventoryPanel.gameObject.transform.position.x - inventoryPanel.sizeDelta.x
-                && cell.transform.position.x < inventoryPanel.gameObject.transform.position.x + inventoryPanel.sizeDelta.x
-                && cell.transform.position.y > inventoryPanel.gameObject.transform.position.y - inventoryPanel.sizeDelta.y
-                && cell.transform.position.y < inventoryPanel.gameObject.transform.position.y + inventoryPanel.sizeDelta.y)
+                if (cell.transform.position.x > inventoryPanel.gameObject.transform.position.x - inventoryPanel.sizeDelta.x / 2
+                && cell.transform.position.x < inventoryPanel.gameObject.transform.position.x + inventoryPanel.sizeDelta.x / 2
+                && cell.transform.position.y > inventoryPanel.gameObject.transform.position.y - inventoryPanel.sizeDelta.y / 2
+                && cell.transform.position.y < inventoryPanel.gameObject.transform.position.y + inventoryPanel.sizeDelta.y / 2)
                 {
-                    inventory[(int)cell.inventoryPosition.y][(int)cell.inventoryPosition.x] = cell;
+                    Debug.Log("Height " + inventory.Count + " Width " + inventory[0].Count);
+                    Debug.Log("inventoryPosY " + cell.inventoryPosition.y + " inventoryPosX " + cell.inventoryPosition.x);
+                    
+                    if ((int)cell.inventoryPosition.y < inventoryHeight && (int)cell.inventoryPosition.x < inventoryWidth)
+                    {
+                        inventory[(int)cell.inventoryPosition.y][(int)cell.inventoryPosition.x] = cell;
+                    }
                 }
             }
 
@@ -92,6 +105,7 @@ public class Inventory : MonoBehaviour
         #region _List_Size_
         //look at milinote for a diagram of the lists
         inventory.Capacity = height;
+        Debug.Log("height = " + inventory.Capacity);
 
         for (int j = 0; j < inventory.Capacity; j++)
         {
@@ -103,14 +117,10 @@ public class Inventory : MonoBehaviour
                 inventory[j].Add(null);
             }
         }
-
-
-
         #endregion
 
         #region _Displaying_Inventory_Slots_
 
-        //InventorySlot setupSlot = inventorySlot.GetComponent<InventorySlot>();
         int tempHeight = inventory.Capacity;
         int tempWidth = inventory[0].Capacity;
 
@@ -118,7 +128,7 @@ public class Inventory : MonoBehaviour
 
         for (int y = 0; y < tempHeight; y++)
         {
-            for (int x = 0; x < tempWidth; x++) //Infinite LOOP!!!!
+            for (int x = 0; x < tempWidth; x++)
             {
                 slotLocation = inventoryPanel.transform.position + new Vector3(-350 + cellDistance * x, 350 - cellDistance * y, inventoryPanel.transform.position.z);
                 GameObject inventorySlotGameObject = Instantiate(inventorySlot, slotLocation, inventoryPanel.transform.rotation, inventoryPanel.transform);
@@ -141,9 +151,25 @@ public class Inventory : MonoBehaviour
             trashImg.color = new Color(1f, 60f / 255f, 60f / 255f, 1f);
             trashSlot.SetInventoryPosition(new Vector2(tempWidth, tempHeight - 1));
         }
-
-
         #endregion
+    }
+
+    public void DestroyInventory()
+    {
+        for (int j = 0; j < inventory.Capacity; j++)
+        {
+            for (int i = 0; i < inventory[0].Capacity; i++)
+            {
+                Destroy(inventory[i][j].gameObject);
+                //if (i == inventory[j].Capacity - 1)
+                //{
+                //    inventory[i].Clear();
+                //    inventory[i].Capacity = 0;
+                //}
+            }
+        }
+        inventory = new List<List<InventorySlot>>();
+
     }
 
     #endregion
@@ -545,15 +571,6 @@ public class Inventory : MonoBehaviour
 
     #endregion
 
-
-
-    //private void Start()
-    //{
-
-    //    //ShowInventory();
-    //    HideInventory();
-
-    //}
 
     private void Awake()
     {
