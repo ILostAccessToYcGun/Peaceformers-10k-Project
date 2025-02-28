@@ -361,30 +361,37 @@ public class Item : MonoBehaviour, IPointerClickHandler
             {
                 Debug.Log("Previous");
                 if (previousInventorySlot == null)
-                    return;
+                {
+                    //find a slot
+                    previousInventorySlot = currentInventory.FindPartialyFilledItemOrEmptySlot(this);
+                }
+                    
 
                 //if the distance is greater than 200 but we are still inside the inventory we go to the previous slot.
                 //if the previous slot has the same Item name, we want to stack
-
-                if (previousInventorySlot.GetHeldItem() != null)
+                if (previousInventorySlot != null)
                 {
-                    if (previousInventorySlot.GetHeldItem().itemName == itemName)
+                    if (previousInventorySlot.GetHeldItem() != null)
                     {
-                        stackingItem = previousInventorySlot.GetHeldItem();
-                        stackingItem.IncreaseStackAmount(stackAmount);
-                        stackingItem.AddComponentSlots(inventorySlots);
-                        stackingItem.currentInventorySlot.SetHeldItem(stackingItem);
-                        Destroy(this.gameObject);
+                        if (previousInventorySlot.GetHeldItem().itemName == itemName)
+                        {
+                            stackingItem = previousInventorySlot.GetHeldItem();
+                            stackingItem.IncreaseStackAmount(stackAmount);
+                            stackingItem.AddComponentSlots(inventorySlots);
+                            stackingItem.currentInventorySlot.SetHeldItem(stackingItem);
+                            Destroy(this.gameObject);
+                        }
+                    }
+                    else
+                    {
+                        currentInventorySlot = previousInventorySlot;
+                        transform.position = currentInventorySlot.transform.position;
+                        currentInventorySlot.currentHeldItem = this; //need to do more with this
+                        currentInventorySlot.SetHeldItem(this);
+                        AddComponentSlots(inventorySlots);
                     }
                 }
-                else
-                {
-                    currentInventorySlot = previousInventorySlot;
-                    transform.position = currentInventorySlot.transform.position;
-                    currentInventorySlot.currentHeldItem = this; //need to do more with this
-                    currentInventorySlot.SetHeldItem(this);
-                    AddComponentSlots(inventorySlots);
-                }
+                
             }
             else //outside of the current inventory
             {
@@ -397,7 +404,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
         }
         else
         {
-            Debug.Log("next");
+            //Debug.Log("next");
             currentInventorySlot = nearestInventorySlot;
             if (currentInventorySlot != null)
                 previousInventorySlot = currentInventorySlot;
@@ -442,7 +449,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
                     {
                         slot.SetHeldItem(this);
                         componentSlots.Add(slot);
-                        Debug.Log("component slot added");
+                        //Debug.Log("component slot added");
                     }
                 }
             }

@@ -291,27 +291,44 @@ public class Inventory : MonoBehaviour
         return itemSearchCount;
     }
 
+    public InventorySlot FindInventorySlotByGrid(int x, int y)
+    {
+        for (int j = 0; j < inventory.Capacity; j++)
+        {
+            for (int i = 0; i < inventory[j].Capacity; i++)
+            {
+                InventorySlot slot = inventory[j][i];
+                if (slot.inventoryPosition == new Vector2(x, y))
+                {
+                    return slot;
+                }
+            }
+        }
+
+        return null;
+    }
+
     #endregion
 
     #region _Inventory_Management_
 
-    public void AddItemToInventory(Item itemToFind, int amount)
+    public void AddItemToInventory(Item itemToAdd, int amount)
     {
         int decreaseAmount = amount;
         for (int i = amount; i > 0;)
         {
-            InventorySlot findSlot = FindPartialyFilledItemOrEmptySlot(itemToFind);
+            InventorySlot findSlot = FindPartialyFilledItemOrEmptySlot(itemToAdd);
             if (findSlot == null) 
             {
-                if (amount > itemToFind.stackLimit)
+                if (amount > itemToAdd.stackLimit)
                 {
-                    decreaseAmount = itemToFind.stackLimit;
-                    itemToFind.InstantiateWorldObject(itemToFind.stackLimit);
+                    decreaseAmount = itemToAdd.stackLimit;
+                    itemToAdd.InstantiateWorldObject(itemToAdd.stackLimit);
                 }
                 else
                 {
                     decreaseAmount = amount;
-                    itemToFind.InstantiateWorldObject(amount);
+                    itemToAdd.InstantiateWorldObject(amount);
                 }
             }
 
@@ -337,7 +354,7 @@ public class Inventory : MonoBehaviour
             }
             else
             {
-                GameObject added = Instantiate(itemToFind.gameObject, findSlot.transform.position + new Vector3(0, 0, 1), findSlot.transform.rotation, parent.transform);
+                GameObject added = Instantiate(itemToAdd.gameObject, findSlot.transform.position + new Vector3(0, 0, 1), findSlot.transform.rotation, parent.transform);
                 added.transform.localScale = Vector3.one;
                 Item addedItem = added.GetComponent<Item>();
                 addedItem.currentInventory = this;
@@ -369,6 +386,37 @@ public class Inventory : MonoBehaviour
             i -= decreaseAmount;
         }
     }
+
+    public void AddItemToInventory(Item itemToAdd, int amount, int x, int y)
+    {
+        InventorySlot findSlot = FindInventorySlotByGrid(x, y);
+        if (findSlot == null)
+        {
+            AddItemToInventory(itemToAdd, amount);
+            return;
+        }
+
+        GameObject added = Instantiate(itemToAdd.gameObject, findSlot.transform.position + new Vector3(0, 0, 1), findSlot.transform.rotation, parent.transform);
+        added.transform.localScale = Vector3.one;
+        Item addedItem = added.GetComponent<Item>();
+        addedItem.currentInventory = this;
+
+        addedItem.SetStackAmount(amount);
+
+        addedItem.SearchAndMoveToNearestInventorySlot();
+
+
+
+        if (!inventoryPanel.gameObject.activeSelf)
+            added.SetActive(false);
+
+        if (playerQuestBoard != null)
+        {
+            Debug.Log("we should be updating the quests");
+            playerQuestBoard.UpdateQuests();
+        }
+    }
+
 
     public int RemoveItemFromInventory(Item itemToFind, int amount)
     {
@@ -433,46 +481,41 @@ public class Inventory : MonoBehaviour
     }
 
     //this feature is pretty much only for the secondary inventory
-    public void CopyInventory(List<Item> inventoryToCopy)
+    public void CopyInventory(List<Item> inventoryToCopy, List<Vector3> itemDetails)
     {
-        /*basically we are going to:
-         *loop through this list
-         *loop through this inventory
-            *if we find a position in this inventory that matches the item in the copy list
-            *then we instantiate a new item of that type there, if we dont, just add it regularly
-         * but ideally the secondary inventory will be getting reset a lot when you swap between them
-
-        */
-        foreach (Item item in inventoryToCopy)
+        //I could work on this some more, so the location of the items are remembered but idc bro
+        for (int k = 0; k < inventoryToCopy.Count; k++)
         {
-            bool foundCorrespondingPosition = false;
-            Vector2 itemPosition = item.GetCurrentInventorySlot().inventoryPosition;
+            AddItemToInventory(inventoryToCopy[k], (int)itemDetails[k].x, (int)itemDetails[k].y, (int)itemDetails[k].z);
 
-            for (int j = 0; j < inventory.Capacity; j++)
-            {
-                for (int i = 0; i < inventory[j].Capacity; i++)
-                {
-                    if (foundCorrespondingPosition) { break; }
+            //bool foundCorrespondingPosition = false;
+            //Vector2 itemPosition = inventoryToCopy[k].GetCurrentInventorySlot().inventoryPosition;
 
-                    InventorySlot slot = inventory[j][i];
-                    if (slot.inventoryPosition == itemPosition)
-                    {
-                        GameObject copied = Instantiate(item.gameObject, slot.transform.position + new Vector3(0, 0, 1), slot.transform.rotation, parent.transform);
-                        copied.transform.localScale = Vector3.one;
+            //for (int j = 0; j < inventory.Capacity; j++)
+            //{
+            //    for (int i = 0; i < inventory[j].Capacity; i++)
+            //    {
+            //        if (foundCorrespondingPosition) { break; }
 
-                        Item copiedItem = copied.GetComponent<Item>();
-                        copiedItem.currentInventory = this;
-                        copiedItem.SetStackAmount(item.stackAmount);
-                        copiedItem.SearchAndMoveToNearestInventorySlot();
-                        foundCorrespondingPosition = true;
-                    }
-                }
-            }
+            //        InventorySlot slot = inventory[j][i];
+            //        if (slot.inventoryPosition == itemPosition)
+            //        {
+            //            GameObject copied = Instantiate(inventoryToCopy[k].gameObject, slot.transform.position + new Vector3(0, 0, 1), slot.transform.rotation, parent.transform);
+            //            copied.transform.localScale = Vector3.one;
 
-            if (!foundCorrespondingPosition)
-            {
-                AddItemToInventory(item, item.stackAmount);
-            }
+            //            Item copiedItem = copied.GetComponent<Item>();
+            //            copiedItem.currentInventory = this;
+            //            copiedItem.SetStackAmount(amounts[k]);
+            //            copiedItem.SearchAndMoveToNearestInventorySlot();
+            //            foundCorrespondingPosition = true;
+            //        }
+            //    }
+            //}
+
+            //if (!foundCorrespondingPosition)
+            //{
+            //    AddItemToInventory(inventoryToCopy[k], amounts[k]);
+            //}
         }
     }
 

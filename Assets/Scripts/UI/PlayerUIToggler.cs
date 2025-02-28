@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Transactions;
 using Unity.VisualScripting.Antlr3.Runtime.Collections;
 using UnityEngine;
 
@@ -24,6 +25,7 @@ public class PlayerUIToggler : MonoBehaviour
     [SerializeField] private RectTransform secondaryInventoryUI;
     [SerializeField] private Vector3 shownPos_Sinv;
     [SerializeField] private Vector3 hiddenPos_Sinv;
+    [SerializeField] private InteractableInventory currentSecondInventory;
     [SerializeField] private bool secondaryInventoryIsShowing = false;
 
     [Space]
@@ -106,6 +108,8 @@ public class PlayerUIToggler : MonoBehaviour
     }
 
     public bool GetSecondaryInventoryShowingBool() { return secondaryInventoryIsShowing; }
+    public InteractableInventory GetSecondaryInventory() { return currentSecondInventory; }
+    public void SetSecondaryInventory(InteractableInventory newInv) { currentSecondInventory = newInv; }
 
     public void ToggleInventoryUIs()
     {
