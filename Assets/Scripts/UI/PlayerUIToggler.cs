@@ -68,9 +68,15 @@ public class PlayerUIToggler : MonoBehaviour
     {
         if (secondaryInventoryIsShowing)
         {
+            
             LeanTween.move(secondaryInventoryUI, hiddenPos_Sinv, timeToMove).setEase(LeanTweenType.easeOutCubic);
             SetUIOpenBool(false);
             secondaryInventoryIsShowing = false;
+
+            if (GetSecondaryInventory() != null)
+            {
+                GetSecondaryInventory().ToggleInventories();
+            }
         }
 
         BackOutOfCurrentUI(1);
@@ -117,6 +123,8 @@ public class PlayerUIToggler : MonoBehaviour
         if (playerQuestIsShowing) { TogglePlayerQuestUI(); }
         if (settlementQuestIsShowing) { ToggleSettlementQuestUI(); }
 
+        
+
         if (inventoryIsShowing && secondaryInventoryIsShowing)
         {
             LeanTween.move(playerInventoryUI, hiddenPos_inv, timeToMove).setEase(LeanTweenType.easeOutCubic);
@@ -145,6 +153,8 @@ public class PlayerUIToggler : MonoBehaviour
             inventoryIsShowing = true;
             secondaryInventoryIsShowing = true;
         }
+
+        
     }
 
     public void TogglePlayerQuestUI()
