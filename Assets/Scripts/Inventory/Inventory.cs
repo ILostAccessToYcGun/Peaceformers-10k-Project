@@ -387,13 +387,13 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void AddItemToInventory(Item itemToAdd, int amount, int x, int y)
+    public bool AddItemToInventory(Item itemToAdd, int amount, int x, int y)
     {
         InventorySlot findSlot = FindInventorySlotByGrid(x, y);
         if (findSlot == null)
         {
             AddItemToInventory(itemToAdd, amount);
-            return;
+            return false;
         }
 
         GameObject added = Instantiate(itemToAdd.gameObject, findSlot.transform.position + new Vector3(0, 0, 1), findSlot.transform.rotation, parent.transform);
@@ -402,6 +402,11 @@ public class Inventory : MonoBehaviour
         addedItem.currentInventory = this;
 
         addedItem.SetStackAmount(amount);
+
+        if (!addedItem.SearchForNearestValidInventorySlot())
+        {
+            return false;
+        }
 
         addedItem.SearchAndMoveToNearestInventorySlot();
 
@@ -415,6 +420,7 @@ public class Inventory : MonoBehaviour
             Debug.Log("we should be updating the quests");
             playerQuestBoard.UpdateQuests();
         }
+        return true;
     }
 
 
