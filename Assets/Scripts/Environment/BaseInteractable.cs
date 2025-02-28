@@ -3,16 +3,16 @@ using UnityEngine.UI;
 
 public class BaseInteractable : MonoBehaviour
 {
-    [SerializeField] private Player player;
-    [SerializeField] private PlayerMovement playerMovement;
-    [SerializeField] private float playerDetectionRange;
+    [SerializeField] protected Player player;
+    [SerializeField] protected PlayerMovement playerMovement;
+    [SerializeField] protected float playerDetectionRange;
     [SerializeField] protected InteractionPrompt interactionPrompt;
     [Space]
-    [SerializeField] private GameObject interactionPromptImage;
-    [SerializeField] private Image interactionFill;
-    [SerializeField] private bool requestedInteract;
-    [SerializeField] private bool initializeAction;
-    [SerializeField] private float interactHoldTime;
+    [SerializeField] protected GameObject interactionPromptImage;
+    [SerializeField] protected Image interactionFill;
+    [SerializeField] protected bool requestedInteract;
+    [SerializeField] protected bool initializeAction;
+    [SerializeField] protected float interactHoldTime;
 
 
 
@@ -21,7 +21,7 @@ public class BaseInteractable : MonoBehaviour
         print("Open Item prompt");
     }
 
-    protected void InteractDistanceCheck()
+    protected virtual void InteractDistanceCheck()
     {
         float distance = Vector3.Distance(transform.position, playerMovement.gameObject.transform.position);
         if (distance <= playerDetectionRange && !initializeAction)
