@@ -106,7 +106,7 @@ public class InteractableInventory : BaseInteractable
                 randX = Random.Range(0, inventory.inventoryWidth);
                 randY = Random.Range(0, inventory.inventoryHeight);
             }
-            while (!inventory.AddItemToInventory(addingItem, itemAmount, randX, randY));
+            while (inventory.AddItemToInventory(addingItem, itemAmount, randX, randY) == false);
             itemInventory.Add(addingItem);
             itemDet.Add(new Vector3(itemAmount, randX, randY));
 

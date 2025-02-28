@@ -197,8 +197,6 @@ public class Item : MonoBehaviour, IPointerClickHandler
                             }
                         }
                     }
-                    else
-                        nearestDistance = compareDistance;
                 }
             }
         }
@@ -345,7 +343,6 @@ public class Item : MonoBehaviour, IPointerClickHandler
                         stackingItem = null;
                         //Debug.Log("trash " + nearestDistance);
                     }
-                    
                 }
             }
         }
