@@ -12902,8 +12902,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerUIToggler: {fileID: 10167185}
-  inventoryWidth: 5
-  inventoryHeight: 5
+  inventoryWidth: 4
+  inventoryHeight: 4
   cellWidth: 100
   cellHeight: 100
   cellDistance: 140
@@ -14760,6 +14760,14 @@ PrefabInstance:
       propertyPath: inventoryPanel
       value: 
       objectReference: {fileID: 1287416807}
+    - target: {fileID: 8729408628118176406, guid: 4b40f047afd3f6d40983f74c3fd22d0d, type: 3}
+      propertyPath: inventorySize.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8729408628118176406, guid: 4b40f047afd3f6d40983f74c3fd22d0d, type: 3}
+      propertyPath: inventorySize.y
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 8729408628118176406, guid: 4b40f047afd3f6d40983f74c3fd22d0d, type: 3}
       propertyPath: playerUIToggler
       value: 

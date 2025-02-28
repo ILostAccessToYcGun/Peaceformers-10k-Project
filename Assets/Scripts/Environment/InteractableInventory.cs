@@ -27,6 +27,7 @@ public class InteractableInventory : BaseInteractable
 
 
     [SerializeField] Inventory inventory;
+    [SerializeField] Vector2 inventorySize;
     [SerializeField] RectTransform inventoryPanel;
 
     protected override void OpenPrompt()
@@ -49,8 +50,11 @@ public class InteractableInventory : BaseInteractable
         
         if (playerUIToggler.GetSecondaryInventoryShowingBool())
         {
-            inventory.CopyInventory(itemInventory, itemDet);
-            playerUIToggler.SetSecondaryInventory(this);
+            //inventory.inventoryWidth = (int)inventorySize.x;
+            //inventory.inventoryHeight = (int)inventorySize.y;
+            inventory.GenerateInventory(inventory.inventoryWidth, inventory.inventoryHeight, 100, 100);
+            inventory.SetInventory(null);
+            Invoke("CopyAndSetInventory", 0.05f);
         }
         else
         {
@@ -59,17 +63,14 @@ public class InteractableInventory : BaseInteractable
                 if (playerUIToggler.GetSecondaryInventory() == this)
                 {
                     UpdateInventoryLoot();
-                    inventory.ClearInventory();
                     playerUIToggler.SetSecondaryInventory(null);
+                    Invoke("ClearAndDestroyInventory", 0.2f);
                 }
                 else
                 {
                     playerUIToggler.GetSecondaryInventory().UpdateInventoryLoot();
-                    inventory.ClearInventory();
                     playerUIToggler.SetSecondaryInventory(null);
-
-                    //inventory.CopyInventory(itemInventory, itemDet);
-                    //playerUIToggler.SetSecondaryInventory(this);
+                    Invoke("ClearAndDestroyInventory", 0.2f);
                     Invoke("OpenPrompt", 0.25f);
                 }
             }
@@ -77,43 +78,56 @@ public class InteractableInventory : BaseInteractable
         }
     }
 
+    public void CopyAndSetInventory()
+    {
+        inventory.CopyInventory(itemInventory, itemDet);
+        playerUIToggler.SetSecondaryInventory(this);
+    }
+
+    public void ClearAndDestroyInventory()
+    {
+        inventory.ClearInventory();
+        inventory.DestroyInventory();
+    }
+
     public void RandomizeInventoryLoot()
     {
-        //FOR NOW this will add a random amount of random items into the inventory
+        inventory.DestroyInventory();
+        //inventory.inventoryWidth = (int)inventorySize.x;
+        //inventory.inventoryHeight = (int)inventorySize.y;
+        inventory.GenerateInventory(inventory.inventoryWidth, inventory.inventoryHeight, 100, 100);
+        inventory.SetInventory(null);
+        //while (currentValue < TotalItemValue)
+        //{
+        //    int itemSelect = Random.Range(0, itemSelection.Count); //choose a random item from our selection to add
+        //    Item addingItem = itemSelection[itemSelect].GetComponent<Item>();
+        //    int itemAmount = Random.Range(1, (TotalItemValue - currentValue > addingItem.stackLimit ? addingItem.stackLimit + 1 : TotalItemValue - currentValue + 1));
 
-        while (currentValue < TotalItemValue)
-        {
-            int itemSelect = Random.Range(0, itemSelection.Count); //choose a random item from our selection to add
-            Item addingItem = itemSelection[itemSelect].GetComponent<Item>();
-            int itemAmount = Random.Range(1, (TotalItemValue - currentValue > addingItem.stackLimit ? addingItem.stackLimit + 1 : TotalItemValue - currentValue + 1));
+        //    currentValue += itemAmount;
+        //    Debug.Log("currentValue: " + currentValue);
 
-            currentValue += itemAmount;
-            Debug.Log("currentValue: " + currentValue);
+        //    if (addingItem.itemName == Item.Name.AmmoCrate)
+        //    {
+        //        itemAmount *= 4;
+        //    }
 
-            if (addingItem.itemName == Item.Name.AmmoCrate)
-            {
-                itemAmount *= 4;
-            }
+        //    int randX = 0;
+        //    int randY = 0;
 
+        //    do
+        //    {
+        //        randX = Random.Range(0, inventory.inventoryWidth);
+        //        randY = Random.Range(0, inventory.inventoryHeight);
+        //    }
+        //    while (inventory.AddItemToInventory(addingItem, itemAmount, randX, randY) == false);
+        //    itemInventory.Add(addingItem);
+        //    itemDet.Add(new Vector3(itemAmount, randX, randY));
 
-
-
-            int randX = 0;
-            int randY = 0;
-
-            do
-            {
-                randX = Random.Range(0, inventory.inventoryWidth);
-                randY = Random.Range(0, inventory.inventoryHeight);
-            }
-            while (inventory.AddItemToInventory(addingItem, itemAmount, randX, randY) == false);
-            itemInventory.Add(addingItem);
-            itemDet.Add(new Vector3(itemAmount, randX, randY));
-
-            //i += itemValue;
-        }
-        Debug.Log("Inventory is set up and should have items");
+        //    //i += itemValue;
+        //}
+        //Debug.Log("Inventory is set up and should have items");
         inventory.ClearInventory();
+        inventory.DestroyInventory();
     }
 
     public void UpdateInventoryLoot()
