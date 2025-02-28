@@ -405,6 +405,8 @@ public class Inventory : MonoBehaviour
 
         if (!addedItem.SearchForNearestValidInventorySlot())
         {
+            Debug.Log("bad spot try again");
+            Destroy(added);
             return false;
         }
 
