@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
+using UnityEngine.UI;
 using static UnityEditor.Progress;
 
 public class InteractableInventory : BaseInteractable
@@ -243,6 +244,20 @@ public class InteractableInventory : BaseInteractable
         if (isRandomizingSize)
             RandomizeInventorySize((int)inventorySizeRange.x, (int)inventorySizeRange.y);
         Invoke("RandomizeInventoryLoot", 0.1f);
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
+        GameObject mainCanvas = FindAnyObjectByType<PlayerUIToggler>().gameObject;
+
+        playerUIToggler = mainCanvas.GetComponent<PlayerUIToggler>();
+
+        GameObject secondInventory = mainCanvas.GetComponentInChildren<Inventory>().gameObject;
+
+        inventory = secondInventory.GetComponent<Inventory>();
+
+        inventoryPanel = (secondInventory.GetComponentInChildren<GridLayoutGroup>().gameObject).GetComponent<RectTransform>();
     }
 
 

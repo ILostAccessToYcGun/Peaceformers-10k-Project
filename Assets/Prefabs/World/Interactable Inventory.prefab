@@ -142,6 +142,9 @@ MonoBehaviour:
   TotalItemValue: 20
   currentValue: 0
   inventory: {fileID: 0}
+  inventorySize: {x: 0, y: 0}
+  inventorySizeRange: {x: 0, y: 0}
+  isRandomizingSize: 1
   inventoryPanel: {fileID: 0}
 --- !u!1001 &2911599524309928492
 PrefabInstance:
@@ -166,6 +169,14 @@ PrefabInstance:
     - target: {fileID: 4861826488088090265, guid: 78c73e9ed0554a540af6616d1180f0fe, type: 3}
       propertyPath: m_Name
       value: InteractCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 4861826488088090265, guid: 78c73e9ed0554a540af6616d1180f0fe, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5881791475613046642, guid: 78c73e9ed0554a540af6616d1180f0fe, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7935216326311987228, guid: 78c73e9ed0554a540af6616d1180f0fe, type: 3}
       propertyPath: m_Pivot.x
