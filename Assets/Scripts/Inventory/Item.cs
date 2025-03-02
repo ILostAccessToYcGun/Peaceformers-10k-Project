@@ -326,7 +326,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
                                         isKeepHolding = true;
                                         isTrashing = false;
                                         stackingItem = slot.GetHeldItem();
-                                        overspillAmount = stackingItem.stackLimit - stackingItem.stackAmount;
+                                        overspillAmount = (stackingItem.stackAmount + stackAmount) - stackingItem.stackLimit;
                                         DecreaseStackAmount(stackingItem.stackLimit - stackingItem.stackAmount);
                                         UpdateStackText();
 
