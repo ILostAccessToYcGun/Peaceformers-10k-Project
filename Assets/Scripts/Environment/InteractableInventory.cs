@@ -30,7 +30,8 @@ public class InteractableInventory : BaseInteractable
 
     [SerializeField] Inventory inventory;
     [SerializeField] Vector2 inventorySize;
-    [SerializeField] Vector2 inventorySizeRange;
+    [SerializeField] Vector2 inventorySizeRangeX;
+    [SerializeField] Vector2 inventorySizeRangeY;
     [SerializeField] bool isRandomizingSize = true;
     [SerializeField] RectTransform inventoryPanel;
 
@@ -87,10 +88,15 @@ public class InteractableInventory : BaseInteractable
         inventory.DestroyInventory();
     }
 
-    public void RandomizeInventorySize(int width, int height)
+    public void RandomizeInventorySize(int minX, int minY, int maxX, int maxY)
     {
-        inventorySize.x = (int)Random.Range(1, width + 1);
-        inventorySize.y = (int)Random.Range(1, height + 1);
+        if (minX <= 0) { minX = 1; }
+        if (minY <= 0) { minY = 1; }
+
+        if (maxX > 10) { maxX = 10; }
+        if (maxY > 10) { maxY = 10; }
+        inventorySize.x = (int)Random.Range(minX, maxX + 1);
+        inventorySize.y = (int)Random.Range(minY, maxY + 1);
     }
 
     public void RandomizeInventoryLoot()
