@@ -431,6 +431,7 @@ public class Inventory : MonoBehaviour
         addedItem.currentInventory = this;
 
         addedItem.SetStackAmount(amount);
+        
 
         if (addedItem.SearchForNearestValidInventorySlot() == 0 || addedItem.SearchForNearestValidInventorySlot() == 2)
         {
@@ -445,6 +446,11 @@ public class Inventory : MonoBehaviour
         if (searchOverspill >= 0)
         {
             returnOverspill = searchOverspill;
+        }
+
+        if (amount > addedItem.stackLimit)
+        {
+            returnOverspill = amount - addedItem.stackLimit;
         }
 
         if (!inventoryPanel.gameObject.activeSelf)
