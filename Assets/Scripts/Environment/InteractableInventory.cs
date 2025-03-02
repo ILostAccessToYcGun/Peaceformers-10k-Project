@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
@@ -33,6 +34,8 @@ public class InteractableInventory : BaseInteractable
     [SerializeField] Vector2 inventorySizeRangeY;
     [SerializeField] bool isRandomizingSize = true;
     [SerializeField] RectTransform inventoryPanel;
+    private bool inventorySetupDone = false;
+    private bool isRandomized = false;
 
     protected override void OpenPrompt()
     {
@@ -163,6 +166,8 @@ public class InteractableInventory : BaseInteractable
         Debug.Log("Inventory is set up and should have items");
         inventory.ClearInventory();
         inventory.DestroyInventory();
+
+        isRandomized = true;
     }
 
     public void UpdateInventoryLoot()
@@ -246,24 +251,45 @@ public class InteractableInventory : BaseInteractable
 
     private void Start()
     {
+        
+
         if (isRandomizingSize)
             RandomizeInventorySize((int)inventorySizeRangeX.y, (int)inventorySizeRangeY.y, (int)inventorySizeRangeX.x, (int)inventorySizeRangeY.x);
-        Invoke("RandomizeInventoryLoot", 0.1f);
+        //Invoke("RandomizeInventoryLoot", 1f);
+        inventorySetupDone = false;
     }
 
     protected override void Awake()
     {
+        
         base.Awake();
         GameObject mainCanvas = FindAnyObjectByType<PlayerUIToggler>().gameObject;
-
         playerUIToggler = mainCanvas.GetComponent<PlayerUIToggler>();
 
-        //GameObject secondInventory = .gameObject;
+        inventory = FindAnyObjectByType<Inventory>();
 
-        Inventory testInventory = mainCanvas.GetComponentInChildren<Inventory>();
-        Debug.Log(testInventory);
+        foreach (Inventory inv in FindObjectsByType<Inventory>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            if (inv.isPlayerInventory)
+                inventory = inv;
+        }
+    }
 
-        //inventoryPanel = inventory.gameObject.GetComponentInChildren<RectTransform>();
+    protected override void Update()
+    {
+        base.Update();
+        if (isRandomized) { return; }
+
+        if (inventorySetupDone)
+        {
+            RandomizeInventoryLoot();
+        }
+        else
+        {
+            inventorySetupDone = true;
+        }
+
+        
     }
 
 
