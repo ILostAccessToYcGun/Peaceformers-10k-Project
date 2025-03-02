@@ -1,7 +1,6 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
@@ -30,8 +29,7 @@ public class InteractableInventory : BaseInteractable
 
     [SerializeField] Inventory inventory;
     [SerializeField] Vector2 inventorySize;
-    [SerializeField] Vector2 inventorySizeRangeX;
-    [SerializeField] Vector2 inventorySizeRangeY;
+    [SerializeField] Vector2 inventorySizeRange;
     [SerializeField] bool isRandomizingSize = true;
     [SerializeField] RectTransform inventoryPanel;
 
@@ -88,14 +86,10 @@ public class InteractableInventory : BaseInteractable
         inventory.DestroyInventory();
     }
 
-    public void RandomizeInventorySize(int maxX, int maxY, int minX = 1, int minY = 1)
+    public void RandomizeInventorySize(int width, int height)
     {
-        if (minX <= 0)
-            minX = 1;
-        if (minY <= 0)
-            minY = 1;
-        inventorySize.x = (int)Random.Range(minX, maxX + 1);
-        inventorySize.y = (int)Random.Range(minY, maxY + 1);
+        inventorySize.x = (int)Random.Range(1, width + 1);
+        inventorySize.y = (int)Random.Range(1, height + 1);
     }
 
     public void RandomizeInventoryLoot()
@@ -248,18 +242,23 @@ public class InteractableInventory : BaseInteractable
     private void Start()
     {
         if (isRandomizingSize)
-            RandomizeInventorySize((int)inventorySizeRangeX.y, (int)inventorySizeRangeY.y, (int)inventorySizeRangeX.x, (int)inventorySizeRangeY.x);
-        Invoke("RandomizeInventoryLoot", 1f);
+            RandomizeInventorySize((int)inventorySizeRange.x, (int)inventorySizeRange.y);
+        Invoke("RandomizeInventoryLoot", 0.1f);
     }
 
-    //protected override void Awake()
-    //{
-    //    base.Awake();
-    //    GameObject mainCanvas = FindAnyObjectByType<PlayerUIToggler>().gameObject;
-    //    playerUIToggler = mainCanvas.GetComponent<PlayerUIToggler>();
+    protected override void Awake()
+    {
+        base.Awake();
+        GameObject mainCanvas = FindAnyObjectByType<PlayerUIToggler>().gameObject;
 
-    //    //you're gonna have to set the secondary inventory manually bro
-    //}
+        playerUIToggler = mainCanvas.GetComponent<PlayerUIToggler>();
+
+        GameObject secondInventory = mainCanvas.GetComponentInChildren<Inventory>().gameObject;
+
+        inventory = secondInventory.GetComponent<Inventory>();
+
+        inventoryPanel = (secondInventory.GetComponentInChildren<GridLayoutGroup>().gameObject).GetComponent<RectTransform>();
+    }
 
 
 }
