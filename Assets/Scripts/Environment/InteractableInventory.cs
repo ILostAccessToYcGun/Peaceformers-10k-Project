@@ -247,21 +247,19 @@ public class InteractableInventory : BaseInteractable
 
     private void Start()
     {
-        
-
         if (isRandomizingSize)
             RandomizeInventorySize((int)inventorySizeRangeX.y, (int)inventorySizeRangeY.y, (int)inventorySizeRangeX.x, (int)inventorySizeRangeY.x);
         Invoke("RandomizeInventoryLoot", 1f);
     }
 
-    protected override void Awake()
-    {
-        base.Awake();
-        GameObject mainCanvas = FindAnyObjectByType<PlayerUIToggler>().gameObject;
-        playerUIToggler = mainCanvas.GetComponent<PlayerUIToggler>();
+    //protected override void Awake()
+    //{
+    //    base.Awake();
+    //    GameObject mainCanvas = FindAnyObjectByType<PlayerUIToggler>().gameObject;
+    //    playerUIToggler = mainCanvas.GetComponent<PlayerUIToggler>();
 
-        //you're gonna have to set the secondary inventory manually
-    }
+    //    //you're gonna have to set the secondary inventory manually bro
+    //}
 
 
 }
