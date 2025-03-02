@@ -143,7 +143,8 @@ MonoBehaviour:
   currentValue: 0
   inventory: {fileID: 0}
   inventorySize: {x: 0, y: 0}
-  inventorySizeRange: {x: 0, y: 0}
+  inventorySizeRangeX: {x: 3, y: 5}
+  inventorySizeRangeY: {x: 3, y: 5}
   isRandomizingSize: 1
   inventoryPanel: {fileID: 0}
 --- !u!1001 &2911599524309928492
