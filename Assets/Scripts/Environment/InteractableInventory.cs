@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
@@ -29,8 +30,7 @@ public class InteractableInventory : BaseInteractable
 
     [SerializeField] Inventory inventory;
     [SerializeField] Vector2 inventorySize;
-    [SerializeField] Vector2 inventorySizeRangeX; //minimum is x, maximum is y
-    [SerializeField] Vector2 inventorySizeRangeY;
+    [SerializeField] Vector2 inventorySizeRange;
     [SerializeField] bool isRandomizingSize = true;
     [SerializeField] RectTransform inventoryPanel;
 
@@ -87,12 +87,10 @@ public class InteractableInventory : BaseInteractable
         inventory.DestroyInventory();
     }
 
-    public void RandomizeInventorySize(int maxX, int maxY, int minX = 1, int minY = 1)
+    public void RandomizeInventorySize(int width, int height)
     {
-        if (minX <= 0) { minX = 1; }
-        if (minY <= 0) { minY = 1; }
-        inventorySize.x = (int)Random.Range(minX, maxX + 1);
-        inventorySize.y = (int)Random.Range(minY, maxY + 1);
+        inventorySize.x = (int)Random.Range(1, width + 1);
+        inventorySize.y = (int)Random.Range(1, height + 1);
     }
 
     public void RandomizeInventoryLoot()
@@ -256,11 +254,12 @@ public class InteractableInventory : BaseInteractable
 
         playerUIToggler = mainCanvas.GetComponent<PlayerUIToggler>();
 
-        GameObject secondInventory = mainCanvas.GetComponentInChildren<Inventory>().gameObject;
+        //GameObject secondInventory = .gameObject;
 
-        inventory = secondInventory.GetComponent<Inventory>();
+        Inventory testInventory = mainCanvas.GetComponentInChildren<Inventory>();
+        Debug.Log(testInventory);
 
-        inventoryPanel = (secondInventory.GetComponentInChildren<GridLayoutGroup>().gameObject).GetComponent<RectTransform>();
+        //inventoryPanel = inventory.gameObject.GetComponentInChildren<RectTransform>();
     }
 
 
