@@ -28,6 +28,8 @@ public class InteractableInventory : BaseInteractable
 
     [SerializeField] Inventory inventory;
     [SerializeField] Vector2 inventorySize;
+    [SerializeField] Vector2 inventorySizeRange;
+    [SerializeField] bool isRandomizingSize = true;
     [SerializeField] RectTransform inventoryPanel;
 
     protected override void OpenPrompt()
@@ -83,9 +85,17 @@ public class InteractableInventory : BaseInteractable
         inventory.DestroyInventory();
     }
 
+    public void RandomizeInventorySize(int width, int height)
+    {
+        inventorySize.x = (int)Random.Range(0, width + 1);
+        inventorySize.y = (int)Random.Range(0, height + 1);
+    }
+
     public void RandomizeInventoryLoot()
     {
         inventory.DestroyInventory();
+        //if (isRandomizingSize)
+        //    RandomizeInventorySize((int)inventorySizeRange.x, (int)inventorySizeRange.y);
         inventory.inventoryWidth = (int)inventorySize.x;
         inventory.inventoryHeight = (int)inventorySize.y;
         inventory.GenerateInventory(inventory.inventoryWidth, inventory.inventoryHeight, 100, 100);
@@ -200,15 +210,9 @@ public class InteractableInventory : BaseInteractable
                         itemInventory.Add(addingItem);
                         itemDet.Add(new Vector3(currentItem.stackAmount, currentItem.GetCurrentInventorySlot().inventoryPosition.x, currentItem.GetCurrentInventorySlot().inventoryPosition.y));
                     }
-
-
-
                 }
             }
         }
-
-        //loop through the inventory and find all the items inside
-        //then put them and their amounts into lists
     }
 
     protected override void InteractDistanceCheck()

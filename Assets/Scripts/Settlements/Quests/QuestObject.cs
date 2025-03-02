@@ -71,7 +71,7 @@ public class QuestObject : ScriptableObject
     public void RandomizeResourceRequirement(int min, int max)
     {
         SetResourceRequirement(Random.Range(min, max + 1));
-        Debug.Log(GetResourceRequirement());
+        //Debug.Log(GetResourceRequirement());
     }
 
     public void SetCompletionPercentage()
@@ -86,7 +86,7 @@ public class QuestObject : ScriptableObject
     public void RandomizeResource()
     {
         SetResource((Item.Name)Random.Range(0, 3));
-        Debug.Log(GetResource());
+        //Debug.Log(GetResource());
     }
 
 
@@ -96,7 +96,7 @@ public class QuestObject : ScriptableObject
     public void RandomizeGain(float minGain, float maxGain) // in %
     {
         SetUpKeepGain((Mathf.Floor(Random.Range(minGain * 10f, maxGain * 10f))) / 10f);
-        Debug.Log(GetUpKeepGain());
+        //Debug.Log(GetUpKeepGain());
     }
 
     #endregion
@@ -196,7 +196,7 @@ public class QuestObject : ScriptableObject
 
     private void Awake()
     {
-        Debug.Log("Roo");
+        //Debug.Log("Roo");
         SetTimeManager();
         SetCalenderManaager();
         SetUpQuest(1, 10);

@@ -11887,6 +11887,14 @@ PrefabInstance:
       propertyPath: interactionPrompt
       value: 
       objectReference: {fileID: 10167186}
+    - target: {fileID: 8729408628118176406, guid: 4b40f047afd3f6d40983f74c3fd22d0d, type: 3}
+      propertyPath: inventorySizeRange.x
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8729408628118176406, guid: 4b40f047afd3f6d40983f74c3fd22d0d, type: 3}
+      propertyPath: inventorySizeRange.y
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14832,6 +14840,14 @@ PrefabInstance:
       propertyPath: interactionPrompt
       value: 
       objectReference: {fileID: 10167186}
+    - target: {fileID: 8729408628118176406, guid: 4b40f047afd3f6d40983f74c3fd22d0d, type: 3}
+      propertyPath: inventorySizeRange.x
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8729408628118176406, guid: 4b40f047afd3f6d40983f74c3fd22d0d, type: 3}
+      propertyPath: inventorySizeRange.y
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
