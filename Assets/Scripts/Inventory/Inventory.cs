@@ -380,8 +380,10 @@ public class Inventory : MonoBehaviour
             }
             else
             {
-                GameObject added = Instantiate(itemToAdd.gameObject, findSlot.transform.position + new Vector3(0, 0, 1), findSlot.transform.rotation, parent.transform);
+                GameObject added = Instantiate(itemToAdd.gameObject, findSlot.transform.position, findSlot.transform.rotation, parent.transform);
                 added.transform.localScale = Vector3.one;
+                //added.transform.localPosition = new Vector3(added.transform.localPosition.x, added.transform.localPosition.y, -1f);
+                Debug.Log("added.transform.position = " + added.transform.position);
                 Item addedItem = added.GetComponent<Item>();
                 addedItem.currentInventory = this;
 
