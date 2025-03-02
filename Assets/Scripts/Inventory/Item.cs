@@ -220,7 +220,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
             }
         }
 
-        if (nearestDistance > 150f) //if the item is really far away from the inventory slot, probably dont do anything
+        if (nearestDistance > 125f) //if the item is really far away from the inventory slot, probably dont do anything
         {
             if (this.transform.position.x > currentInventory.inventoryPanel.gameObject.transform.position.x - currentInventory.inventoryPanel.sizeDelta.x / 2
                 && this.transform.position.x < currentInventory.inventoryPanel.gameObject.transform.position.x + currentInventory.inventoryPanel.sizeDelta.x / 2
@@ -325,6 +325,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
                                         isStacking = false;
                                         isKeepHolding = true;
                                         isTrashing = false;
+                                        nearestDistance = compareDistance;
                                         stackingItem = slot.GetHeldItem();
                                         overspillAmount = (stackingItem.stackAmount + stackAmount) - stackingItem.stackLimit;
                                         DecreaseStackAmount(stackingItem.stackLimit - stackingItem.stackAmount);
@@ -351,8 +352,9 @@ public class Item : MonoBehaviour, IPointerClickHandler
                                     isStacking = false;
                                     isKeepHolding = true;
                                     isTrashing = false;
+                                    nearestDistance = compareDistance;
                                     stackingItem = slot.GetHeldItem();
-                                    int tempHold = stackingItem.stackAmount;
+                                    int tempHold = stackingItem.stackAmount; //2
 
                                     stackingItem.SetStackAmount(stackAmount);
                                     SetStackAmount(tempHold);
@@ -382,7 +384,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
         }
 
         //Move
-        if (nearestDistance > 150) //if the item is really far away from the inventory slot, probably dont do anything
+        if (nearestDistance > 125f) //if the item is really far away from the inventory slot, probably dont do anything
         {
             //check if the item's location is still inside the current inventory   
             if (this.transform.position.x > currentInventory.inventoryPanel.gameObject.transform.position.x - currentInventory.inventoryPanel.sizeDelta.x / 2 

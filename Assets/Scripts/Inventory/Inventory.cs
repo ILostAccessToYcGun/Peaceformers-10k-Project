@@ -443,9 +443,14 @@ public class Inventory : MonoBehaviour
         int searchOverspill = addedItem.SearchAndMoveToNearestInventorySlot();
 
         //if this returns a value that is greater than 0 should return the overspill value
-        if (searchOverspill >= 0)
+        if (searchOverspill == 0)
         {
             returnOverspill = searchOverspill;
+        }
+        else if (searchOverspill > 0)
+        {
+            returnOverspill = searchOverspill;
+            Destroy(added);
         }
 
         if (amount > addedItem.stackLimit)
