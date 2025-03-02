@@ -98,6 +98,8 @@ public class InteractableInventory : BaseInteractable
             int randX = 0;
             int randY = 0;
 
+            int overspillValue = -1;
+
             do
             {
                 int itemSelect = Random.Range(0, itemSelection.Count); //choose a random item from our selection to add
@@ -118,11 +120,24 @@ public class InteractableInventory : BaseInteractable
                     actualAmount = itemAmount;
                 }
                 //Debug.Log("actualAmount: " + actualAmount);
+                overspillValue = inventory.AddItemToInventory(addingItem, actualAmount, randX, randY);
+                if (overspillValue > 0)
+                {
+                    if (addingItem.itemName == Item.Name.AmmoCrate)
+                    {
+                        currentValue -= (int)(overspillValue * 0.25f);
+                    }
+                    else
+                    {
+                        currentValue -= overspillValue; //debug the overspill more, we dont get the exact item value back, but it probably doesnt have to be exact
+                    }
+                    
+                }
             }
-            while (inventory.AddItemToInventory(addingItem, actualAmount, randX, randY) == false);
+            while (overspillValue < 0);
             
             currentValue += itemAmount;
-            Debug.Log("currentValue: " + currentValue);
+            //Debug.Log("currentValue: " + currentValue);
 
             itemInventory.Add(addingItem);
             itemDet.Add(new Vector3(actualAmount, randX, randY));

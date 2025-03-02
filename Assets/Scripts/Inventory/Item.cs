@@ -61,8 +61,21 @@ public class Item : MonoBehaviour, IPointerClickHandler
                     Item droppedItem = dropped.GetComponent<Item>();
                     droppedItem.SetStackAmount(1);
                     droppedItem.UpdateStackText();
-                    if (droppedItem.SearchForNearestValidInventorySlot())
+                    if (droppedItem.SearchForNearestValidInventorySlot() == 1)
                         droppedItem.SearchAndMoveToNearestInventorySlot();
+                    else if (droppedItem.SearchForNearestValidInventorySlot() == 2)
+                    {
+                        if (player != null)
+                        {
+                            InstantiateWorldObject(1, false);
+                            Destroy(dropped.gameObject);
+                        }
+                    }
+                    else
+                    {
+                        IncreaseStackAmount(1);
+                        Destroy(dropped.gameObject);
+                    }
                     this.ItemComponentSetSiblingLast();
                 }
                 else //if we right click without item in hand SPLIT
@@ -130,11 +143,11 @@ public class Item : MonoBehaviour, IPointerClickHandler
     #endregion
 
     #region _Inventory_
-    public bool SearchForNearestValidInventorySlot()
+    public int SearchForNearestValidInventorySlot()
     {
         //Search
         InventorySlot[] inventorySlots = FindObjectsByType<InventorySlot>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        if (inventorySlots.Length < 1) { return false; }
+        if (inventorySlots.Length < 1) { return 0; }
 
         float nearestDistance = 300f;
 
@@ -170,17 +183,20 @@ public class Item : MonoBehaviour, IPointerClickHandler
                             {
                                 for (int w = (int)slotPosition.x; w < (int)slotPosition.x + itemWidth; w++)
                                 {
-                                    Item currentItem = currentInventory.inventory[h][w].GetHeldItem();
-                                    if (currentItem != null) //if there is something inside the checking cells
+                                    if (currentInventory.inventory != null)
                                     {
-                                        if (w == (int)slotPosition.x && h == (int)slotPosition.y)
-                                        //if (h == (int)startPos.y)
+                                        Item currentItem = currentInventory.inventory[h][w].GetHeldItem();
+                                        if (currentItem != null) //if there is something inside the checking cells
                                         {
-                                            if (currentItem.itemName == this.itemName && currentItem.stackAmount < currentItem.stackLimit) //hmmm will need some work
-                                                firstCellisLikeItem = true;
+                                            if (w == (int)slotPosition.x && h == (int)slotPosition.y)
+                                            //if (h == (int)startPos.y)
+                                            {
+                                                if (currentItem.itemName == this.itemName && currentItem.stackAmount < currentItem.stackLimit) //hmmm will need some work
+                                                    firstCellisLikeItem = true;
+                                            }
+                                            else
+                                                itemDoesNotCollideWithOtherItems = false;
                                         }
-                                        else
-                                            itemDoesNotCollideWithOtherItems = false;
                                     }
                                 }
                             }
@@ -203,20 +219,32 @@ public class Item : MonoBehaviour, IPointerClickHandler
             }
         }
 
-        if (nearestDistance > 200f) //if the item is really far away from the inventory slot, probably dont do anything
-            return false;
+        if (nearestDistance > 150f) //if the item is really far away from the inventory slot, probably dont do anything
+        {
+            if (this.transform.position.x > currentInventory.inventoryPanel.gameObject.transform.position.x - currentInventory.inventoryPanel.sizeDelta.x / 2
+                && this.transform.position.x < currentInventory.inventoryPanel.gameObject.transform.position.x + currentInventory.inventoryPanel.sizeDelta.x / 2
+                && this.transform.position.y > currentInventory.inventoryPanel.gameObject.transform.position.y - currentInventory.inventoryPanel.sizeDelta.y / 2
+                && this.transform.position.y < currentInventory.inventoryPanel.gameObject.transform.position.y + currentInventory.inventoryPanel.sizeDelta.y / 2)
+            {
+                return 0;
+            }
+            else
+            {
+                return 2;
+            }
+        }
         else
         {
-            return true;
+            return 1;
         }
     }
 
-    public void SearchAndMoveToNearestInventorySlot()
+    public int SearchAndMoveToNearestInventorySlot()
     {
         //Search
         //InventorySlot[] inventorySlots = FindObjectsByType<InventorySlot>(FindObjectsSortMode.None);
         InventorySlot[] inventorySlots = FindObjectsByType<InventorySlot>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        if (inventorySlots.Length < 1) { return; }
+        if (inventorySlots.Length < 1) { return -1; }
 
         InventorySlot nearestInventorySlot = inventorySlots[0];
         float nearestDistance = 300f;
@@ -226,6 +254,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
         bool isTrashing = false;
         Item stackingItem = inventorySlots[0].GetHeldItem();
 
+        int overspillAmount = 0;
         if (inventorySlots.Length > 1) //if there is more than one inventory slot on screen, find the closest
         {
             float compareDistance; 
@@ -296,7 +325,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
                                         isKeepHolding = true;
                                         isTrashing = false;
                                         stackingItem = slot.GetHeldItem();
-
+                                        overspillAmount = stackingItem.stackLimit - stackingItem.stackAmount;
                                         DecreaseStackAmount(stackingItem.stackLimit - stackingItem.stackAmount);
                                         UpdateStackText();
 
@@ -326,6 +355,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
 
                                     stackingItem.SetStackAmount(stackAmount);
                                     SetStackAmount(tempHold);
+                                    overspillAmount = tempHold;
 
                                     stackingItem.UpdateStackText();
                                     UpdateStackText();
@@ -395,7 +425,6 @@ public class Item : MonoBehaviour, IPointerClickHandler
                 {
                     InstantiateWorldObject(stackAmount);
                 }
-                
             } 
         }
         else
@@ -414,7 +443,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
             if (isTrashing)
             {
                 OnDestroy();
-                return;
+                return overspillAmount;
             }
             if (isStacking)
             {
@@ -426,11 +455,14 @@ public class Item : MonoBehaviour, IPointerClickHandler
             else
             {
                 if (isKeepHolding)
-                    PickUpItemInInventory();
+                    PickUpItemInInventory(); 
+                //normally when we stack and we have overspill we pick it back up, but when generating inventories we cant pick it back up
+                //i need a feedback loop to return a value to tell the method if we had overspill, and if we did, we reroll a new item with that value
                 else
                     AddComponentSlots(inventorySlots);
             }
         }
+        return overspillAmount;
     }
 
     public void AddComponentSlots(InventorySlot[] inventorySlots)
@@ -465,13 +497,14 @@ public class Item : MonoBehaviour, IPointerClickHandler
         componentSlots.Clear();
     }
 
-    public void InstantiateWorldObject(int worldStackAmount)
+    public void InstantiateWorldObject(int worldStackAmount, bool isDestroy = true)
     {
         GameObject newDroppedItem = Instantiate(worldItem.gameObject, player.transform.position + new Vector3(0, 2f, 0), player.transform.rotation);
         WorldItem newWorldItem = newDroppedItem.GetComponent<WorldItem>();
 
         newWorldItem.InitializeWorldObject(worldStackAmount, 0, 0);
-        OnDestroy();
+        if (isDestroy)
+            OnDestroy();
     }
 
     public InventorySlot GetCurrentInventorySlot() { return currentInventorySlot; }
