@@ -121,6 +121,7 @@ public class InteractableInventory : BaseInteractable
                 }
                 //Debug.Log("actualAmount: " + actualAmount);
                 overspillValue = inventory.AddItemToInventory(addingItem, actualAmount, randX, randY);
+                Debug.Log(addingItem.itemName + "Amount: " + actualAmount + ". overspillValue: " + overspillValue);
                 if (overspillValue > 0)
                 {
                     if (addingItem.itemName == Item.Name.AmmoCrate)
@@ -129,7 +130,8 @@ public class InteractableInventory : BaseInteractable
                     }
                     else
                     {
-                        currentValue -= overspillValue; //debug the overspill more, we dont get the exact item value back, but it probably doesnt have to be exact
+                        currentValue -= overspillValue; 
+                        //debug the overspill more, we dont get the exact item value back, but it probably doesnt have to be exact
                     }
                     
                 }

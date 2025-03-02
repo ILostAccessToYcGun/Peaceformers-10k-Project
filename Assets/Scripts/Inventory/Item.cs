@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -126,19 +127,19 @@ public class Item : MonoBehaviour, IPointerClickHandler
                 currentInventorySlot.ClearHeldItem();
                 ClearComponentSlots();
                 SetParentInventoryObject(null);
-                //this.transform.SetAsLastSibling();
+                this.ItemComponentSetSiblingLast();
             }
         }
         else
             SearchAndMoveToNearestInventorySlot();
 
-        this.ItemComponentSetSiblingLast();
+        
     }
 
     public void MoveToMouse()
     {
         if (itemIsPickedUpByMouse)
-            transform.position = Input.mousePosition;
+            transform.position = new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.z);
     }
     #endregion
 
@@ -431,8 +432,10 @@ public class Item : MonoBehaviour, IPointerClickHandler
         {
             //Debug.Log("next");
             currentInventorySlot = nearestInventorySlot;
+
             if (currentInventorySlot != null)
                 previousInventorySlot = currentInventorySlot;
+
             transform.position = currentInventorySlot.transform.position;
             currentInventorySlot.currentHeldItem = this; //need to do more with this
             currentInventorySlot.SetHeldItem(this);
@@ -482,6 +485,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
                 }
             }
         }
+        PlaceDownItem();
     }
 
     public void ClearComponentSlots()
@@ -586,8 +590,22 @@ public class Item : MonoBehaviour, IPointerClickHandler
         foreach (ItemComponent component in itemComponents)
         {
             component.transform.SetAsLastSibling();
+            component.transform.position = new Vector3(component.transform.position.x, component.transform.position.y, 1f);
         }
         this.transform.SetAsLastSibling();
+        this.gameObject.transform.position = new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y, 1f);
+        Debug.Log("hmmmm" + this.gameObject.transform.position);
+    }
+
+    public void PlaceDownItem()
+    {
+        
+        foreach (ItemComponent component in itemComponents)
+        {
+            component.transform.position = new Vector3(component.transform.position.x, component.transform.position.y, -1f);
+            Debug.Log(component.transform.position);
+        }
+        this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -1f);
     }
 
 
