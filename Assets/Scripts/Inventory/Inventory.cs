@@ -78,8 +78,8 @@ public class Inventory : MonoBehaviour
                 && cell.transform.position.y > inventoryPanel.gameObject.transform.position.y - inventoryPanel.sizeDelta.y / 2
                 && cell.transform.position.y < inventoryPanel.gameObject.transform.position.y + inventoryPanel.sizeDelta.y / 2)
                 {
-                    Debug.Log("Height " + inventory.Count + " Width " + inventory[0].Count);
-                    Debug.Log("inventoryPosY " + cell.inventoryPosition.y + " inventoryPosX " + cell.inventoryPosition.x);
+                    //Debug.Log("Height " + inventory.Count + " Width " + inventory[0].Count);
+                    //Debug.Log("inventoryPosY " + cell.inventoryPosition.y + " inventoryPosX " + cell.inventoryPosition.x);
                     
                     if ((int)cell.inventoryPosition.y < inventoryHeight && (int)cell.inventoryPosition.x < inventoryWidth)
                     {
@@ -105,7 +105,7 @@ public class Inventory : MonoBehaviour
         #region _List_Size_
         //look at milinote for a diagram of the lists
         inventory.Capacity = height;
-        Debug.Log("height = " + inventory.Capacity);
+        //Debug.Log("height = " + inventory.Capacity);
 
         for (int j = 0; j < inventory.Capacity; j++)
         {
@@ -225,7 +225,7 @@ public class Inventory : MonoBehaviour
 
     public InventorySlot FindPartialyFilledItemOrEmptySlot(Item itemToFind)
     {
-        Debug.Log(itemToFind.itemName);
+        //Debug.Log(itemToFind.itemName);
         //finding partially filled, has prio over empty slot
         for (int j = 0; j < inventory.Capacity; j++)
         {
@@ -236,7 +236,7 @@ public class Inventory : MonoBehaviour
                 {
                     if (slot.GetHeldItem().itemName == itemToFind.itemName && slot.GetHeldItem().stackAmount < slot.GetHeldItem().stackLimit)
                     {
-                        Debug.Log("Existing Item found");
+                        //Debug.Log("Existing Item found");
                         return slot;
                     }
                 }
@@ -413,13 +413,14 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public bool AddItemToInventory(Item itemToAdd, int amount, int x, int y)
+    public int AddItemToInventory(Item itemToAdd, int amount, int x, int y)
     {
+        int returnOverspill = -1;
         InventorySlot findSlot = FindInventorySlotByGrid(x, y);
         if (findSlot == null)
         {
             AddItemToInventory(itemToAdd, amount);
-            return false;
+            return returnOverspill;
         }
 
         GameObject added = Instantiate(itemToAdd.gameObject, findSlot.transform.position + new Vector3(0, 0, 1), findSlot.transform.rotation, parent.transform);
@@ -429,16 +430,20 @@ public class Inventory : MonoBehaviour
 
         addedItem.SetStackAmount(amount);
 
-        if (!addedItem.SearchForNearestValidInventorySlot())
+        if (addedItem.SearchForNearestValidInventorySlot() == 0 || addedItem.SearchForNearestValidInventorySlot() == 2)
         {
             Debug.Log("bad spot try again");
             Destroy(added);
-            return false;
+            return returnOverspill;
         }
 
-        addedItem.SearchAndMoveToNearestInventorySlot();
+        int searchOverspill = addedItem.SearchAndMoveToNearestInventorySlot();
 
-
+        //if this returns a value that is greater than 0 should return the overspill value
+        if (searchOverspill >= 0)
+        {
+            returnOverspill = searchOverspill;
+        }
 
         if (!inventoryPanel.gameObject.activeSelf)
             added.SetActive(false);
@@ -448,7 +453,7 @@ public class Inventory : MonoBehaviour
             Debug.Log("we should be updating the quests");
             playerQuestBoard.UpdateQuests();
         }
-        return true;
+        return returnOverspill;
     }
 
 
