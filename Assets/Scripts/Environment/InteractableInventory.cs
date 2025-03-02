@@ -87,15 +87,13 @@ public class InteractableInventory : BaseInteractable
 
     public void RandomizeInventorySize(int width, int height)
     {
-        inventorySize.x = (int)Random.Range(0, width + 1);
-        inventorySize.y = (int)Random.Range(0, height + 1);
+        inventorySize.x = (int)Random.Range(1, width + 1);
+        inventorySize.y = (int)Random.Range(1, height + 1);
     }
 
     public void RandomizeInventoryLoot()
     {
         inventory.DestroyInventory();
-        //if (isRandomizingSize)
-        //    RandomizeInventorySize((int)inventorySizeRange.x, (int)inventorySizeRange.y);
         inventory.inventoryWidth = (int)inventorySize.x;
         inventory.inventoryHeight = (int)inventorySize.y;
         inventory.GenerateInventory(inventory.inventoryWidth, inventory.inventoryHeight, 100, 100);
@@ -242,6 +240,8 @@ public class InteractableInventory : BaseInteractable
 
     private void Start()
     {
+        if (isRandomizingSize)
+            RandomizeInventorySize((int)inventorySizeRange.x, (int)inventorySizeRange.y);
         Invoke("RandomizeInventoryLoot", 0.1f);
     }
 
