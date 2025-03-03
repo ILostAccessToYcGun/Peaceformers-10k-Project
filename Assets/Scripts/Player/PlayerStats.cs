@@ -17,13 +17,14 @@ public class PlayerStats : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// Pass in the name of the variable you want to change, and then by how much.
+    /// Just make it a negative number to subtract
     /// </summary>
-    /// <param name="index"></param>
+    /// <param name="name">HP, ATK, SPD, INV_SIZE</param>
     /// <param name="amount"></param>
-    void ModifyStat(int index, float amount)
+    void ModifyStat(string name, float amount)
     {
-        stats[index] += amount;
+        stats[name] += amount;
     }
 
     void ResetStats()
