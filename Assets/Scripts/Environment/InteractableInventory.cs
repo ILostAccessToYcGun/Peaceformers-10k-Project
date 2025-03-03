@@ -249,7 +249,7 @@ public class InteractableInventory : BaseInteractable
     private void Start()
     {
         if (isRandomizingSize)
-            RandomizeInventorySize((int)inventorySizeRangeX.y, (int)inventorySizeRangeY.y, (int)inventorySizeRangeX.x, (int)inventorySizeRangeY.x);
+            RandomizeInventorySize((int)inventorySizeRangeX.x, (int)inventorySizeRangeY.x, (int)inventorySizeRangeX.y, (int)inventorySizeRangeY.y);
         Invoke("RandomizeInventoryLoot", 0.1f);
     }
 
@@ -262,8 +262,8 @@ public class InteractableInventory : BaseInteractable
 
         //GameObject secondInventory = .gameObject;
 
-        Inventory testInventory = mainCanvas.GetComponentInChildren<Inventory>();
-        Debug.Log(testInventory);
+        //Inventory testInventory = mainCanvas.GetComponentInChildren<Inventory>();
+        //Debug.Log(testInventory);
 
         //inventoryPanel = inventory.gameObject.GetComponentInChildren<RectTransform>();
     }
