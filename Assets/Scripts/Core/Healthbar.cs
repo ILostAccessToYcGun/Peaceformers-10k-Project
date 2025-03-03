@@ -45,6 +45,10 @@ public class Healthbar : MonoBehaviour
         UpdateHealthbar();
     }
 
+    public float GetCurrentHealth() { return currentHealth; }
+    public void SetMaxHealth(float newMaxHealth) { maxHealth = newMaxHealth; }
+    public float GetMaxHealth() { return maxHealth; }
+
     private void UpdateHealthbar()
     {
         float healthRatio = currentHealth / maxHealth;

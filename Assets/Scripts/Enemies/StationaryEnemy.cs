@@ -46,7 +46,7 @@ public class StationaryEnemy : MonoBehaviour
         }
     }
 
-    void DetectPlayer()
+    void DetectPlayer() //we also want to detect other settlements or other settlement's enemies
     {
         if (Vector3.Distance(transform.position, target.position) <= detectionRange)
         {
@@ -133,6 +133,7 @@ public class StationaryEnemy : MonoBehaviour
             GameObject b = Instantiate(bulletPrefab, barrel.position, barrel.rotation);
             b.GetComponent<Rigidbody>().linearVelocity = barrel.right * bulletForce;
             b.GetComponent<Bullet>().baseDmg = baseDmg;
+            b.GetComponent<Bullet>().source = transform;
 
             Destroy(b, 5f);
 

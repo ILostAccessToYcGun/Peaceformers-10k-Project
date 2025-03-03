@@ -15,26 +15,22 @@ public class QuestGiver : MonoBehaviour
      *  into the right spots and instantiate the right quest objects
      *  
      * this other script will be very similar to the QuestBoard script, but different because of the different layout
-     
-     
-     
      */
 
-    //this script will be given to the settlements
     [SerializeField] Settlement currentSettlement;
     [SerializeField] SettlementQuestBoard settlementQuestBoard;
-    //[SerializeField] Slider settlementUpKeepMeter;
-    //[SerializeField] Image settlementIcon;
-    //[SerializeField] float currentSettlementMaxUpkeep;
+    [SerializeField] QuestBoard playerQuestBoard;
 
     public enum QuestStatus { InProgress, Completed } //????
     [SerializeField] List<QuestObject> quests;
     //[SerializeField] GameObject baseQuestUI;
     [SerializeField] QuestObject baseQuestObject;
 
+    [SerializeField] PlayerUIToggler playerUIToggler;
+
     public void AddQuestToGiver(QuestObject newObject = null)
-    {
-        Debug.Log(baseQuestObject);
+    {   
+        //Debug.Log("add quest");
         if (newObject == null)
         {
             newObject = Instantiate(baseQuestObject, this.transform);
@@ -43,11 +39,20 @@ public class QuestGiver : MonoBehaviour
             //newObject.SetResourceCount(Random.Range(0, newObject.GetResourceRequirement()));
         }
 
+        Debug.Log("Quest accepted");
+        newObject.SetState(QuestObject.QuestState.InProgress);
+        playerQuestBoard.AddQuestToBoard(newObject);
+        playerQuestBoard.UpdateQuests();
+        settlementQuestBoard.AddQuestToBoard(newObject);
+        settlementQuestBoard.UpdateQuests();
+            //correspondingPlayerBoardDisplay = otherQuestBoard.AddQuestToBoard(this.questObject);
+
+
         quests.Add(newObject);
 
         if (settlementQuestBoard.GetCurrentViewingSettlement() == currentSettlement)
         {
-            settlementQuestBoard.SetQuests(quests);
+            //settlementQuestBoard.SetQuests(quests);
         }
 
     }
@@ -66,7 +71,7 @@ public class QuestGiver : MonoBehaviour
                 {
                     currentSettlement.GainMeter(removeObject.GetUpKeepGain() * removeObject.GetResourceCount() / removeObject.GetResourceRequirement());
                     quests.Remove(removeObject);
-                    Destroy(removeObject); //huh 
+                    //Destroy(removeObject); //huh 
                 }
                 else
                 {
@@ -80,18 +85,17 @@ public class QuestGiver : MonoBehaviour
         }
     }
 
-
-
-    //the idea is that this is one piece of UI that will switch which settlement to look at based on which one you interact with.
     public void SetSettlement() { currentSettlement = GetComponent<Settlement>(); }
     public Settlement GetSettlement() { return currentSettlement; }
 
     public void ToggleSettlementQuestBoardVisibility()
     {
-        if (settlementQuestBoard.gameObject.activeSelf)
+        if (playerUIToggler.GetSettlementQuestBool())
         {
             settlementQuestBoard.ResetCurrentViewingSettlement();
-            settlementQuestBoard.gameObject.SetActive(false);
+            playerUIToggler.ToggleSettlementQuestUI();
+            //settlementQuestBoard.gameObject.SetActive(false);
+            settlementQuestBoard.ClearQuestBoard();
         }
             
         else
@@ -99,12 +103,16 @@ public class QuestGiver : MonoBehaviour
             //pass in the quests list and remake the settlement quest board based on it
             settlementQuestBoard.SetCurrentViewingSettlement(this);
             settlementQuestBoard.SetQuests(quests);
-            Debug.Log("twice?");
-            settlementQuestBoard.gameObject.SetActive(true);
+            playerUIToggler.ToggleSettlementQuestUI();
+            //settlementQuestBoard.gameObject.SetActive(true);
         }
             
     }
 
+    private void Start()
+    {
+        playerUIToggler = FindAnyObjectByType<PlayerUIToggler>();
+    }
     private void Awake()
     {
         //settlementQuestBoard = FindAnyObjectByType<SettlementQuestBoard>();

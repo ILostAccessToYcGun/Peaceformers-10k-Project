@@ -15,6 +15,7 @@ public class QuestObject : ScriptableObject
     public DayNightCycleManager time;
     public CalendarManger calendar;
     public QuestDisplay correspondingPlayerQuestDisplayUI;
+    public QuestDisplay correspondingSettlementQuestDisplayUI;
     [Space]
     [Header("Completion")]
     [SerializeField] public QuestState state;
@@ -49,6 +50,9 @@ public class QuestObject : ScriptableObject
     public void SetCorrespondingPlayerQuestDisplayUI(QuestDisplay newDisplay) { correspondingPlayerQuestDisplayUI = newDisplay; }
     public QuestDisplay GetCorrespondingPlayerQuestDisplayUI() { return correspondingPlayerQuestDisplayUI; }
 
+    public void SetCorrespondingSettlementQuestDisplayUI(QuestDisplay newDisplay) { correspondingSettlementQuestDisplayUI = newDisplay; }
+    public QuestDisplay GetCorrespondingSettlementQuestDisplayUI() { return correspondingSettlementQuestDisplayUI; }
+
     #endregion
 
     #region _Completion_
@@ -67,7 +71,7 @@ public class QuestObject : ScriptableObject
     public void RandomizeResourceRequirement(int min, int max)
     {
         SetResourceRequirement(Random.Range(min, max + 1));
-        Debug.Log(GetResourceRequirement());
+        //Debug.Log(GetResourceRequirement());
     }
 
     public void SetCompletionPercentage()
@@ -82,7 +86,7 @@ public class QuestObject : ScriptableObject
     public void RandomizeResource()
     {
         SetResource((Item.Name)Random.Range(0, 3));
-        Debug.Log(GetResource());
+        //Debug.Log(GetResource());
     }
 
 
@@ -92,7 +96,7 @@ public class QuestObject : ScriptableObject
     public void RandomizeGain(float minGain, float maxGain) // in %
     {
         SetUpKeepGain((Mathf.Floor(Random.Range(minGain * 10f, maxGain * 10f))) / 10f);
-        Debug.Log(GetUpKeepGain());
+        //Debug.Log(GetUpKeepGain());
     }
 
     #endregion
@@ -130,8 +134,11 @@ public class QuestObject : ScriptableObject
             suffix = "th";
 
         description = "Collect " + resourcesRequired + " " + desiredResourceName + " and Deliver to " + parentSettlement.GetSettlementName()
-            + " before " + timeDue.x + ":" + (timeDue.y < 10 ? "0" : "") + timeDue.y + " on the " + dayDue + suffix + " of November.\n\n" +
-            "Will add " + GetUpKeepGain() +  "% to the settlement's upkeep meter";
+            + " before the " + dayDue + suffix + " of November.\n\n" + "Will add " + GetUpKeepGain() +  "% to the settlement's upkeep meter";
+
+        //description = "Collect " + resourcesRequired + " " + desiredResourceName + " and Deliver to " + parentSettlement.GetSettlementName()
+        //    + " before " + timeDue.x + ":" + (timeDue.y < 10 ? "0" : "") + timeDue.y + " on the " + dayDue + suffix + " of November.\n\n" +
+        //    "Will add " + GetUpKeepGain() + "% to the settlement's upkeep meter";
     }
 
     public string GetDescription() { return description; }
@@ -141,13 +148,12 @@ public class QuestObject : ScriptableObject
 
     public void SetUpQuest(int minResource, int maxResource)
     {
-
         //SetParentSettlement();
         SetState(QuestState.Avalible);
         RandomizeResource();
         RandomizeResourceRequirement(minResource, maxResource);
-        RandomizeDayDue(3, 5);
-        RandomizeGain(10, 30);
+        RandomizeDayDue(3, 4);
+        RandomizeGain(10, 30);  
         SetDescription(); //kinda pointless here
     }
 
@@ -190,7 +196,7 @@ public class QuestObject : ScriptableObject
 
     private void Awake()
     {
-        Debug.Log("Roo");
+        //Debug.Log("Roo");
         SetTimeManager();
         SetCalenderManaager();
         SetUpQuest(1, 10);

@@ -8,6 +8,7 @@ TagManager:
   - Settlement
   - Bullet
   - Camp
+  - EnemyCamp
   layers:
   - Default
   - TransparentFX

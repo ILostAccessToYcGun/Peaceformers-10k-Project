@@ -25,24 +25,31 @@ public class Settlement : BaseInteractable
     [SerializeField] private Color criticalColor;
     [SerializeField] private QuestGiver questGiver;
 
-    protected virtual void Awake()
+
+    [SerializeField] public bool panicEnemiesGO;
+    [SerializeField] public bool currentlyEndangered;
+
+
+
+    protected override void Awake()
     {
         base.Awake();
         questGiver = GetComponent<QuestGiver>();
     }
-    protected virtual void Start()
+    protected void Start()
     {
         nametag.text = settlementName;
         transform.name = settlementName;
         currentUpkeep = maxUpkeep;
     }
 
-    void Update()
+    protected override void Update()
     {
         if (!stationary) 
         {
             currentStayTime = 0;
-            currentUpkeep -= lossRate * Time.deltaTime;
+            if (!currentlyEndangered)
+                currentUpkeep -= lossRate * Time.deltaTime;
         }
         else
         { 
@@ -70,6 +77,8 @@ public class Settlement : BaseInteractable
             upkeepMeter.color = watchOutColor;
         else //critical
             upkeepMeter.color = criticalColor;
+
+        CheckEndangerment();
     }
 
     public void GainMeter(float value)
@@ -88,6 +97,22 @@ public class Settlement : BaseInteractable
     {
         print("Open QuestGiver prompt");
         questGiver.ToggleSettlementQuestBoardVisibility();
+    }
+
+    protected void CheckEndangerment()
+    {
+        if (panicEnemiesGO) { return; } //if we got enemies we dont care about the endagerment, because the player will fix that. right?
+        //this gets set to false after the panic enemies are defeated AND the settlement is back to above 25%
+        //the DayManager is where this gets set. 
+
+        if (currentUpkeep <= 25)
+        {
+            currentlyEndangered = true;
+        }
+        else
+        {
+            currentlyEndangered = false;
+        }
     }
 
     public string GetSettlementName() { return settlementName; }
