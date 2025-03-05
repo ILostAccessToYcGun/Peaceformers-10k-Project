@@ -11547,8 +11547,9 @@ MonoBehaviour:
   - {fileID: 4306798957387617246, guid: f2bcb506a096c484cb30db8c4f6f0ef6, type: 3}
   - {fileID: 4306798957387617246, guid: 7957ab5b60400064b850ba00a1f9afbf, type: 3}
   - {fileID: 4306798957387617246, guid: a6746c55e8dc8d748888853077208dc6, type: 3}
-  nodeAlive: 0
-  nodeLimit: 3000
+  nodesAlive: 0
+  nodeLimit: 300
+  currentSpawnAttempts: 0
 --- !u!4 &1703625641
 Transform:
   m_ObjectHideFlags: 0

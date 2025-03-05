@@ -6,10 +6,10 @@ public class MapDirector : MonoBehaviour
     [SerializeField] List<GameObject> resourceNodeSelection;
     [Space]
     [Header("Node Info")]
-    [SerializeField] int nodeAlive;
+    [SerializeField] public int nodesAlive;
     [SerializeField] int nodeLimit;
-
-    LayerMask checkMasks;
+    [SerializeField] int currentSpawnAttempts;
+    //LayerMask checkMasks;
 
     private GameObject SelectRandomNode()
     {
@@ -22,14 +22,14 @@ public class MapDirector : MonoBehaviour
     {
         RaycastHit hit;
 
-        bool rayHit = Physics.SphereCast(transform.position, 3f, -transform.up, out hit, 100f, checkMasks);
+        bool rayHit = Physics.SphereCast(transform.position, 2f, -transform.up, out hit, 100f);
 
-        Debug.Log(rayHit);
+        //Debug.Log(hit.collider.gameObject.layer);
 
         // Does the ray intersect any objects excluding the player layer
         if (rayHit)
         {
-            
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
             return hit.point;
         }
         return new Vector3(0, 100, 0);
@@ -58,21 +58,26 @@ public class MapDirector : MonoBehaviour
         if (randomNode == null || location == new Vector3(0, 100, 0)) { return false; }
 
         GameObject newNode = Instantiate(randomNode, location, Quaternion.identity);
-        ++nodeAlive;
+
+        currentSpawnAttempts = 0;
         return true;
     }
 
     public void GenerateNodes()
     {
         FindAliveNodes();
-        if (nodeAlive >= nodeLimit) { return; }
-        for (int i = nodeAlive; i < nodeLimit; i++)
+        if (nodesAlive >= nodeLimit) { return; }
+        currentSpawnAttempts = 0;
+        for (int i = nodesAlive; i < nodeLimit; i++)
         {
+            if (currentSpawnAttempts >= 1000) { break; }
             
+
             SelectRandomLocation();
             if (!SpawnNode())
             {
                 i--;
+                ++currentSpawnAttempts;
             }
             
         }
@@ -81,7 +86,7 @@ public class MapDirector : MonoBehaviour
     public void FindAliveNodes()
     {
         ResourceNode[] foundNodes = FindObjectsByType<ResourceNode>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
-        nodeAlive = foundNodes.Length;
+        nodesAlive = foundNodes.Length;
     }
 
     public void DestroyWorldItems()
@@ -92,15 +97,5 @@ public class MapDirector : MonoBehaviour
         {
             Destroy(itemsOnTheGround[i].gameObject);
         }
-    }
-
-    private void Start()
-    {
-        checkMasks = LayerMask.GetMask("Ground");
-    }
-
-    private void Update()
-    {
-        Debug.DrawRay(transform.position, -transform.up * 100f, Color.cyan);
     }
 }
