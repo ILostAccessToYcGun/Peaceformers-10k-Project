@@ -13,30 +13,31 @@ public class DayNightCycleManager : MonoBehaviour
     //17.5s per hour
     //2.91666s per 10 minutes
     //0.29166s per minute
-    public bool updateTime = true;
+    [SerializeField] bool updateTime = true;
     [Space]
-    public CalendarManger cm;
+    [SerializeField] CalendarManger cm;
+    [SerializeField] MapDirector md;
 
     public enum twelveHour { AM, PM }
-    public twelveHour twelveHourClock = twelveHour.AM;
+    [SerializeField] twelveHour twelveHourClock = twelveHour.AM;
     [Space]
-    public float time;
-    public float totalTime;
+    [SerializeField] float time;
+    [SerializeField] float totalTime;
 
-    public int hour = 6;
-    public int minute;
+    [SerializeField] public int hour = 6;
+    [SerializeField] public int minute;
+
     [Space]
-    public int UIUpdateFrequency;
-    public TextMeshProUGUI timeUI;
-    public Light sunLight;
-    public float sunLightAngle;
-
-    public Light moonLight;
-    public float moonLightAngle;
+    [SerializeField] int UIUpdateFrequency;
+    [SerializeField] TextMeshProUGUI timeUI;
+    [SerializeField] Light sunLight;
+    [SerializeField] float sunLightAngle;
+    [SerializeField] Light moonLight;
+    [SerializeField] float moonLightAngle;
 
     [Space]
     [Header("Inbetween")]
-    public Image dayEndPanel;
+    [SerializeField] Image dayEndPanel;
 
     [Space]
     [Header("Other Elements")]
@@ -114,6 +115,8 @@ public class DayNightCycleManager : MonoBehaviour
         SetTime(6, 0);
         moonLight.intensity = 0;
         sunLight.intensity = 0.7f;
+
+        md.GenerateNodes();
     }
     public void SetTime(int _hour, int _minute)
     {
@@ -132,7 +135,6 @@ public class DayNightCycleManager : MonoBehaviour
     public void UpdateTime()
     {
         minute++;
-        //totalTime++;
         if (minute >= 60)
         {
             minute = 0;
@@ -163,13 +165,7 @@ public class DayNightCycleManager : MonoBehaviour
             cm.IncrementDayCount();
             //do something like upgrades
 
-            WorldItem[] itemsOnTheGround = FindObjectsByType<WorldItem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-
-            for (int i = 0; i < itemsOnTheGround.Length; i++)
-            {
-                Destroy(itemsOnTheGround[i].gameObject);
-            }
-            
+            md.DestroyWorldItems();
 
             List<QuestDisplay> currentQuests = playerQuestBoard.GetQuests();
             for (int i = 0; i < currentQuests.Count; i++)
@@ -220,6 +216,7 @@ public class DayNightCycleManager : MonoBehaviour
     private void Awake()
     {
         cm = FindAnyObjectByType<CalendarManger>();
+        md = FindAnyObjectByType<MapDirector>();
         BeginDay();
 
         if (UIUpdateFrequency == 0)
