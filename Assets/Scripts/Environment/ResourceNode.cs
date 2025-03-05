@@ -3,18 +3,7 @@ using TMPro;
 using UnityEngine;
 
 public class ResourceNode : MonoBehaviour
-{
-    /*
-     * FOR NOW, this is how the resource node will work:
-       * When you deplete the node's health bar it will give all the resources
-       * It will randomize the amount
-     
-     
-     
-     */
-
-
-
+{ 
     [SerializeField] Healthbar resourceHealthBar; //resource's health bar, when you shoot it, it goes down, when its 0 the resource dies
     [SerializeField] TextMeshProUGUI resourceNodeTitle; //resource's health bar, when you shoot it, it goes down, when its 0 the resource dies
     [SerializeField] WorldItem resourceType; //this is the resource that the node will spit out
