@@ -103,6 +103,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ed: {fileID: 0}
+  healthBar: {fileID: 3966007659544706363}
   modelTransform: {fileID: 5140852886422253725}
   shootingPoints:
   - {fileID: 606029580797111747}
@@ -564,3 +565,14 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8884201070040849761, guid: a6442e5bdaf45494283be8778fa220e8, type: 3}
   m_PrefabInstance: {fileID: 6729235742710814489}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3966007659544706363 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7667689206835063330, guid: a6442e5bdaf45494283be8778fa220e8, type: 3}
+  m_PrefabInstance: {fileID: 6729235742710814489}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf684674354ddcd4f881a760cf654455, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

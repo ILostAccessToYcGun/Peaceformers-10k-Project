@@ -3,6 +3,10 @@ using UnityEngine;
 
 public class EnemyDirector : MonoBehaviour
 {
+    [Header("Enemy Modifiers")]
+    [SerializeField] float healthMultiplier;
+    [SerializeField] float damageMultiplier;
+    [Space]
     [Header("Enemy Selection")]
     [SerializeField] List<GameObject> randomEnemySelection;
     [SerializeField] List<GameObject> settlementEnemySelection;
@@ -11,6 +15,8 @@ public class EnemyDirector : MonoBehaviour
     [SerializeField] public int enemiesAlive;
     [SerializeField] int enemyLimit;
     [SerializeField] int currentSpawnAttempts;
+    [SerializeField] List<int> enemyCountHistory  = new List<int> { 0, 10, 10 }; //this current system isnt great, we're gonna have to chnage it
+    //the idea is to regenrate the enemy count 3 days after it has decreased, ill need a flexible maximum that changes so we dont regenerate too much
     LayerMask whiteListMasks;
 
     private GameObject SelectRandomEnemy()
@@ -68,9 +74,9 @@ public class EnemyDirector : MonoBehaviour
 
     public void GenerateEnemies()
     {
-        if (enemiesAlive >= enemyLimit) { return; }
+        //if (enemiesAlive >= enemyLimit) { return; }
         currentSpawnAttempts = 0;
-        for (int i = enemiesAlive; i < enemyLimit; i++)
+        for (int i = GetAndRemoveTopEnemyCountHistoryEntry(); i < enemyLimit; i++)
         {
             if (currentSpawnAttempts >= 1000) { break; }
 
@@ -90,6 +96,21 @@ public class EnemyDirector : MonoBehaviour
         StationaryEnemy[] foundEnemies = FindObjectsByType<StationaryEnemy>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
         enemiesAlive = foundEnemies.Length;
     }
+
+    public void AddEnemyCountEntry()
+    {
+        enemyCountHistory.Add(enemiesAlive);
+    }
+
+    public int GetAndRemoveTopEnemyCountHistoryEntry()
+    {
+        int returnValue = enemyCountHistory[0];
+
+        enemyCountHistory.RemoveAt(0);
+        Debug.Log("removing");
+        return returnValue;
+    }
+
 
     //public void DestroyWorldItems()
     //{

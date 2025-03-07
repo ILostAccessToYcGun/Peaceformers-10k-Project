@@ -171,7 +171,7 @@ public class DayNightCycleManager : MonoBehaviour
             BeginDay();
             cm.IncrementDayCount();
             //do something like upgrades
-
+            ed.AddEnemyCountEntry();
             md.DestroyWorldItems();
 
             List<QuestDisplay> currentQuests = playerQuestBoard.GetQuests();

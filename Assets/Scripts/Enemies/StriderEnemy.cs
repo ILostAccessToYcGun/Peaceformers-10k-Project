@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using KinematicCharacterController;
+using static UnityEngine.GraphicsBuffer;
 
 public class StriderEnemy : MonoBehaviour, ICharacterController
 {
@@ -31,6 +32,7 @@ public class StriderEnemy : MonoBehaviour, ICharacterController
 
     void Start()
     {
+        player = FindAnyObjectByType<PlayerMovement>().transform;
         spawnPos = transform.position;
         motor.CharacterController = this;
     }

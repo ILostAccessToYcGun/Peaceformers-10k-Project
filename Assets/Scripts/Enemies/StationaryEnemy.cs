@@ -1,15 +1,19 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class StationaryEnemy : MonoBehaviour
 {
+    [Header("Objects")]
     [SerializeField] private EnemyDirector ed;
+    [SerializeField] private Healthbar healthBar;
+
     [SerializeField] private Transform modelTransform;
     [SerializeField] private Transform[] shootingPoints;
     [SerializeField] private Material bulletTrailMaterial;
     [SerializeField] private GameObject muzzleFlash;
     [SerializeField] private GameObject bulletPrefab;
+
+    [SerializeField] private GameObject gameObjectToDestory;
     [Space]
     [Header("Detection")]
     [SerializeField] private Transform target;
@@ -43,12 +47,15 @@ public class StationaryEnemy : MonoBehaviour
 
     void Update()
     {
+        if (healthBar.GetCurrentHealth() == 0) { alive = false; }
+        
         if(alive)
             DetectPlayer();
         else
         {
             print(transform.name + ": im dead!!");
             --ed.enemiesAlive;
+            Destroy((gameObjectToDestory != null ? gameObjectToDestory : this.gameObject));
         }
     }
 

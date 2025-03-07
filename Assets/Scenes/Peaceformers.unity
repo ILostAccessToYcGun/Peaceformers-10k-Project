@@ -3372,6 +3372,7 @@ MonoBehaviour:
   enemiesAlive: 0
   enemyLimit: 10
   currentSpawnAttempts: 0
+  enemyCountHistory: 000000000a0000000a000000
 --- !u!4 &532867118
 Transform:
   m_ObjectHideFlags: 0
