@@ -3336,6 +3336,57 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4308463287167097925, guid: 4b40f047afd3f6d40983f74c3fd22d0d, type: 3}
   m_PrefabInstance: {fileID: 1745279337}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &532867116
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 532867118}
+  - component: {fileID: 532867117}
+  m_Layer: 0
+  m_Name: EnemyDirector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &532867117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 532867116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55bc73dfd9a1a25489f3883b0c82c40a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  randomEnemySelection:
+  - {fileID: 4375174454121215537, guid: be1be77bab19fdb41bd17ae7a3635930, type: 3}
+  - {fileID: 4715244853274961923, guid: e51862f1ebc1433419a66684493cc6f9, type: 3}
+  settlementEnemySelection: []
+  enemiesAlive: 0
+  enemyLimit: 10
+  currentSpawnAttempts: 0
+--- !u!4 &532867118
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 532867116}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &543989164
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11011,16 +11062,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb0c24b622b64044abcb18d33cbfacaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  updateTime: 1
   cm: {fileID: 0}
   md: {fileID: 0}
+  ed: {fileID: 0}
+  updateTime: 1
   twelveHourClock: 0
   time: 0
   totalTime: 0
   hour: 6
   minute: 0
-  UIUpdateFrequency: 20
   timeUI: {fileID: 2140969741}
+  UIUpdateFrequency: 20
   sunLight: {fileID: 1460068866}
   sunLightAngle: 0
   moonLight: {fileID: 2134520294}
@@ -15553,3 +15605,4 @@ SceneRoots:
   - {fileID: 1676149431}
   - {fileID: 1012667615}
   - {fileID: 1703625641}
+  - {fileID: 532867118}

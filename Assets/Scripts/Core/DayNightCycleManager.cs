@@ -13,23 +13,29 @@ public class DayNightCycleManager : MonoBehaviour
     //17.5s per hour
     //2.91666s per 10 minutes
     //0.29166s per minute
-    [SerializeField] bool updateTime = true;
+    
     [Space]
+    [Header("Managers")]
     [SerializeField] CalendarManger cm;
     [SerializeField] MapDirector md;
+    [SerializeField] EnemyDirector ed;
 
     public enum twelveHour { AM, PM }
-    [SerializeField] twelveHour twelveHourClock = twelveHour.AM;
+    
     [Space]
+    [Header("Time")]
+    [SerializeField] bool updateTime = true;
+    [SerializeField] twelveHour twelveHourClock = twelveHour.AM;
     [SerializeField] float time;
     [SerializeField] float totalTime;
-
     [SerializeField] public int hour = 6;
     [SerializeField] public int minute;
 
-    [Space]
-    [SerializeField] int UIUpdateFrequency;
     [SerializeField] TextMeshProUGUI timeUI;
+    [SerializeField] int UIUpdateFrequency;
+
+    [Space]
+    [Header("Light")]
     [SerializeField] Light sunLight;
     [SerializeField] float sunLightAngle;
     [SerializeField] Light moonLight;
@@ -117,6 +123,7 @@ public class DayNightCycleManager : MonoBehaviour
         sunLight.intensity = 0.7f;
 
         md.GenerateNodes();
+        ed.GenerateEnemies();
     }
     public void SetTime(int _hour, int _minute)
     {
@@ -217,6 +224,7 @@ public class DayNightCycleManager : MonoBehaviour
     {
         cm = FindAnyObjectByType<CalendarManger>();
         md = FindAnyObjectByType<MapDirector>();
+        ed = FindAnyObjectByType<EnemyDirector>();
         BeginDay();
 
         if (UIUpdateFrequency == 0)

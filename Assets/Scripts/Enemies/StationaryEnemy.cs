@@ -1,8 +1,10 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class StationaryEnemy : MonoBehaviour
 {
+    [SerializeField] private EnemyDirector ed;
     [SerializeField] private Transform modelTransform;
     [SerializeField] private Transform[] shootingPoints;
     [SerializeField] private Material bulletTrailMaterial;
@@ -33,6 +35,9 @@ public class StationaryEnemy : MonoBehaviour
 
     void Start()
     {
+        target = FindAnyObjectByType<PlayerMovement>().transform;
+        ed = FindAnyObjectByType<EnemyDirector>();
+        ++ed.enemiesAlive;
         currentAmmo = maxAmmo;
     }
 
@@ -43,6 +48,7 @@ public class StationaryEnemy : MonoBehaviour
         else
         {
             print(transform.name + ": im dead!!");
+            --ed.enemiesAlive;
         }
     }
 
@@ -124,7 +130,7 @@ public class StationaryEnemy : MonoBehaviour
             );
 
             Vector3 shootDirection = barrel.right + spread;
-            RaycastHit hit;
+            //RaycastHit hit;
 
             GameObject m = Instantiate(muzzleFlash, barrel.position, barrel.rotation);
             m.transform.parent = barrel;

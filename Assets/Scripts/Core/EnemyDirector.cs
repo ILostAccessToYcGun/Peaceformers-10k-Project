@@ -1,21 +1,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapDirector : MonoBehaviour
+public class EnemyDirector : MonoBehaviour
 {
-    [SerializeField] List<GameObject> resourceNodeSelection;
+    [Header("Enemy Selection")]
+    [SerializeField] List<GameObject> randomEnemySelection;
+    [SerializeField] List<GameObject> settlementEnemySelection;
     [Space]
-    [Header("Node Info")]
-    [SerializeField] public int nodesAlive;
-    [SerializeField] int nodeLimit;
+    [Header("Enemy Info")]
+    [SerializeField] public int enemiesAlive;
+    [SerializeField] int enemyLimit;
     [SerializeField] int currentSpawnAttempts;
     LayerMask whiteListMasks;
 
-    private GameObject SelectRandomNode()
+    private GameObject SelectRandomEnemy()
     {
-        if (resourceNodeSelection.Count < 1) { return null; }
-        int choice = Random.Range(0, resourceNodeSelection.Count);
-        return resourceNodeSelection[choice];
+        if (randomEnemySelection.Count < 1) { return null; }
+        int choice = Random.Range(0, randomEnemySelection.Count);
+        return randomEnemySelection[choice];
     }
 
     private Vector3 CheckForValidSpawn()
@@ -23,7 +25,7 @@ public class MapDirector : MonoBehaviour
         RaycastHit hit;
         whiteListMasks = LayerMask.GetMask("Ground");
 
-        bool rayHit = Physics.SphereCast(transform.position, 2f, -transform.up, out hit, 100f, whiteListMasks);
+        bool rayHit = Physics.SphereCast(transform.position, 10f, -transform.up, out hit, 100f, whiteListMasks);
 
         //Debug.Log(hit.collider.gameObject.layer);
 
@@ -52,9 +54,9 @@ public class MapDirector : MonoBehaviour
         }
     }
 
-    private bool SpawnNode()
+    private bool SpawnEnemy()
     {
-        GameObject randomNode = SelectRandomNode();
+        GameObject randomNode = SelectRandomEnemy();
         Vector3 location = CheckForValidSpawn();
         if (randomNode == null || location == new Vector3(0, 100, 0)) { return false; }
 
@@ -64,38 +66,38 @@ public class MapDirector : MonoBehaviour
         return true;
     }
 
-    public void GenerateNodes()
+    public void GenerateEnemies()
     {
-        if (nodesAlive >= nodeLimit) { return; }
+        if (enemiesAlive >= enemyLimit) { return; }
         currentSpawnAttempts = 0;
-        for (int i = nodesAlive; i < nodeLimit; i++)
+        for (int i = enemiesAlive; i < enemyLimit; i++)
         {
             if (currentSpawnAttempts >= 1000) { break; }
-            
+
 
             SelectRandomLocation();
-            if (!SpawnNode())
+            if (!SpawnEnemy())
             {
                 i--;
                 ++currentSpawnAttempts;
             }
-            
+
         }
     }
 
-    public void FindAliveNodes()
+    public void FindAliveEnemies()
     {
-        ResourceNode[] foundNodes = FindObjectsByType<ResourceNode>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
-        nodesAlive = foundNodes.Length;
+        StationaryEnemy[] foundEnemies = FindObjectsByType<StationaryEnemy>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+        enemiesAlive = foundEnemies.Length;
     }
 
-    public void DestroyWorldItems()
-    {
-        WorldItem[] itemsOnTheGround = FindObjectsByType<WorldItem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+    //public void DestroyWorldItems()
+    //{
+    //    WorldItem[] itemsOnTheGround = FindObjectsByType<WorldItem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 
-        for (int i = 0; i < itemsOnTheGround.Length; i++)
-        {
-            Destroy(itemsOnTheGround[i].gameObject);
-        }
-    }
+    //    for (int i = 0; i < itemsOnTheGround.Length; i++)
+    //    {
+    //        Destroy(itemsOnTheGround[i].gameObject);
+    //    }
+    //}
 }

@@ -24,13 +24,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4303633089789495140}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -0.9260006, y: 1.993, z: 1.9250002}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2893625557634845151}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1 &4715244853274961923
 GameObject:
   m_ObjectHideFlags: 0
@@ -259,12 +259,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbeeb8cc09e0fca4bafe21834dcaea05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ed: {fileID: 0}
   modelTransform: {fileID: 2893625557634845151}
   shootingPoints:
   - {fileID: 284180439129356348}
   bulletTrailMaterial: {fileID: 2100000, guid: 00e59bddd4cf1eb409be6f48b2ba4233, type: 2}
   muzzleFlash: {fileID: 100008, guid: c460780050234874594e9f7a0f7decc6, type: 3}
-  bulletPrefab: {fileID: 0}
+  bulletPrefab: {fileID: 7141802491186774219, guid: 3dfb1062e4a35f54c9df97167bff0018, type: 3}
   target: {fileID: 0}
   detectionRange: 20
   rotationSpeed: 8
@@ -300,13 +301,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8736465323536985736}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0.9260006, y: 1.993, z: 1.9250002}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2893625557634845151}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1 &9082035767698303248
 GameObject:
   m_ObjectHideFlags: 0
@@ -508,6 +509,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7635826562936255635, guid: 2c261c96b6739e54aa22b141a2aa472c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 58d5399a25b7f6541bd254a0b3edb8c6, type: 2}
     - target: {fileID: 919132149155446097, guid: 2c261c96b6739e54aa22b141a2aa472c, type: 3}
       propertyPath: m_Name
       value: Strider_Top
@@ -549,15 +554,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: fd93661125f7f09469eea5ae4fdbf001, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fd93661125f7f09469eea5ae4fdbf001, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fd93661125f7f09469eea5ae4fdbf001, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fd93661125f7f09469eea5ae4fdbf001, type: 3}
       propertyPath: m_LocalPosition.x
@@ -603,6 +608,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7635826562936255635, guid: fd93661125f7f09469eea5ae4fdbf001, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 58d5399a25b7f6541bd254a0b3edb8c6, type: 2}
     - target: {fileID: 919132149155446097, guid: fd93661125f7f09469eea5ae4fdbf001, type: 3}
       propertyPath: m_Name
       value: Strider_Base
