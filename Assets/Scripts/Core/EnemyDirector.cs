@@ -17,8 +17,9 @@ public class EnemyDirector : MonoBehaviour
     [SerializeField] int enemyRespawnCount;
     [SerializeField] int enemyLimit;
     [SerializeField] int currentSpawnAttempts;
-    [SerializeField] List<int> queuedEnemyRespawn  = new List<int> { 7, 0, 0 }; //this current system isnt great, we're gonna have to chnage it
-    //the idea is to regenrate the enemy count 3 days after it has decreased, ill need a flexible maximum that changes so we dont regenerate too much
+    [SerializeField] List<int> queuedEnemyRespawn  = new List<int> { 7, 0, 0 }; 
+
+    //the next thing I need to do is to have dedicated spawns for the enemy camps, maybe...
     LayerMask whiteListMasks;
 
     private GameObject SelectRandomEnemy()
