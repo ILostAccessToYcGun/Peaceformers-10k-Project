@@ -1,11 +1,13 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class StationaryEnemy : MonoBehaviour
 {
     [Header("Objects")]
     [SerializeField] private EnemyDirector ed;
-    [SerializeField] private Healthbar healthBar;
+    [SerializeField] public Healthbar healthBar;
 
     [SerializeField] private Transform modelTransform;
     [SerializeField] private Transform[] shootingPoints;
@@ -16,7 +18,8 @@ public class StationaryEnemy : MonoBehaviour
     [SerializeField] private GameObject gameObjectToDestory;
     [Space]
     [Header("Detection")]
-    [SerializeField] private Transform target;
+    [SerializeField] private List<Transform> targets;
+    [SerializeField] private Transform currentTarget;
     [SerializeField] private float detectionRange;
     [SerializeField] private float rotationSpeed;
     [Space]
@@ -24,6 +27,7 @@ public class StationaryEnemy : MonoBehaviour
     [SerializeField] private int maxAmmo = 25;
     [SerializeField] private int currentAmmo;
     [SerializeField] private int baseDmg = 8;
+    [SerializeField] private int modDmg;
     [SerializeField] private float bulletForce = 60f;
     [SerializeField] private float timeBetweenShots = 0.04f;
     [SerializeField] private float reloadTime = 5f;
@@ -39,8 +43,15 @@ public class StationaryEnemy : MonoBehaviour
 
     void Start()
     {
-        target = FindAnyObjectByType<PlayerMovement>().transform;
+        //currentTarget = FindAnyObjectByType<PlayerMovement>().transform;
         ed = FindAnyObjectByType<EnemyDirector>();
+
+        modDmg = baseDmg;
+        SetModDmg(ed.damageMultiplier);
+        healthBar.SetMaxHealth(healthBar.GetMaxHealth() * ed.healthMultiplier);
+        healthBar.ScaleUI();
+
+        targets = ed.targetList;
         ++ed.enemiesAlive;
         currentAmmo = maxAmmo;
     }
@@ -59,18 +70,47 @@ public class StationaryEnemy : MonoBehaviour
         }
     }
 
+    public Transform CompareTargetDistances()
+    {
+        Transform closestTransform = targets[0];
+        float smallestDistance = detectionRange;
+        foreach (Transform target in targets)
+        {
+            float dist = Vector3.Distance(transform.position, target.position);
+            
+            if (dist < smallestDistance)
+            {
+                Debug.Log(dist);
+                smallestDistance = dist;
+                closestTransform = target;
+                if (healthBar.GetCurrentHealth() < healthBar.GetMaxHealth())
+                {
+                    if (target.gameObject.layer == LayerMask.NameToLayer("Player"))
+                    {
+                        Debug.Log("erm");
+                        return closestTransform;
+                    }
+                }
+            }
+        }
+        return closestTransform;
+    }
+
     void DetectPlayer() //we also want to detect other settlements or other settlement's enemies
     {
-        if (Vector3.Distance(transform.position, target.position) <= detectionRange)
+        
+        currentTarget = CompareTargetDistances();
+
+        if (Vector3.Distance(transform.position, currentTarget.position) <= detectionRange)
         {
 
             RaycastHit hitInfo;
             if (Physics.Linecast(new Vector3(modelTransform.position.x, (modelTransform.position.y + 1.5f), modelTransform.position.z),
-                new Vector3(target.position.x, (target.position.y + 1.5f),
-                    target.position.z), out hitInfo))
+                new Vector3(currentTarget.position.x, (currentTarget.position.y + 1.5f),
+                    currentTarget.position.z), out hitInfo))
             {
 
-                if (hitInfo.transform == target)
+                if (hitInfo.transform == currentTarget)
                 {
                     //requesting fire
                     if (!isFiring && !isReloading)
@@ -78,7 +118,7 @@ public class StationaryEnemy : MonoBehaviour
                         _requestedShoot = true;
                         firingCoroutine = StartCoroutine(ContinuousFire());
                     }
-                    Vector3 targetPoint = target.position;
+                    Vector3 targetPoint = currentTarget.position;
                     Vector3 direction = (targetPoint - modelTransform.position).normalized;
 
                     if (direction != Vector3.zero)
@@ -145,7 +185,7 @@ public class StationaryEnemy : MonoBehaviour
 
             GameObject b = Instantiate(bulletPrefab, barrel.position, barrel.rotation);
             b.GetComponent<Rigidbody>().linearVelocity = barrel.right * bulletForce;
-            b.GetComponent<Bullet>().baseDmg = baseDmg;
+            b.GetComponent<Bullet>().baseDmg = modDmg;
             b.GetComponent<Bullet>().source = transform;
 
             Destroy(b, 5f);
@@ -194,5 +234,10 @@ public class StationaryEnemy : MonoBehaviour
         yield return new WaitForSeconds(reloadTime);
         currentAmmo = maxAmmo;
         isReloading = false;
+    }
+
+    public void SetModDmg(float addative)
+    {
+        modDmg = (int)((float)baseDmg + addative);
     }
 }

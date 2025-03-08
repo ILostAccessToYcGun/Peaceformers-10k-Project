@@ -3365,14 +3365,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55bc73dfd9a1a25489f3883b0c82c40a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healthMultiplier: 1
+  damageMultiplier: 1
+  targetList:
+  - {fileID: 1678360443}
+  - {fileID: 974890185}
+  - {fileID: 866025019}
+  - {fileID: 1854132510}
   randomEnemySelection:
   - {fileID: 4375174454121215537, guid: be1be77bab19fdb41bd17ae7a3635930, type: 3}
   - {fileID: 4715244853274961923, guid: e51862f1ebc1433419a66684493cc6f9, type: 3}
   settlementEnemySelection: []
   enemiesAlive: 0
-  enemyLimit: 10
+  enemyRespawnCount: 0
+  enemyLimit: 3
   currentSpawnAttempts: 0
-  enemyCountHistory: 000000000a0000000a000000
+  queuedEnemyRespawn: 070000000000000000000000
 --- !u!4 &532867118
 Transform:
   m_ObjectHideFlags: 0
@@ -13624,7 +13632,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5427910253662536891, guid: be1be77bab19fdb41bd17ae7a3635930, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -32.24
+      value: -16.25
       objectReference: {fileID: 0}
     - target: {fileID: 5427910253662536891, guid: be1be77bab19fdb41bd17ae7a3635930, type: 3}
       propertyPath: m_LocalPosition.y
@@ -13632,7 +13640,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5427910253662536891, guid: be1be77bab19fdb41bd17ae7a3635930, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 460.26
+      value: 459.95
       objectReference: {fileID: 0}
     - target: {fileID: 5427910253662536891, guid: be1be77bab19fdb41bd17ae7a3635930, type: 3}
       propertyPath: m_LocalRotation.w

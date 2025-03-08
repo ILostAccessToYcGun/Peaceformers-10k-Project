@@ -20,6 +20,11 @@ public class Healthbar : MonoBehaviour
 
     void Start()
     {
+        ScaleUI();
+    }
+
+    public void ScaleUI()
+    {
         float newScaleX = maxHealth * 0.0022f;
         mainBar.localScale = new Vector3(newScaleX, mainBar.localScale.y, mainBar.localScale.z);
 

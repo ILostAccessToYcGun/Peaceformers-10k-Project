@@ -605,7 +605,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
         foreach (ItemComponent component in itemComponents)
         {
             component.transform.position = new Vector3(component.transform.position.x, component.transform.position.y, -1f);
-            Debug.Log(component.transform.position);
+            //Debug.Log(component.transform.position);
         }
         this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -1f);
     }

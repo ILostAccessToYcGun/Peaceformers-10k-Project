@@ -4,8 +4,9 @@ using UnityEngine;
 public class EnemyDirector : MonoBehaviour
 {
     [Header("Enemy Modifiers")]
-    [SerializeField] float healthMultiplier;
-    [SerializeField] float damageMultiplier;
+    [SerializeField] public float healthMultiplier;
+    [SerializeField] public float damageMultiplier;
+    [SerializeField] public List<Transform> targetList;
     [Space]
     [Header("Enemy Selection")]
     [SerializeField] List<GameObject> randomEnemySelection;
@@ -13,9 +14,10 @@ public class EnemyDirector : MonoBehaviour
     [Space]
     [Header("Enemy Info")]
     [SerializeField] public int enemiesAlive;
+    [SerializeField] int enemyRespawnCount;
     [SerializeField] int enemyLimit;
     [SerializeField] int currentSpawnAttempts;
-    [SerializeField] List<int> enemyCountHistory  = new List<int> { 0, 10, 10 }; //this current system isnt great, we're gonna have to chnage it
+    [SerializeField] List<int> queuedEnemyRespawn  = new List<int> { 7, 0, 0 }; //this current system isnt great, we're gonna have to chnage it
     //the idea is to regenrate the enemy count 3 days after it has decreased, ill need a flexible maximum that changes so we dont regenerate too much
     LayerMask whiteListMasks;
 
@@ -62,11 +64,14 @@ public class EnemyDirector : MonoBehaviour
 
     private bool SpawnEnemy()
     {
-        GameObject randomNode = SelectRandomEnemy();
+        GameObject randomEnemy = SelectRandomEnemy();
         Vector3 location = CheckForValidSpawn();
-        if (randomNode == null || location == new Vector3(0, 100, 0)) { return false; }
+        if (randomEnemy == null || location == new Vector3(0, 100, 0)) { return false; }
 
-        GameObject newNode = Instantiate(randomNode, location, Quaternion.identity);
+        GameObject newEnemy = Instantiate(randomEnemy, location, Quaternion.identity);
+        //StationaryEnemy enemy = newEnemy.GetComponentInChildren<StationaryEnemy>();
+        //enemy.SetModDmg(damageMultiplier);
+        //enemy.healthBar.SetMaxHealth(enemy.healthBar.GetMaxHealth() * healthMultiplier);
 
         currentSpawnAttempts = 0;
         return true;
@@ -76,7 +81,8 @@ public class EnemyDirector : MonoBehaviour
     {
         //if (enemiesAlive >= enemyLimit) { return; }
         currentSpawnAttempts = 0;
-        for (int i = GetAndRemoveTopEnemyCountHistoryEntry(); i < enemyLimit; i++)
+        GetAndRemoveTopEnemyCountHistoryEntry();
+        for (int i = 0; i < enemyRespawnCount; i++)
         {
             if (currentSpawnAttempts >= 1000) { break; }
 
@@ -87,7 +93,6 @@ public class EnemyDirector : MonoBehaviour
                 i--;
                 ++currentSpawnAttempts;
             }
-
         }
     }
 
@@ -99,16 +104,18 @@ public class EnemyDirector : MonoBehaviour
 
     public void AddEnemyCountEntry()
     {
-        enemyCountHistory.Add(enemiesAlive);
+        queuedEnemyRespawn.Add(enemyLimit - enemiesAlive);
+        enemyLimit = enemyLimit - (enemyLimit - enemiesAlive);
     }
 
-    public int GetAndRemoveTopEnemyCountHistoryEntry()
+    public void GetAndRemoveTopEnemyCountHistoryEntry()
     {
-        int returnValue = enemyCountHistory[0];
-
-        enemyCountHistory.RemoveAt(0);
+        int topRegen = queuedEnemyRespawn[0];
+        enemyRespawnCount = topRegen;
+        enemyLimit += topRegen;   
+        queuedEnemyRespawn.RemoveAt(0);
         Debug.Log("removing");
-        return returnValue;
+        //return returnValue;
     }
 
 

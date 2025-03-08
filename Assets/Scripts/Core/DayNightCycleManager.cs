@@ -168,10 +168,11 @@ public class DayNightCycleManager : MonoBehaviour
     {
         if (hour == 12 && twelveHourClock == twelveHour.AM)
         {
+            ed.AddEnemyCountEntry();
             BeginDay();
             cm.IncrementDayCount();
             //do something like upgrades
-            ed.AddEnemyCountEntry();
+            
             md.DestroyWorldItems();
 
             List<QuestDisplay> currentQuests = playerQuestBoard.GetQuests();
