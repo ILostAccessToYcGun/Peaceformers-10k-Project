@@ -17,8 +17,13 @@ public class Bullet : MonoBehaviour
         }
         else if (set != null)
         {
+            Debug.Log(source.gameObject.tag);
             if (source.gameObject.CompareTag("Target") == true)
+            {
                 set.LoseMeter(baseDmg / 10f);
+                
+            }
+                
         }
         print(target.name);
         Destroy(this.gameObject);

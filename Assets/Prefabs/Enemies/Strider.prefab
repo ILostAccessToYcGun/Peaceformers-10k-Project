@@ -225,7 +225,7 @@ GameObject:
   - component: {fileID: 5567472437346848133}
   m_Layer: 10
   m_Name: Root
-  m_TagString: Untagged
+  m_TagString: Target
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -268,16 +268,20 @@ MonoBehaviour:
   muzzleFlash: {fileID: 100008, guid: c460780050234874594e9f7a0f7decc6, type: 3}
   bulletPrefab: {fileID: 7141802491186774219, guid: 3dfb1062e4a35f54c9df97167bff0018, type: 3}
   gameObjectToDestory: {fileID: 4715244853274961923}
-  target: {fileID: 0}
+  targets: []
+  currentTarget: {fileID: 0}
   detectionRange: 20
   rotationSpeed: 8
   maxAmmo: 15
   currentAmmo: 0
   baseDmg: 5
+  modDmg: 0
   bulletForce: 80
   timeBetweenShots: 0.4
   reloadTime: 2.5
   bulletSpread: 0.01
+  isReloading: 0
+  isPrioSettlements: 0
   alive: 1
 --- !u!1001 &2060499082442629772
 PrefabInstance:

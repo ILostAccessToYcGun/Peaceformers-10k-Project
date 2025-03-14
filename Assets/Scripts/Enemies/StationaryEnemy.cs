@@ -6,7 +6,7 @@ using static UnityEngine.GraphicsBuffer;
 public class StationaryEnemy : MonoBehaviour
 {
     [Header("Objects")]
-    [SerializeField] private EnemyDirector ed;
+    [SerializeField] public EnemyDirector ed;
     [SerializeField] public Healthbar healthBar;
 
     [SerializeField] private Transform modelTransform;
@@ -20,7 +20,7 @@ public class StationaryEnemy : MonoBehaviour
     [Header("Detection")]
     [SerializeField] private List<Transform> targets;
     [SerializeField] private Transform currentTarget;
-    [SerializeField] private float detectionRange;
+    [SerializeField] public float detectionRange;
     [SerializeField] private float rotationSpeed;
     [Space]
     [Header("Weapon")]
@@ -33,7 +33,8 @@ public class StationaryEnemy : MonoBehaviour
     [SerializeField] private float reloadTime = 5f;
     [SerializeField] private float bulletSpread = 3f;
     private bool isFiring;
-    private bool isReloading;
+    public bool isReloading;
+    [SerializeField] public bool isPrioSettlements = false;
 
     private bool _requestedShoot;
 
@@ -61,7 +62,7 @@ public class StationaryEnemy : MonoBehaviour
         if (healthBar.GetCurrentHealth() == 0) { alive = false; }
         
         if(alive)
-            DetectPlayer();
+            DetectTargets();
         else
         {
             print(transform.name + ": im dead!!");
@@ -80,14 +81,17 @@ public class StationaryEnemy : MonoBehaviour
             
             if (dist < smallestDistance)
             {
-                Debug.Log(dist);
                 smallestDistance = dist;
                 closestTransform = target;
                 if (healthBar.GetCurrentHealth() < healthBar.GetMaxHealth())
                 {
                     if (target.gameObject.layer == LayerMask.NameToLayer("Player"))
+                        return closestTransform;
+                }
+                else if (isPrioSettlements)
+                {
+                    if (target.gameObject.tag == "Settlement")
                     {
-                        Debug.Log("erm");
                         return closestTransform;
                     }
                 }
@@ -96,7 +100,7 @@ public class StationaryEnemy : MonoBehaviour
         return closestTransform;
     }
 
-    void DetectPlayer() //we also want to detect other settlements or other settlement's enemies
+    void DetectTargets() //we also want to detect other settlements or other settlement's enemies
     {
         
         currentTarget = CompareTargetDistances();
@@ -159,7 +163,6 @@ public class StationaryEnemy : MonoBehaviour
                 }
                 _requestedShoot = false;
             }
-
             yield return new WaitForSeconds(timeBetweenShots);
         }
 

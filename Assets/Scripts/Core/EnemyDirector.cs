@@ -73,6 +73,7 @@ public class EnemyDirector : MonoBehaviour
         //StationaryEnemy enemy = newEnemy.GetComponentInChildren<StationaryEnemy>();
         //enemy.SetModDmg(damageMultiplier);
         //enemy.healthBar.SetMaxHealth(enemy.healthBar.GetMaxHealth() * healthMultiplier);
+        //this is not needed becasue it is handled in the enemey director
 
         currentSpawnAttempts = 0;
         return true;
