@@ -3282,10 +3282,10 @@ MonoBehaviour:
   healthMultiplier: 3
   damageMultiplier: 2
   targetList:
-  - {fileID: 1678360443}
   - {fileID: 974890185}
   - {fileID: 866025019}
   - {fileID: 1854132510}
+  - {fileID: 1678360443}
   randomEnemySelection:
   - {fileID: 4375174454121215537, guid: be1be77bab19fdb41bd17ae7a3635930, type: 3}
   - {fileID: 4715244853274961923, guid: e51862f1ebc1433419a66684493cc6f9, type: 3}
@@ -14407,6 +14407,18 @@ PrefabInstance:
     - target: {fileID: 6964937787662241260, guid: a5c36a5d65d741d4086d5aa35deaac03, type: 3}
       propertyPath: m_Name
       value: Tank
+      objectReference: {fileID: 0}
+    - target: {fileID: 7316300745279487211, guid: a5c36a5d65d741d4086d5aa35deaac03, type: 3}
+      propertyPath: baseDmg
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 7316300745279487211, guid: a5c36a5d65d741d4086d5aa35deaac03, type: 3}
+      propertyPath: muzzleFlash
+      value: 
+      objectReference: {fileID: 100008, guid: c460780050234874594e9f7a0f7decc6, type: 3}
+    - target: {fileID: 7316300745279487211, guid: a5c36a5d65d741d4086d5aa35deaac03, type: 3}
+      propertyPath: detectionRange
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 7316300745279487211, guid: a5c36a5d65d741d4086d5aa35deaac03, type: 3}
       propertyPath: isPrioSettlements

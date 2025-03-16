@@ -58,6 +58,7 @@ public class TankEnemy : MonoBehaviour, ICharacterController
         foreach (Transform target in targets)
         {
             float dist = Vector3.Distance(transform.position, target.position);
+
             if (dist < smallestDistance)
             {
                 smallestDistance = dist;
@@ -71,7 +72,6 @@ public class TankEnemy : MonoBehaviour, ICharacterController
                 {
                     if (target.gameObject.tag == "Settlement")
                     {
-                        Debug.Log(closestTransform.name);
                         return closestTransform;
                     }
                 }
@@ -94,8 +94,8 @@ public class TankEnemy : MonoBehaviour, ICharacterController
         //stopping
         if (distanceToTarget <= gun.detectionRange) 
         {
-            currentVelocity = Vector3.Lerp(currentVelocity, Vector3.zero, deltaTime * turnSpeed * 2);
-            if (!gun.isReloading) { return; }
+            //currentVelocity = Vector3.Lerp(currentVelocity, Vector3.zero, deltaTime * turnSpeed * 2);
+            //if (!gun.isReloading) { return; }
         }
 
         Vector3 targetPosition = spawnPos;
@@ -104,8 +104,10 @@ public class TankEnemy : MonoBehaviour, ICharacterController
 
         if (distanceToTarget <= detectionRange)
         {
+            //Debug.Log("target in range");
             if (distanceToTarget > orbitDistance)
             {
+                //Debug.Log("not in orbit");
                 // Move towards player
                 //targetPosition = currentTarget.position;
                 targetPosition = Vector3.Lerp(targetPosition, currentTarget.position, deltaTime * turnSpeed);

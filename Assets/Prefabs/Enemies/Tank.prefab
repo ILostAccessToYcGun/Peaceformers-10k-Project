@@ -126,7 +126,7 @@ MonoBehaviour:
   modelBase: {fileID: 78221743054138095}
   gun: {fileID: 0}
   detectionRange: 45
-  orbitDistance: 5
+  orbitDistance: 30
   moveSpeed: 7.5
   turnSpeed: 1.5
   orbitRadius: 10
