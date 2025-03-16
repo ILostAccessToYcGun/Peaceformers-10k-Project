@@ -10,7 +10,7 @@ public class TemporaryQuestAccessor : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.I))
         {
-            settlementBoard.gameObject.SetActive(!settlementBoard.gameObject.activeSelf);
+            //settlementBoard.gameObject.SetActive(!settlementBoard.gameObject.activeSelf);
         }
         if (Input.GetKeyDown(KeyCode.J))
         {

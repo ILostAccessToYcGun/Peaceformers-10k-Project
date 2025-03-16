@@ -29,11 +29,13 @@ public class InteractableInventory : BaseInteractable
 
 
     [SerializeField] Inventory inventory;
+    [SerializeField] RectTransform inventoryPanel;
     [SerializeField] Vector2 inventorySize;
     [SerializeField] Vector2 inventorySizeRangeX;
     [SerializeField] Vector2 inventorySizeRangeY;
     [SerializeField] bool isRandomizingSize = true;
-    [SerializeField] RectTransform inventoryPanel;
+    [SerializeField] bool isRandomizingLoot = true;
+    
 
     protected override void OpenPrompt()
     {
@@ -250,7 +252,8 @@ public class InteractableInventory : BaseInteractable
     {
         if (isRandomizingSize)
             RandomizeInventorySize((int)inventorySizeRangeX.x, (int)inventorySizeRangeY.x, (int)inventorySizeRangeX.y, (int)inventorySizeRangeY.y);
-        Invoke("RandomizeInventoryLoot", 0.1f);
+        if (isRandomizingLoot)
+            Invoke("RandomizeInventoryLoot", 0.1f);
     }
 
     protected override void Awake()

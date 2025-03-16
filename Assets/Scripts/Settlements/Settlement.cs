@@ -26,7 +26,7 @@ public class Settlement : BaseInteractable
     [SerializeField] private QuestGiver questGiver;
 
 
-    [SerializeField] public bool panicEnemiesGO;
+    [SerializeField] public int panicEnemies;
     [SerializeField] public bool currentlyEndangered;
 
 
@@ -101,7 +101,7 @@ public class Settlement : BaseInteractable
 
     protected void CheckEndangerment()
     {
-        if (panicEnemiesGO) { return; } //if we got enemies we dont care about the endagerment, because the player will fix that. right?
+        if (panicEnemies > 0) { return; } //if we got enemies we dont care about the endagerment, because the player will fix that. right?
         //this gets set to false after the panic enemies are defeated AND the settlement is back to above 25%
         //the DayManager is where this gets set. 
 

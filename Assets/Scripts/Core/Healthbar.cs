@@ -9,8 +9,8 @@ public class Healthbar : MonoBehaviour
     [SerializeField] private Image healthbarLoss;
     [SerializeField] private float lossLerpSpeed = 2f; 
     [Space]
-    [SerializeField]private float maxHealth = 100f;
-    private float currentHealth;
+    [SerializeField]protected float maxHealth = 100f;
+    protected float currentHealth;
 
     [Space]
     [SerializeField] private Color goodHealthColor;
@@ -19,6 +19,11 @@ public class Healthbar : MonoBehaviour
     
 
     void Start()
+    {
+        ScaleUI();
+    }
+
+    public void ScaleUI()
     {
         float newScaleX = maxHealth * 0.0022f;
         mainBar.localScale = new Vector3(newScaleX, mainBar.localScale.y, mainBar.localScale.z);
@@ -33,7 +38,7 @@ public class Healthbar : MonoBehaviour
         UpdateHealthbar();
     }
 
-    public void LoseHealth(float amount)
+    public virtual void LoseHealth(float amount)
     {
         currentHealth = Mathf.Clamp(currentHealth - amount, 0, maxHealth);
         UpdateHealthbar();
@@ -49,7 +54,7 @@ public class Healthbar : MonoBehaviour
     public void SetMaxHealth(float newMaxHealth) { maxHealth = newMaxHealth; }
     public float GetMaxHealth() { return maxHealth; }
 
-    private void UpdateHealthbar()
+    protected void UpdateHealthbar()
     {
         float healthRatio = currentHealth / maxHealth;
 

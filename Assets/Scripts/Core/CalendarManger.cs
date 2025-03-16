@@ -42,7 +42,7 @@ public class CalendarManger : MonoBehaviour
     public void IncrementDayCount() 
     { 
         date++;
-        Debug.Log("the should only happen once");
+        //Debug.Log("the should only happen once");
         UpdateDateText();
         CheckIfEndDayCountReached();
     }
