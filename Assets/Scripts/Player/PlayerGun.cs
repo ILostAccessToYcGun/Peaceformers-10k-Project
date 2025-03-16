@@ -38,6 +38,7 @@ public class PlayerGun : MonoBehaviour
     [SerializeField] private GameObject hitVfx;
     [SerializeField] private TextMeshProUGUI ammoText;
     [SerializeField] private Image reloadCircle;
+    [SerializeField] private PlayerBattery pb;
 
     private float currentReloadTime;
 
@@ -54,6 +55,7 @@ public class PlayerGun : MonoBehaviour
     void Start()
     {
         currentAmmo = maxAmmo;
+        pb = GetComponentInParent<PlayerBattery>();
     }
 
     public void RotateGunTowardsMouse()
@@ -175,6 +177,8 @@ public class PlayerGun : MonoBehaviour
         {
             StartCoroutine(CreateBulletTrail(muzzlePoint.position + direction * range)); 
         }
+
+        pb.LoseBattery(0.05f);
     }
 
     IEnumerator CreateBulletTrail(Vector3 endPosition)

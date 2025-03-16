@@ -11,6 +11,7 @@ public class PlayerBattery : MonoBehaviour
     [Space]
     private float maxBattery = 100f;
     [SerializeField] private float currentBattery;
+    [SerializeField] private float passiveLossRate;
 
     [Space]
     [SerializeField] private Color goodHealthColor;
@@ -30,7 +31,7 @@ public class PlayerBattery : MonoBehaviour
     void Update()
     {
         //LoseBattery(0.29166f);
-        LoseBattery(0.29166f/100f/2f);
+        LoseBattery(0.29166f/100f/2f * passiveLossRate);
 
         if (currentBattery <= 0f)
         {

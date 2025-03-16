@@ -27,6 +27,7 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
     [Header("Components")]
     [SerializeField] private KinematicCharacterMotor motor;
     [SerializeField] private Transform root;
+    [SerializeField] private PlayerBattery pb;
     [Space]
 
     [SerializeField] private Transform cameraTarget;
@@ -121,6 +122,7 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
         boostCapacity = maxBoost;
 
         motor.CharacterController = this;
+        pb = GetComponentInParent<PlayerBattery>();
     }
 
     public void UpdateInput(CharacterInput input)
@@ -225,6 +227,7 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
         if(_requestedSprint)
         {
             boostCapacity = Mathf.Clamp(boostCapacity - (sprintBoostLoss * deltaTime), 0, maxBoost);
+            pb.LoseBattery(sprintBoostLoss * deltaTime * 0.025f);
         }
         else
         {
@@ -319,6 +322,7 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
             if (grounded || canCoyoteJump)
             {
                 boostCapacity -= jumpBoostLoss;
+                pb.LoseBattery(jumpBoostLoss * 0.025f);
                 _requestedJump = false;
 
                 //unstick that thang
@@ -352,7 +356,7 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
                 dashes--;
                 boostCapacity -= dashBoostLoss;
                 _requestedDash = false;
-
+                pb.LoseBattery(dashBoostLoss * 0.025f);
 
 
                 var dashDirection = _requestedMovement.normalized;

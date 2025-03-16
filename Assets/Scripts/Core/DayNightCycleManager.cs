@@ -13,30 +13,37 @@ public class DayNightCycleManager : MonoBehaviour
     //17.5s per hour
     //2.91666s per 10 minutes
     //0.29166s per minute
-    public bool updateTime = true;
+    
     [Space]
-    public CalendarManger cm;
+    [Header("Managers")]
+    [SerializeField] CalendarManger cm;
+    [SerializeField] MapDirector md;
+    [SerializeField] EnemyDirector ed;
 
     public enum twelveHour { AM, PM }
-    public twelveHour twelveHourClock = twelveHour.AM;
+    
     [Space]
-    public float time;
-    public float totalTime;
+    [Header("Time")]
+    [SerializeField] bool updateTime = true;
+    [SerializeField] twelveHour twelveHourClock = twelveHour.AM;
+    [SerializeField] float time;
+    [SerializeField] float totalTime;
+    [SerializeField] public int hour = 6;
+    [SerializeField] public int minute;
 
-    public int hour = 6;
-    public int minute;
+    [SerializeField] TextMeshProUGUI timeUI;
+    [SerializeField] int UIUpdateFrequency;
+
     [Space]
-    public int UIUpdateFrequency;
-    public TextMeshProUGUI timeUI;
-    public Light sunLight;
-    public float sunLightAngle;
-
-    public Light moonLight;
-    public float moonLightAngle;
+    [Header("Light")]
+    [SerializeField] Light sunLight;
+    [SerializeField] float sunLightAngle;
+    [SerializeField] Light moonLight;
+    [SerializeField] float moonLightAngle;
 
     [Space]
     [Header("Inbetween")]
-    public Image dayEndPanel;
+    [SerializeField] Image dayEndPanel;
 
     [Space]
     [Header("Other Elements")]
@@ -114,6 +121,9 @@ public class DayNightCycleManager : MonoBehaviour
         SetTime(6, 0);
         moonLight.intensity = 0;
         sunLight.intensity = 0.7f;
+
+        md.GenerateNodes();
+        ed.GenerateEnemies();
     }
     public void SetTime(int _hour, int _minute)
     {
@@ -132,7 +142,6 @@ public class DayNightCycleManager : MonoBehaviour
     public void UpdateTime()
     {
         minute++;
-        //totalTime++;
         if (minute >= 60)
         {
             minute = 0;
@@ -159,17 +168,12 @@ public class DayNightCycleManager : MonoBehaviour
     {
         if (hour == 12 && twelveHourClock == twelveHour.AM)
         {
+            ed.AddEnemyCountEntry();
             BeginDay();
             cm.IncrementDayCount();
             //do something like upgrades
-
-            WorldItem[] itemsOnTheGround = FindObjectsByType<WorldItem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-
-            for (int i = 0; i < itemsOnTheGround.Length; i++)
-            {
-                Destroy(itemsOnTheGround[i].gameObject);
-            }
             
+            md.DestroyWorldItems();
 
             List<QuestDisplay> currentQuests = playerQuestBoard.GetQuests();
             for (int i = 0; i < currentQuests.Count; i++)
@@ -184,13 +188,37 @@ public class DayNightCycleManager : MonoBehaviour
                     i--;
                 }
             }
+            GameObject highestUpkeep = settlements[0].gameObject;
+            float highestUpkeepCount =  0;
+            foreach (Settlement settlement in settlements)
+            {
+                if (settlement.GetCurrentUpKeep() > highestUpkeepCount)
+                {
+                    highestUpkeepCount = settlement.GetCurrentUpKeep();
+                    highestUpkeep = settlement.gameObject;
+                }
+            }
+
 
             foreach (Settlement settlement in settlements)
             {
                 if (settlement.currentlyEndangered)
                 {
-                    settlement.panicEnemiesGO = true;
                     settlement.currentlyEndangered = false;
+                    settlement.panicEnemies += ed.SpawnSettlementEnemeies(settlement.gameObject, highestUpkeep);
+                }
+
+                foreach (Settlement otherSettlement in settlements)
+                {
+                    if (otherSettlement!= settlement)
+                    {
+                        //compare this settlement to the other settlements
+                        //if the difference between the upkeeps is greater than 30, send more bois
+                        if (otherSettlement.GetCurrentUpKeep() - settlement.GetCurrentUpKeep() >= 30f)
+                        {
+                            settlement.panicEnemies += ed.SpawnSettlementEnemeies(settlement.gameObject, otherSettlement.gameObject);
+                        }
+                    }
                 }
             }
 
@@ -220,6 +248,8 @@ public class DayNightCycleManager : MonoBehaviour
     private void Awake()
     {
         cm = FindAnyObjectByType<CalendarManger>();
+        md = FindAnyObjectByType<MapDirector>();
+        ed = FindAnyObjectByType<EnemyDirector>();
         BeginDay();
 
         if (UIUpdateFrequency == 0)

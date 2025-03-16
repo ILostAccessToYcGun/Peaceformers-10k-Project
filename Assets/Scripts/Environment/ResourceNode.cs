@@ -4,26 +4,21 @@ using UnityEngine;
 
 public class ResourceNode : MonoBehaviour
 {
-    /*
-     * FOR NOW, this is how the resource node will work:
-       * When you deplete the node's health bar it will give all the resources
-       * It will randomize the amount
-     
-     
-     
-     */
-
-
-
+    [Header("Resource")]
     [SerializeField] Healthbar resourceHealthBar; //resource's health bar, when you shoot it, it goes down, when its 0 the resource dies
     [SerializeField] TextMeshProUGUI resourceNodeTitle; //resource's health bar, when you shoot it, it goes down, when its 0 the resource dies
     [SerializeField] WorldItem resourceType; //this is the resource that the node will spit out
     [SerializeField] int resourceCount; //this is the total number of resources that will be obtained when you fully destroy a node
-
+    [SerializeField] int resourceCountReleased;
+    [Space]
+    [Header("Node")]
     [SerializeField] float nodeMaxHealth;
     private float nodeReleaseTimer;
     [SerializeField] float nodeReleaseDelay;
-    [SerializeField] int resourceCountReleased;
+    [Space]
+    [Header("Other Objects")]
+    [SerializeField] MapDirector md;
+
 
 
     public void RandomizeResourceCount(int min, int max)
@@ -39,6 +34,8 @@ public class ResourceNode : MonoBehaviour
 
     private void Awake()
     {
+        md = FindAnyObjectByType<MapDirector>();
+        ++md.nodesAlive;
         resourceHealthBar.SetMaxHealth(nodeMaxHealth);
         RandomizeResourceCount(7, 14);
         SetResourceNodeTitle(resourceType.inventoryItem.itemName.ToString() + " Node");
@@ -73,6 +70,7 @@ public class ResourceNode : MonoBehaviour
             }
             else
             {
+                --md.nodesAlive;
                 Destroy(gameObject);
             }
             

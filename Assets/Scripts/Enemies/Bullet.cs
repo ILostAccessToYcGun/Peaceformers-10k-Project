@@ -17,8 +17,18 @@ public class Bullet : MonoBehaviour
         }
         else if (set != null)
         {
+            Debug.Log(source.gameObject.tag);
             if (source.gameObject.CompareTag("Target") == true)
+            {
                 set.LoseMeter(baseDmg / 10f);
+                StationaryEnemy gun = source.GetComponent<StationaryEnemy>();
+                if (gun.parentSettlement != null)// aka if it's a settlement enemy
+                {
+                    gun.parentSettlement.GetComponent<Settlement>().GainMeter(baseDmg / 20f); //steal half the upkeep you deduct
+                }
+                
+            }
+                
         }
         print(target.name);
         Destroy(this.gameObject);

@@ -86,9 +86,9 @@ GameObject:
   - component: {fileID: 7341321206145931203}
   - component: {fileID: 3361130613981310837}
   - component: {fileID: 3127354106012941725}
-  - component: {fileID: 7562604648282910455}
+  - component: {fileID: 4437755073924506015}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Rock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -102,13 +102,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1783571620532625991}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: -0.43}
+  m_LocalScale: {x: 60, y: 60, z: 60}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8597229157700028397}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!33 &3361130613981310837
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -116,7 +116,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1783571620532625991}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: -5495902117074765545, guid: aad1163a9a089274997a5929693a6eda, type: 3}
 --- !u!23 &3127354106012941725
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -140,7 +140,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 314b6195f764ab2488557aaf61038a6a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -162,8 +162,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &7562604648282910455
-BoxCollider:
+--- !u!64 &4437755073924506015
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -180,9 +180,10 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5495902117074765545, guid: aad1163a9a089274997a5929693a6eda, type: 3}
 --- !u!1 &4306798957387617246
 GameObject:
   m_ObjectHideFlags: 0
@@ -210,7 +211,7 @@ Transform:
   m_GameObject: {fileID: 4306798957387617246}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 14.24, y: 0, z: -18.26}
+  m_LocalPosition: {x: 14.24, y: 0.5, z: -18.26}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -257,9 +258,10 @@ MonoBehaviour:
   resourceNodeTitle: {fileID: 1414687270716254063}
   resourceType: {fileID: 8154398913341998294, guid: d0e2c2d796812f948b8e56e5e496b63d, type: 3}
   resourceCount: 0
+  resourceCountReleased: 0
   nodeMaxHealth: 75
   nodeReleaseDelay: 0.35
-  resourceCountReleased: 0
+  md: {fileID: 0}
 --- !u!1 &4775773403124767851
 GameObject:
   m_ObjectHideFlags: 0

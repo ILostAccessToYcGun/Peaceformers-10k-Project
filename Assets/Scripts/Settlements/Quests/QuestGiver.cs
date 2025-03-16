@@ -62,7 +62,10 @@ public class QuestGiver : MonoBehaviour
         switch (removeType)
         {
             case RemoveType.Remove:
-                currentSettlement.LoseMeter(removeObject.GetUpKeepGain()); //might change this later to lesser values
+                float modifier = 1f;
+                if (removeObject.GetDayDue() - removeObject.calendar.GetDayCount() == 0)
+                    modifier = 1.5f;
+                currentSettlement.LoseMeter(removeObject.GetUpKeepGain() * modifier); //might change this later to lesser values
                 quests.Remove(removeObject);
                 Destroy(removeObject); //huh 
                 break;
