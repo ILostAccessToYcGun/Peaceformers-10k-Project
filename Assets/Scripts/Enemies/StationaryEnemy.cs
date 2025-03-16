@@ -16,6 +16,7 @@ public class StationaryEnemy : MonoBehaviour
     [SerializeField] private GameObject bulletPrefab;
 
     [SerializeField] private GameObject gameObjectToDestory;
+    [SerializeField] public GameObject parentSettlement;
     [Space]
     [Header("Detection")]
     [SerializeField] private List<Transform> targets;
@@ -67,13 +68,21 @@ public class StationaryEnemy : MonoBehaviour
         {
             print(transform.name + ": im dead!!");
             --ed.enemiesAlive;
+
+            if (parentSettlement != null)
+            {
+                Debug.Log("settlement enemy has died, deducting some upkeep");
+                Settlement set = parentSettlement.GetComponent<Settlement>();
+                set.LoseMeter(3f);
+                --set.panicEnemies;
+            }
             Destroy((gameObjectToDestory != null ? gameObjectToDestory : this.gameObject));
         }
     }
 
     public Transform CompareTargetDistances()
     {
-        Transform closestTransform = targets[0];
+        Transform closestTransform = null;
         float smallestDistance = detectionRange;
         foreach (Transform target in targets)
         {
@@ -92,18 +101,25 @@ public class StationaryEnemy : MonoBehaviour
                 {
                     if (target.gameObject.tag == "Settlement")
                     {
-                        return closestTransform;
+                        if (parentSettlement == null)
+                            return closestTransform;
+                        else if(target.gameObject != parentSettlement)
+                            return closestTransform;
                     }
                 }
             }
         }
-        return closestTransform;
+        if (parentSettlement != null)
+            return null;
+        else
+            return closestTransform;
     }
 
     void DetectTargets() //we also want to detect other settlements or other settlement's enemies
     {
         
         currentTarget = CompareTargetDistances();
+        if (currentTarget == null) return;
 
         if (Vector3.Distance(transform.position, currentTarget.position) <= detectionRange)
         {

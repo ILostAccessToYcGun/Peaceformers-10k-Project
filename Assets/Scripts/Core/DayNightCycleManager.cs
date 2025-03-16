@@ -188,13 +188,37 @@ public class DayNightCycleManager : MonoBehaviour
                     i--;
                 }
             }
+            GameObject highestUpkeep = settlements[0].gameObject;
+            float highestUpkeepCount =  0;
+            foreach (Settlement settlement in settlements)
+            {
+                if (settlement.GetCurrentUpKeep() > highestUpkeepCount)
+                {
+                    highestUpkeepCount = settlement.GetCurrentUpKeep();
+                    highestUpkeep = settlement.gameObject;
+                }
+            }
+
 
             foreach (Settlement settlement in settlements)
             {
                 if (settlement.currentlyEndangered)
                 {
-                    settlement.panicEnemiesGO = true;
                     settlement.currentlyEndangered = false;
+                    settlement.panicEnemies += ed.SpawnSettlementEnemeies(settlement.gameObject, highestUpkeep);
+                }
+
+                foreach (Settlement otherSettlement in settlements)
+                {
+                    if (otherSettlement!= settlement)
+                    {
+                        //compare this settlement to the other settlements
+                        //if the difference between the upkeeps is greater than 30, send more bois
+                        if (otherSettlement.GetCurrentUpKeep() - settlement.GetCurrentUpKeep() >= 30f)
+                        {
+                            settlement.panicEnemies += ed.SpawnSettlementEnemeies(settlement.gameObject, otherSettlement.gameObject);
+                        }
+                    }
                 }
             }
 

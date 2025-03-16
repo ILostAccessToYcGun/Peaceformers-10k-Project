@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.FilePathAttribute;
 
 public class EnemyDirector : MonoBehaviour
 {
@@ -10,7 +11,8 @@ public class EnemyDirector : MonoBehaviour
     [Space]
     [Header("Enemy Selection")]
     [SerializeField] List<GameObject> randomEnemySelection;
-    [SerializeField] List<GameObject> settlementEnemySelection;
+    //[SerializeField] List<GameObject> settlementEnemySelection;
+    [SerializeField] public GameObject settlementEnemy;
     [Space]
     [Header("Enemy Info")]
     [SerializeField] public int enemiesAlive;
@@ -96,6 +98,17 @@ public class EnemyDirector : MonoBehaviour
                 ++currentSpawnAttempts;
             }
         }
+    }
+
+    public int SpawnSettlementEnemeies(GameObject homeSettlement, GameObject targetSettlement)
+    {
+        Vector3 randVec = new Vector3(Random.Range(-5, 6), 0, Random.Range(-5, 6));
+        GameObject newEnemy = Instantiate(settlementEnemy, homeSettlement.transform.position + randVec, Quaternion.identity);
+        TankEnemy setEnemyAI = newEnemy.GetComponentInChildren<TankEnemy>();
+        setEnemyAI.SetParentSettlement(homeSettlement);
+        setEnemyAI.SetDestination(targetSettlement.transform.position);
+
+        return 1;
     }
 
     public void FindAliveEnemies()

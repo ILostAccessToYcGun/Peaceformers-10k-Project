@@ -6,7 +6,8 @@ using System.Collections.Generic;
 
 public class TankEnemy : MonoBehaviour, ICharacterController
 {
-    private Vector3 spawnPos;
+    //tanks are the settlement enemies so they will need to travel from one settlement to another
+    [SerializeField] private Vector3 destination;
 
     [Header("Components")]
     [SerializeField] private KinematicCharacterMotor motor;
@@ -34,13 +35,14 @@ public class TankEnemy : MonoBehaviour, ICharacterController
 
     [SerializeField] private Transform currentTarget;
     [SerializeField] public EnemyDirector ed;
+    [SerializeField] private GameObject parentSettlement;
 
     void Start()
     {
         //player = FindAnyObjectByType<PlayerMovement>().transform;
 
         ed = FindAnyObjectByType<EnemyDirector>();
-        spawnPos = transform.position;
+        //destination = transform.position;
         motor.CharacterController = this;
         targets = ed.targetList;
     }
@@ -49,6 +51,17 @@ public class TankEnemy : MonoBehaviour, ICharacterController
     {
         UpdateVelocity(ref _requestedMovement, Time.deltaTime);
         BaseRotation(Time.deltaTime);
+    }
+
+    public void SetParentSettlement(GameObject newParent)
+    {
+        parentSettlement = newParent;
+        gun.parentSettlement = newParent;
+    }
+
+    public void SetDestination(Vector3 newDestination)
+    {
+        destination = newDestination;
     }
 
     public Transform CompareTargetDistances()
@@ -72,13 +85,15 @@ public class TankEnemy : MonoBehaviour, ICharacterController
                 {
                     if (target.gameObject.tag == "Settlement")
                     {
-                        return closestTransform;
+                        if (parentSettlement == null)
+                            return closestTransform;
+                        else if (target.gameObject != parentSettlement)
+                            return closestTransform;
                     }
                 }
             }
         }
-        Debug.Log(closestTransform.name);
-        return closestTransform;
+        return null;
     }
 
     public void UpdateBody(float deltaTime) { }
@@ -87,29 +102,43 @@ public class TankEnemy : MonoBehaviour, ICharacterController
     {
         
         currentTarget = CompareTargetDistances();
-        if (currentTarget == null) return;
+
+        //if there are not targets nearby, just travel to destination
+        if (currentTarget == null)
+        {
+            //Debug.Log("no targets, traveling");
+            Vector3 travelPosition = destination;
+            Vector3 directionToTravel = (travelPosition - transform.position).normalized;
+
+            // Apply random noise
+            float travelNoiseX = Mathf.PerlinNoise(Time.time * noiseFrequency, 0) * 2 - 1;
+            float travelNoiseZ = Mathf.PerlinNoise(0, Time.time * noiseFrequency) * 2 - 1;
+            Vector3 travelNoiseOffset = new Vector3(travelNoiseX, 0, travelNoiseZ) * noiseStrength;
+            directionToTravel += travelNoiseOffset;
+            directionToTravel.Normalize();
+
+            _requestedMovement = directionToTravel * moveSpeed;
+            Vector3 travelVelocity = _requestedMovement;
+            currentVelocity = Vector3.Lerp(currentVelocity, travelVelocity, deltaTime * turnSpeed);
+            return;
+        }
 
         float distanceToTarget = Vector3.Distance(transform.position, currentTarget.position);
 
-        //stopping
+        //stopping to shoot
         if (distanceToTarget <= gun.detectionRange) 
         {
-            //currentVelocity = Vector3.Lerp(currentVelocity, Vector3.zero, deltaTime * turnSpeed * 2);
-            //if (!gun.isReloading) { return; }
+            currentVelocity = Vector3.Lerp(currentVelocity, Vector3.zero, deltaTime * turnSpeed * 2);
+            if (!gun.isReloading) { return; }
         }
 
-        Vector3 targetPosition = spawnPos;
+        Vector3 targetPosition = destination;
         
-
-
         if (distanceToTarget <= detectionRange)
         {
-            //Debug.Log("target in range");
             if (distanceToTarget > orbitDistance)
             {
-                //Debug.Log("not in orbit");
                 // Move towards player
-                //targetPosition = currentTarget.position;
                 targetPosition = Vector3.Lerp(targetPosition, currentTarget.position, deltaTime * turnSpeed);
             }
             else

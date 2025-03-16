@@ -55,6 +55,7 @@ MonoBehaviour:
   muzzleFlash: {fileID: 100008, guid: c460780050234874594e9f7a0f7decc6, type: 3}
   bulletPrefab: {fileID: 7141802491186774219, guid: 3dfb1062e4a35f54c9df97167bff0018, type: 3}
   gameObjectToDestory: {fileID: 6964937787662241260}
+  parentSettlement: {fileID: 0}
   targets: []
   currentTarget: {fileID: 0}
   detectionRange: 30
@@ -119,22 +120,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ac87f7138695844aa6159bba0995e30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  destination: {x: 0, y: 0, z: 0}
   motor: {fileID: 4264551071615111736}
   root: {fileID: 1122169181169961168}
   targets: []
   cameraTarget: {fileID: 1122169181169961168}
   modelBase: {fileID: 78221743054138095}
-  gun: {fileID: 0}
+  gun: {fileID: 7316300745279487211}
   detectionRange: 45
   orbitDistance: 30
-  moveSpeed: 7.5
-  turnSpeed: 1.5
-  orbitRadius: 10
-  orbitSpeed: 1
+  moveSpeed: 5
+  turnSpeed: 2
+  orbitRadius: 200
+  orbitSpeed: 0.5
   noiseStrength: 1
-  noiseFrequency: 2
+  noiseFrequency: 0.5
   currentTarget: {fileID: 0}
   ed: {fileID: 0}
+  parentSettlement: {fileID: 0}
 --- !u!136 &7103201861910080053
 CapsuleCollider:
   m_ObjectHideFlags: 8
