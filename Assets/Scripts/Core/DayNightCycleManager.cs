@@ -52,11 +52,12 @@ public class DayNightCycleManager : MonoBehaviour
     [Header("Other Elements")]
     [SerializeField] QuestBoard playerQuestBoard;
     [SerializeField] List<Settlement> settlements;
+    [SerializeField] Camp playerCamp;
+    [SerializeField] Inventory playerInventory;
 
     #region _Time_
 
-    public void DisableTime() { updateTime = false; }
-    public void EnableTime() { updateTime = true; }
+    public void ToggleTime(bool toggle) { updateTime = toggle; }
 
     public void SetTime(int _hour, int _minute)
     {
@@ -101,7 +102,7 @@ public class DayNightCycleManager : MonoBehaviour
 
     public void DayEndPanel(bool enable)
     {
-        DisableTime();
+        ToggleTime(!enable);
         dayEndPanel.gameObject.SetActive(enable);
         ui.SetUIOpenBool(enable);
     }
@@ -170,10 +171,7 @@ public class DayNightCycleManager : MonoBehaviour
             DayEndPanel(true);
             ed.AddEnemyCountEntry();
             ed.IncreaseDifficulty();
-            BeginDay();
             cm.IncrementDayCount();
-            //do something like upgrades
-
             md.DestroyWorldItems();
 
             List<QuestDisplay> currentQuests = playerQuestBoard.GetQuests();
@@ -189,6 +187,15 @@ public class DayNightCycleManager : MonoBehaviour
                 }
             }
             SettlementEnemySpawnCheck();
+
+
+            //we wanna run a check to see if the player is not within X distance to the camp
+            if (!playerCamp.SafeDistanceCheck())
+            {
+                //if the player is outside the distance range, randomly remove half their items
+                playerInventory.RemoveHalfInventory();
+            }
+
         }
     }
 

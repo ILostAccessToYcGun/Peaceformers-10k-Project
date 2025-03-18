@@ -30,4 +30,9 @@ public class Camp : BaseInteractable
         interactionPrompt = tempPrompt;
     }
 
+    public bool SafeDistanceCheck()
+    {
+        return Vector3.Distance(this.transform.position, playerMovement.transform.position) <= playerDetectionRange;
+    }
+
 }

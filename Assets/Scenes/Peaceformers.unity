@@ -10900,6 +10900,8 @@ MonoBehaviour:
   - {fileID: 974890186}
   - {fileID: 866025022}
   - {fileID: 1854132513}
+  playerCamp: {fileID: 798244627}
+  playerInventory: {fileID: 1001539036}
 --- !u!4 &1676149431
 Transform:
   m_ObjectHideFlags: 0
