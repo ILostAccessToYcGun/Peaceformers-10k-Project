@@ -53,13 +53,9 @@ public class PlayerUIToggler : MonoBehaviour
     {
         BackOutOfCurrentUI(0);
         if (settlementIsShowing)
-        {
             LeanTween.move(settlementUI, hiddenPos, timeToMove).setEase(LeanTweenType.easeOutCubic);
-        }
         else
-        {
             LeanTween.move(settlementUI, shownPos, timeToMove/2).setEase(LeanTweenType.easeOutBack);
-        }
 
         settlementIsShowing = !settlementIsShowing;
     }
@@ -68,15 +64,12 @@ public class PlayerUIToggler : MonoBehaviour
     {
         if (secondaryInventoryIsShowing)
         {
-            
             LeanTween.move(secondaryInventoryUI, hiddenPos_Sinv, timeToMove).setEase(LeanTweenType.easeOutCubic);
             SetUIOpenBool(false);
             secondaryInventoryIsShowing = false;
 
             if (GetSecondaryInventory() != null)
-            {
                 GetSecondaryInventory().ToggleInventories();
-            }
         }
 
         BackOutOfCurrentUI(1);
@@ -91,8 +84,6 @@ public class PlayerUIToggler : MonoBehaviour
             SetUIOpenBool(true);
         }
         inventoryIsShowing = !inventoryIsShowing;
-
-        
     }
 
     public bool GetPlayerInventoryShowingBool() { return inventoryIsShowing; }
@@ -123,8 +114,6 @@ public class PlayerUIToggler : MonoBehaviour
         if (playerQuestIsShowing) { TogglePlayerQuestUI(); }
         if (settlementQuestIsShowing) { ToggleSettlementQuestUI(); }
 
-        
-
         if (inventoryIsShowing && secondaryInventoryIsShowing)
         {
             LeanTween.move(playerInventoryUI, hiddenPos_inv, timeToMove).setEase(LeanTweenType.easeOutCubic);
@@ -153,8 +142,6 @@ public class PlayerUIToggler : MonoBehaviour
             inventoryIsShowing = true;
             secondaryInventoryIsShowing = true;
         }
-
-        
     }
 
     public void TogglePlayerQuestUI()
@@ -211,7 +198,6 @@ public class PlayerUIToggler : MonoBehaviour
         }
         if (playerQuestIsShowing && blackList != 3)
         {
-            //Debug.Log("weeee");
             TogglePlayerQuestUI();
             return;
         }
@@ -220,16 +206,5 @@ public class PlayerUIToggler : MonoBehaviour
             ToggleSettlementQuestUI();
             return;
         }
-    }
-
-
-
-
-    private void Update()
-    {
-        //if (Input.GetKeyDown(KeyCode.Escape))
-        //{
-        //    currentOpenUI
-        //}
     }
 }

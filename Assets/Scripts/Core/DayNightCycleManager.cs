@@ -19,6 +19,7 @@ public class DayNightCycleManager : MonoBehaviour
     [SerializeField] CalendarManger cm;
     [SerializeField] MapDirector md;
     [SerializeField] EnemyDirector ed;
+    [SerializeField] PlayerUIToggler ui;
 
     public enum twelveHour { AM, PM }
     
@@ -31,6 +32,8 @@ public class DayNightCycleManager : MonoBehaviour
     [SerializeField] public int hour = 6;
     [SerializeField] public int minute;
 
+    [Space]
+    [Header("User Interface")]
     [SerializeField] TextMeshProUGUI timeUI;
     [SerializeField] int UIUpdateFrequency;
 
@@ -50,81 +53,11 @@ public class DayNightCycleManager : MonoBehaviour
     [SerializeField] QuestBoard playerQuestBoard;
     [SerializeField] List<Settlement> settlements;
 
+    #region _Time_
+
     public void DisableTime() { updateTime = false; }
-    public void EnableTime() {  updateTime = true; }
+    public void EnableTime() { updateTime = true; }
 
-    public void DayEndPanel(bool enable)
-    {
-        DisableTime();
-        dayEndPanel.gameObject.SetActive(enable);
-    }
-
-
-    public void UpdateTimeUI() 
-    {
-        string hourZero;
-        string minuteZero;
-
-        if (hour < 10)
-            hourZero = "0";
-        else
-            hourZero = null;
-
-        if (minute < 10)
-            minuteZero = "0";
-        else
-            minuteZero = null;
-
-        timeUI.text = hourZero + hour + ":" + minuteZero + minute + twelveHourClock;
-    }
-
-    public void UpdateLightIntensity()
-    {
-        //360 minutes = 0.5
-        //720 minutes = 1
-        //1080 minutes = 0.5 1.5
-        //1440 minutes = 0   2
-
-        if (totalTime <= 1080)
-        {
-
-            sunLight.intensity = Mathf.Clamp(Mathf.Lerp(sunLight.intensity, (totalTime <= 720 ? totalTime * 1.5f / 720 : 2f - ((totalTime / 720)) * 0.5f), Time.deltaTime / 10f), 0f, 1f);
-            moonLight.intensity = Mathf.Lerp(moonLight.intensity, 0, Time.deltaTime / 10f);
-        }
-        else
-        {
-            sunLight.intensity = Mathf.Lerp(sunLight.intensity, 0, Time.deltaTime / 10f);
-            moonLight.intensity = Mathf.Clamp(Mathf.Lerp(moonLight.intensity, (totalTime / 720f) - 1f, Time.deltaTime / 10f), 0f, 0.75f);
-        }
-        
-
-
-        
-    }
-
-    public void UpdateLightAngle()
-    {
-        //360 minutes = 180 degrees 6am
-        //720 minutes = 90 degrees 12pm
-        //1080 minutes = 0 degrees 6pm
-        //1440 minutes = -90 degrees 6pm
-
-        sunLightAngle = Mathf.Lerp(sunLightAngle, ((totalTime / 1440f) * -360f) - 90f, Time.deltaTime);
-        sunLight.gameObject.transform.localEulerAngles = new Vector3(sunLightAngle, 90f, 0);
-        
-        moonLightAngle = Mathf.Lerp(moonLightAngle, ((totalTime / 1440f) * -360f) - 270f, Time.deltaTime);
-        moonLight.gameObject.transform.localEulerAngles = new Vector3(moonLightAngle, 90f, 0);
-    }
-
-    public void BeginDay()
-    {
-        SetTime(6, 0);
-        moonLight.intensity = 0;
-        sunLight.intensity = 0.7f;
-
-        md.GenerateNodes();
-        ed.GenerateEnemies();
-    }
     public void SetTime(int _hour, int _minute)
     {
         hour = _hour;
@@ -133,7 +66,7 @@ public class DayNightCycleManager : MonoBehaviour
         sunLightAngle = ((totalTime / 1440f) * -360f) - 90f;
         sunLight.gameObject.transform.localEulerAngles = new Vector3(sunLightAngle, 90f, 0);
 
-        
+
         moonLightAngle = ((totalTime / 1440f) * -360f) - 270f;
         moonLight.gameObject.transform.localEulerAngles = new Vector3(moonLightAngle, 90f, 0);
         UpdateTimeUI();
@@ -158,21 +91,89 @@ public class DayNightCycleManager : MonoBehaviour
             }
         }
         if (minute % UIUpdateFrequency == 0)
-        {
             UpdateTimeUI();
-        }
         EndOfDayCheck();
+    }
+
+    #endregion
+
+    #region _UI_
+
+    public void DayEndPanel(bool enable)
+    {
+        DisableTime();
+        dayEndPanel.gameObject.SetActive(enable);
+        ui.SetUIOpenBool(enable);
+    }
+
+    public void UpdateTimeUI()
+    {
+        string hourZero;
+        string minuteZero;
+
+        if (hour < 10)
+            hourZero = "0";
+        else
+            hourZero = null;
+
+        if (minute < 10)
+            minuteZero = "0";
+        else
+            minuteZero = null;
+
+        timeUI.text = hourZero + hour + ":" + minuteZero + minute + twelveHourClock;
+    }
+
+    #endregion
+
+    #region _Light_
+    public void UpdateLightIntensity()
+    {
+        if (totalTime <= 1080)
+        {
+            sunLight.intensity = Mathf.Clamp(Mathf.Lerp(sunLight.intensity, (totalTime <= 720 ? totalTime * 1.5f / 720 : 2f - ((totalTime / 720)) * 0.5f), Time.deltaTime / 10f), 0f, 1f);
+            moonLight.intensity = Mathf.Lerp(moonLight.intensity, 0, Time.deltaTime / 10f);
+        }
+        else
+        {
+            sunLight.intensity = Mathf.Lerp(sunLight.intensity, 0, Time.deltaTime / 10f);
+            moonLight.intensity = Mathf.Clamp(Mathf.Lerp(moonLight.intensity, (totalTime / 720f) - 1f, Time.deltaTime / 10f), 0f, 0.75f);
+        }
+    }
+
+    public void UpdateLightAngle()
+    {
+        sunLightAngle = Mathf.Lerp(sunLightAngle, ((totalTime / 1440f) * -360f) - 90f, Time.deltaTime);
+        sunLight.gameObject.transform.localEulerAngles = new Vector3(sunLightAngle, 90f, 0);
+        moonLightAngle = Mathf.Lerp(moonLightAngle, ((totalTime / 1440f) * -360f) - 270f, Time.deltaTime);
+        moonLight.gameObject.transform.localEulerAngles = new Vector3(moonLightAngle, 90f, 0);
+    }
+
+    #endregion
+
+    #region _Day_Methods_
+
+    public void BeginDay()
+    {
+        SetTime(6, 0);
+        moonLight.intensity = 0;
+        sunLight.intensity = 0.7f;
+
+        md.GenerateNodes();
+        ed.GenerateEnemies();
     }
 
     public void EndOfDayCheck()
     {
         if (hour == 12 && twelveHourClock == twelveHour.AM)
         {
+            DayEndPanel(true);
             ed.AddEnemyCountEntry();
+            ed.IncreaseDifficulty();
             BeginDay();
             cm.IncrementDayCount();
             //do something like upgrades
-            
+
             md.DestroyWorldItems();
 
             List<QuestDisplay> currentQuests = playerQuestBoard.GetQuests();
@@ -184,49 +185,46 @@ public class DayNightCycleManager : MonoBehaviour
                     //quest has expired, immediatly abandon it
                     currentQuests[i].otherQuestBoard.RemoveQuestFromBoard(currentQuests[i].questObject.GetCorrespondingSettlementQuestDisplayUI(), QuestBoard.RemoveType.Remove);
                     currentQuests[i].parentQuestBoard.RemoveQuestFromBoard(currentQuests[i].questObject.GetCorrespondingPlayerQuestDisplayUI(), QuestBoard.RemoveType.Remove);
-                    
                     i--;
                 }
             }
-            GameObject highestUpkeep = settlements[0].gameObject;
-            float highestUpkeepCount =  0;
-            foreach (Settlement settlement in settlements)
-            {
-                if (settlement.GetCurrentUpKeep() > highestUpkeepCount)
-                {
-                    highestUpkeepCount = settlement.GetCurrentUpKeep();
-                    highestUpkeep = settlement.gameObject;
-                }
-            }
-
-
-            foreach (Settlement settlement in settlements)
-            {
-                if (settlement.currentlyEndangered)
-                {
-                    settlement.currentlyEndangered = false;
-                    settlement.panicEnemies += ed.SpawnSettlementEnemeies(settlement.gameObject, highestUpkeep);
-                }
-
-                foreach (Settlement otherSettlement in settlements)
-                {
-                    if (otherSettlement!= settlement)
-                    {
-                        //compare this settlement to the other settlements
-                        //if the difference between the upkeeps is greater than 30, send more bois
-                        if (otherSettlement.GetCurrentUpKeep() - settlement.GetCurrentUpKeep() >= 30f)
-                        {
-                            settlement.panicEnemies += ed.SpawnSettlementEnemeies(settlement.gameObject, otherSettlement.gameObject);
-                        }
-                    }
-                }
-            }
-
-            //spawn Settlement enemies
+            SettlementEnemySpawnCheck();
         }
-            
     }
 
+    public void SettlementEnemySpawnCheck()
+    {
+        GameObject highestUpkeep = settlements[0].gameObject;
+        float highestUpkeepCount = 0;
+        foreach (Settlement settlement in settlements)
+        {
+            if (settlement.GetCurrentUpKeep() > highestUpkeepCount)
+            {
+                highestUpkeepCount = settlement.GetCurrentUpKeep();
+                highestUpkeep = settlement.gameObject;
+            }
+        }
+
+        foreach (Settlement settlement in settlements)
+        {
+            if (settlement.currentlyEndangered)
+            {
+                settlement.currentlyEndangered = false;
+                settlement.panicEnemies += ed.SpawnSettlementEnemeies(settlement.gameObject, highestUpkeep);
+            }
+
+            foreach (Settlement otherSettlement in settlements)
+            {
+                if (otherSettlement != settlement)
+                {
+                    if (otherSettlement.GetCurrentUpKeep() - settlement.GetCurrentUpKeep() >= 30f)
+                        settlement.panicEnemies += ed.SpawnSettlementEnemeies(settlement.gameObject, otherSettlement.gameObject);
+                }
+            }
+        }
+    }
+
+    #endregion
 
     private void Update()
     {
@@ -242,7 +240,6 @@ public class DayNightCycleManager : MonoBehaviour
             UpdateLightIntensity();
             time += Time.deltaTime;
         }
-        
     }
 
     private void Awake()
@@ -250,12 +247,11 @@ public class DayNightCycleManager : MonoBehaviour
         cm = FindAnyObjectByType<CalendarManger>();
         md = FindAnyObjectByType<MapDirector>();
         ed = FindAnyObjectByType<EnemyDirector>();
+        ed.ResetDifficulty();
+        ui = FindAnyObjectByType<PlayerUIToggler>();
         BeginDay();
 
         if (UIUpdateFrequency == 0)
-        {
             UIUpdateFrequency = 20;
-        }
-        
     }
 }

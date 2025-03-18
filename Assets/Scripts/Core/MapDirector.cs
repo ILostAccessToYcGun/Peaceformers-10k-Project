@@ -9,6 +9,8 @@ public class MapDirector : MonoBehaviour
     [SerializeField] public int nodesAlive;
     [SerializeField] int nodeLimit;
     [SerializeField] int currentSpawnAttempts;
+    [Space]
+    [SerializeField] Transform nodeParent;
     LayerMask whiteListMasks;
 
     private GameObject SelectRandomNode()
@@ -58,7 +60,7 @@ public class MapDirector : MonoBehaviour
         Vector3 location = CheckForValidSpawn();
         if (randomNode == null || location == new Vector3(0, 100, 0)) { return false; }
 
-        GameObject newNode = Instantiate(randomNode, location, Quaternion.identity);
+        GameObject newNode = Instantiate(randomNode, location, Quaternion.identity, nodeParent);
 
         currentSpawnAttempts = 0;
         return true;

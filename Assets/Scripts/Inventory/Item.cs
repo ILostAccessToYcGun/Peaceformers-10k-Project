@@ -21,9 +21,9 @@ public class Item : MonoBehaviour, IPointerClickHandler
     [Header("Dimensions")]
     [SerializeField] public int itemWidth; //we NOT doing Ls
     [SerializeField] public  int itemHeight;
+    [SerializeField] public Image img;
     [SerializeField] List<ItemComponent> itemComponents = new List<ItemComponent>();
     [SerializeField] ItemComponent singleComponent;
-    [SerializeField] public Image img;
     [SerializeField] int componentDistance;
     [SerializeField] GridLayoutGroup gridLayout;
 
@@ -39,8 +39,8 @@ public class Item : MonoBehaviour, IPointerClickHandler
     [SerializeField] public GameObject parentInventory;
     [SerializeField] public Inventory currentInventory;
     [SerializeField] WorldItem worldItem;
-    
-    #region _Item_Pickup_in_Menu_
+
+    #region _Item_Menu_Pickup_ 
     private bool itemIsPickedUpByMouse;
 
     public void OnPointerClick(PointerEventData pointerEventData)
@@ -226,24 +226,16 @@ public class Item : MonoBehaviour, IPointerClickHandler
                 && this.transform.position.x < currentInventory.inventoryPanel.gameObject.transform.position.x + currentInventory.inventoryPanel.sizeDelta.x / 2
                 && this.transform.position.y > currentInventory.inventoryPanel.gameObject.transform.position.y - currentInventory.inventoryPanel.sizeDelta.y / 2
                 && this.transform.position.y < currentInventory.inventoryPanel.gameObject.transform.position.y + currentInventory.inventoryPanel.sizeDelta.y / 2)
-            {
                 return 0;
-            }
             else
-            {
                 return 2;
-            }
         }
         else
-        {
             return 1;
-        }
     }
 
     public int SearchAndMoveToNearestInventorySlot()
     {
-        //Search
-        //InventorySlot[] inventorySlots = FindObjectsByType<InventorySlot>(FindObjectsSortMode.None);
         InventorySlot[] inventorySlots = FindObjectsByType<InventorySlot>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         if (inventorySlots.Length < 1) { return -1; }
 
@@ -288,7 +280,6 @@ public class Item : MonoBehaviour, IPointerClickHandler
                                     if (currentItem != null) //if there is something inside the checking cells
                                     {
                                         if (w == (int)slotPosition.x && h == (int)slotPosition.y)
-                                        //if (h == (int)startPos.y)
                                         {
                                             if (currentItem.itemName == this.itemName && currentItem.stackAmount < currentItem.stackLimit) //hmmm will need some work
                                                 firstCellisLikeItem = true;
@@ -300,12 +291,8 @@ public class Item : MonoBehaviour, IPointerClickHandler
                             }
                         }
 
-
                         if (itemDoesFitInsideInventoryFrame && (itemDoesNotCollideWithOtherItems || firstCellisLikeItem))
                         {
-                            //Debug.Log("itemDoesFitInsideInventoryFrame: " + itemDoesFitInsideInventoryFrame);
-                            //Debug.Log("itemDoesNotCollideWithOtherItems: " + itemDoesNotCollideWithOtherItems);
-                            //Debug.Log("firstCellisLikeItem: " + firstCellisLikeItem);
                             if (slot.GetHeldItem() == null) //if the slot isnt holding anything
                             {
                                 isStacking = false;
@@ -314,7 +301,6 @@ public class Item : MonoBehaviour, IPointerClickHandler
                                 nearestDistance = compareDistance;
                                 nearestInventorySlot = slot;
                                 stackingItem = null;
-                                //Debug.Log("empty " + nearestDistance);
                             }
                             else if (slot.GetHeldItem().itemName == itemName) //if the slot is holding another of the same item
                             {
@@ -333,7 +319,6 @@ public class Item : MonoBehaviour, IPointerClickHandler
 
                                         stackingItem.SetStackAmount(stackingItem.stackLimit);
                                         stackingItem.UpdateStackText();
-                                        //Debug.Log("top up " + nearestDistance);
                                     }
                                     else
                                     {
@@ -343,9 +328,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
                                         nearestDistance = compareDistance;
                                         nearestInventorySlot = slot;
                                         stackingItem = slot.GetHeldItem();
-                                        //Debug.Log("merge " + nearestDistance);
                                     }
-
                                 }
                                 else if (slot.GetHeldItem().stackAmount < slot.GetHeldItem().stackLimit && stackAmount == stackLimit)
                                 {
@@ -362,8 +345,6 @@ public class Item : MonoBehaviour, IPointerClickHandler
 
                                     stackingItem.UpdateStackText();
                                     UpdateStackText();
-
-                                    //Debug.Log("swap" + nearestDistance);
                                 }
                             }
                         }
@@ -376,28 +357,22 @@ public class Item : MonoBehaviour, IPointerClickHandler
                         nearestDistance = compareDistance;
                         nearestInventorySlot = slot;
                         stackingItem = null;
-                        //Debug.Log("trash " + nearestDistance);
                     }
-                    
                 }
             }
         }
 
         //Move
         if (nearestDistance > 125f) //if the item is really far away from the inventory slot, probably dont do anything
-        {
-            //check if the item's location is still inside the current inventory   
+        {  
             if (this.transform.position.x > currentInventory.inventoryPanel.gameObject.transform.position.x - currentInventory.inventoryPanel.sizeDelta.x / 2 
                 && this.transform.position.x < currentInventory.inventoryPanel.gameObject.transform.position.x + currentInventory.inventoryPanel.sizeDelta.x / 2
                 && this.transform.position.y > currentInventory.inventoryPanel.gameObject.transform.position.y - currentInventory.inventoryPanel.sizeDelta.y / 2
                 && this.transform.position.y < currentInventory.inventoryPanel.gameObject.transform.position.y + currentInventory.inventoryPanel.sizeDelta.y / 2)
             {
-                Debug.Log("Previous");
                 if (previousInventorySlot == null)
-                {
-                    //find a slot
                     previousInventorySlot = currentInventory.FindPartialyFilledItemOrEmptySlot(this);
-                }
+
                 if (previousInventorySlot != null)
                 {
                     if (previousInventorySlot.GetHeldItem() != null)
@@ -420,19 +395,15 @@ public class Item : MonoBehaviour, IPointerClickHandler
                         AddComponentSlots(inventorySlots);
                     }
                 }
-                
             }
             else //outside of the current inventory
             {
                 if (player != null)
-                {
                     InstantiateWorldObject(stackAmount);
-                }
             } 
         }
         else
         {
-            //Debug.Log("next");
             currentInventorySlot = nearestInventorySlot;
 
             if (currentInventorySlot != null)
@@ -443,7 +414,6 @@ public class Item : MonoBehaviour, IPointerClickHandler
             currentInventorySlot.SetHeldItem(this);
             currentInventory = currentInventorySlot.parentInventory;
             SetParentInventoryObject(currentInventory.parent);
-            //Debug.Log(currentInventorySlot.inventoryPosition);
 
             if (isTrashing)
             {
@@ -470,6 +440,12 @@ public class Item : MonoBehaviour, IPointerClickHandler
         return overspillAmount;
     }
 
+    #endregion
+
+    #region _Inventory_Slots_
+
+    public InventorySlot GetCurrentInventorySlot() { return currentInventorySlot; }
+
     public void AddComponentSlots(InventorySlot[] inventorySlots)
     {
         foreach (InventorySlot slot in inventorySlots)
@@ -482,7 +458,6 @@ public class Item : MonoBehaviour, IPointerClickHandler
                     {
                         slot.SetHeldItem(this);
                         componentSlots.Add(slot);
-                        //Debug.Log("component slot added");
                     }
                 }
             }
@@ -503,24 +478,12 @@ public class Item : MonoBehaviour, IPointerClickHandler
         componentSlots.Clear();
     }
 
-    public void InstantiateWorldObject(int worldStackAmount, bool isDestroy = true)
-    {
-        GameObject newDroppedItem = Instantiate(worldItem.gameObject, player.transform.position + new Vector3(0, 2f, 0), player.transform.rotation);
-        WorldItem newWorldItem = newDroppedItem.GetComponent<WorldItem>();
-
-        newWorldItem.InitializeWorldObject(worldStackAmount, 0, 0);
-        if (isDestroy)
-            OnDestroy();
-    }
-
-    public InventorySlot GetCurrentInventorySlot() { return currentInventorySlot; }
-
     #endregion
 
     #region _Stack_
     [Space]
-    public int stackAmount;
-    public int stackLimit;
+    [SerializeField] public int stackAmount;
+    [SerializeField] public int stackLimit;
     public TextMeshProUGUI stackText;
 
     public void SetStackLimit(int newLimit) { stackLimit = newLimit; UpdateStackText(); }
@@ -536,7 +499,6 @@ public class Item : MonoBehaviour, IPointerClickHandler
     }
     public void DecreaseStackAmount(int decrease) 
     {
-        
         if (decrease >= stackAmount)
             stackAmount -= stackLimit;
         else
@@ -596,22 +558,63 @@ public class Item : MonoBehaviour, IPointerClickHandler
         }
         this.transform.SetAsLastSibling();
         this.gameObject.transform.position = new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y, 1f);
-        Debug.Log("hmmmm" + this.gameObject.transform.position);
     }
 
     public void PlaceDownItem()
     {
-        
         foreach (ItemComponent component in itemComponents)
         {
             component.transform.position = new Vector3(component.transform.position.x, component.transform.position.y, -1f);
-            //Debug.Log(component.transform.position);
         }
         this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -1f);
     }
 
 
     #endregion
+
+    #region _Other_Objects_
+
+    public void SetParentInventoryObject(GameObject newParent)
+    {
+        if (newParent != null)
+            parentInventory = newParent;
+        else
+            parentInventory = FindAnyObjectByType<PlayerUIToggler>().gameObject;
+
+        this.transform.parent = parentInventory.transform;
+    }
+
+    public void InstantiateWorldObject(int worldStackAmount, bool isDestroy = true)
+    {
+        GameObject newDroppedItem = Instantiate(worldItem.gameObject, player.transform.position + new Vector3(0, 2f, 0), player.transform.rotation);
+        WorldItem newWorldItem = newDroppedItem.GetComponent<WorldItem>();
+
+        newWorldItem.InitializeWorldObject(worldStackAmount, 0, 0);
+        if (isDestroy)
+            OnDestroy();
+    }
+
+    #endregion
+
+    private void Awake()
+    {
+        player = FindAnyObjectByType<PlayerMovement>();
+        currentInventory = FindAnyObjectByType<Inventory>();
+        img = GetComponent<Image>();
+
+        SetParentInventoryObject(currentInventory.parent);
+        this.gameObject.name = itemName.ToString();
+        stackAmount = 1;
+        if (itemComponents.Count < (itemWidth * itemHeight) - 1)
+            GenerateItem();
+    }
+
+
+    private void Update()
+    {
+        if (this.gameObject.activeSelf)
+            MoveToMouse();
+    }
 
     private void OnDestroy()
     {
@@ -629,47 +632,8 @@ public class Item : MonoBehaviour, IPointerClickHandler
 
         if (currentInventory.playerQuestBoard != null)
             currentInventory.playerQuestBoard.UpdateQuests();
-        
+
         Destroy(gameObject);
-    }
-
-    public void SetParentInventoryObject(GameObject newParent)
-    {
-        if (newParent != null)
-        {
-            parentInventory = newParent;
-        }
-        else
-        {
-            parentInventory = FindAnyObjectByType<PlayerUIToggler>().gameObject;
-        }
-        
-        this.transform.parent = parentInventory.transform;
-    }
-
-    private void Awake()
-    {
-        this.gameObject.name = itemName.ToString();
-        currentInventory = FindAnyObjectByType<Inventory>();
-
-        SetParentInventoryObject(currentInventory.parent);
-
-        img = GetComponent<Image>();
-        stackAmount = 1;
-        //SetStackLimit(5);
-        player = FindAnyObjectByType<PlayerMovement>();
-        //componentDistance = 100;
-        if (itemComponents.Count < (itemWidth * itemHeight) - 1)
-            GenerateItem();
-    }
-
-
-    private void Update()
-    {
-        if (this.gameObject.activeSelf)
-        {
-            MoveToMouse();
-        }
     }
 
 }
