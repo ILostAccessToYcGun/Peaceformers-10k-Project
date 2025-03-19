@@ -24,7 +24,10 @@ public class EnemyDirector : MonoBehaviour
     [Space]
     [SerializeField] Transform enemyParent;
 
-    //the next thing I need to do is to have dedicated spawns for the enemy camps, maybe...
+    //the next thing I need to do is to have dedicated spawns for the enemy camps
+    //what im thinking is that for however many camps we have, they will spawn 1-2 enemies on the camp
+    //when that camp is _cleared_ a day timer is started and it will regen in 3 days
+    //but these enemies are on a separate counter to the regular world spawns, so they dont get counted towards those variables
     LayerMask whiteListMasks;
 
     #region _Difficulty_
