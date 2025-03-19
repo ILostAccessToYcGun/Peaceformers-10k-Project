@@ -338,7 +338,7 @@ public class Inventory : MonoBehaviour
 
     #region _Inventory_Management_
 
-    public void AddItemToInventory(Item itemToAdd, int amount)
+    public int AddItemToInventory(Item itemToAdd, int amount)
     {
         int decreaseAmount = amount;
         for (int i = amount; i > 0;)
@@ -349,12 +349,14 @@ public class Inventory : MonoBehaviour
                 if (amount > itemToAdd.stackLimit)
                 {
                     decreaseAmount = itemToAdd.stackLimit;
-                    itemToAdd.InstantiateWorldObject(itemToAdd.stackLimit); //this is bugging
+                    //itemToAdd.InstantiateWorldObject(itemToAdd.stackLimit); //this is bugging
+                    return itemToAdd.stackLimit;
                 }
                 else
                 {
                     decreaseAmount = amount;
-                    itemToAdd.InstantiateWorldObject(amount); //this is bugging
+                    //itemToAdd.InstantiateWorldObject(amount); //this is bugging
+                    return amount;
                 }
             }
 
@@ -413,6 +415,7 @@ public class Inventory : MonoBehaviour
             amount -= decreaseAmount;
             i -= decreaseAmount;
         }
+        return 0;
     }
 
     public int AddItemToInventory(Item itemToAdd, int amount, int x, int y)
