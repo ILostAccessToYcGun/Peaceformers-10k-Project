@@ -54,6 +54,8 @@ public class DayNightCycleManager : MonoBehaviour
     [SerializeField] List<Settlement> settlements;
     [SerializeField] Camp playerCamp;
     [SerializeField] Inventory playerInventory;
+    [SerializeField] float addQuestCoolDownTimer; //make this private
+    [SerializeField] float addQuestCoolDown;
 
     #region _Time_
 
@@ -157,6 +159,7 @@ public class DayNightCycleManager : MonoBehaviour
     public void BeginDay()
     {
         SetTime(6, 0);
+        addQuestCoolDownTimer = 0f;
         moonLight.intensity = 0;
         sunLight.intensity = 0.7f;
 
@@ -233,6 +236,32 @@ public class DayNightCycleManager : MonoBehaviour
 
     #endregion
 
+    public void AllocateQuests()
+    {
+        List<Settlement> whiteListQuestAdd = new List<Settlement>();
+        List<int> questCounts = new List<int>();
+        for (int i = 0; i < settlements.Count; ++i) //loop through the settlements
+        {
+            questCounts.Add(settlements[i].questGiver.quests.Count);
+        }
+
+        int smallest = questCounts[0];
+        foreach (int num in questCounts)
+        {
+            if (num < smallest)
+                smallest = num;
+        }
+
+        for (int i = 0; i < questCounts.Count; ++i)
+        {
+            if (questCounts[i] - smallest <= 1)
+                whiteListQuestAdd.Add(settlements[i]); 
+        }
+
+        Settlement settlementRecievingQuest = whiteListQuestAdd[Random.Range(0, whiteListQuestAdd.Count)];
+        settlementRecievingQuest.questGiver.AddQuestToGiver();
+    }
+
     private void Update()
     {
         if (updateTime)
@@ -243,6 +272,12 @@ public class DayNightCycleManager : MonoBehaviour
                 time = 0;
             }
             totalTime += Time.deltaTime / 0.29166f;
+            addQuestCoolDownTimer -= Time.deltaTime / 0.29166f;
+            if (addQuestCoolDownTimer <= 0)
+            {
+                AllocateQuests();
+                addQuestCoolDownTimer = addQuestCoolDown;
+            }
             UpdateLightAngle();
             UpdateLightIntensity();
             time += Time.deltaTime;

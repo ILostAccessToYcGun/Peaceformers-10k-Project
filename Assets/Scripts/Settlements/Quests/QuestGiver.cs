@@ -22,7 +22,7 @@ public class QuestGiver : MonoBehaviour
     [SerializeField] QuestBoard playerQuestBoard;
 
     public enum QuestStatus { InProgress, Completed } //????
-    [SerializeField] List<QuestObject> quests;
+    [SerializeField] public List<QuestObject> quests;
     //[SerializeField] GameObject baseQuestUI;
     [SerializeField] QuestObject baseQuestObject;
 

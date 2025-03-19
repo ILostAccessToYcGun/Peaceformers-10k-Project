@@ -23,7 +23,7 @@ public class Settlement : BaseInteractable
     [SerializeField] private Color goodHealthColor;
     [SerializeField] private Color watchOutColor;
     [SerializeField] private Color criticalColor;
-    [SerializeField] private QuestGiver questGiver;
+    [SerializeField] public QuestGiver questGiver;
 
 
     [SerializeField] public int panicEnemies;

@@ -10902,6 +10902,8 @@ MonoBehaviour:
   - {fileID: 1854132513}
   playerCamp: {fileID: 798244627}
   playerInventory: {fileID: 1001539036}
+  addQuestCoolDownTimer: 0
+  addQuestCoolDown: 600
 --- !u!4 &1676149431
 Transform:
   m_ObjectHideFlags: 0

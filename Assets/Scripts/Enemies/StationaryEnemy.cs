@@ -29,7 +29,7 @@ public class StationaryEnemy : MonoBehaviour
     [SerializeField] private int currentAmmo;
     [SerializeField] private int baseDmg = 8;
     [SerializeField] private int modDmg;
-    [SerializeField] private float bulletForce = 60f;
+    [SerializeField] private float fireForce = 60f;
     [SerializeField] private float timeBetweenShots = 0.04f;
     [SerializeField] private float reloadTime = 5f;
     [SerializeField] private float bulletSpread = 3f;
@@ -203,7 +203,7 @@ public class StationaryEnemy : MonoBehaviour
             Destroy(m, 0.05f);
 
             GameObject b = Instantiate(bulletPrefab, barrel.position, barrel.rotation);
-            b.GetComponent<Rigidbody>().linearVelocity = barrel.right * bulletForce;
+            b.GetComponent<Rigidbody>().linearVelocity = barrel.right * fireForce;
             b.GetComponent<Bullet>().baseDmg = modDmg;
             b.GetComponent<Bullet>().source = transform;
 

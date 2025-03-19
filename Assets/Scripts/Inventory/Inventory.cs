@@ -313,7 +313,7 @@ public class Inventory : MonoBehaviour
                 
             }
         }
-        Debug.Log("itemSearchCount=" + itemSearchCount);
+        //Debug.Log("itemSearchCount=" + itemSearchCount); /
         return itemSearchCount;
     }
 
