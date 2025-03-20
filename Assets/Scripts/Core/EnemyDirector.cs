@@ -24,10 +24,7 @@ public class EnemyDirector : MonoBehaviour
     [Space]
     [SerializeField] Transform enemyParent;
 
-    //the next thing I need to do is to have dedicated spawns for the enemy camps
-    //what im thinking is that for however many camps we have, they will spawn 1-2 enemies on the camp
-    //when that camp is _cleared_ a day timer is started and it will regen in 3 days
-    //but these enemies are on a separate counter to the regular world spawns, so they dont get counted towards those variables
+    
     LayerMask whiteListMasks;
 
     #region _Difficulty_
@@ -48,11 +45,11 @@ public class EnemyDirector : MonoBehaviour
 
     #region _Location_
 
-    private Vector3 CheckForValidSpawn()
+    public Vector3 CheckForValidSpawn(float radius = 10f)
     {
         RaycastHit hit;
         whiteListMasks = LayerMask.GetMask("Ground");
-        bool rayHit = Physics.SphereCast(transform.position, 10f, -transform.up, out hit, 100f, whiteListMasks);
+        bool rayHit = Physics.SphereCast(transform.position, radius, -transform.up, out hit, 100f, whiteListMasks);
         // Does the ray intersect any objects excluding the player layer
         if (rayHit)
             return hit.point;
@@ -73,6 +70,11 @@ public class EnemyDirector : MonoBehaviour
         }
     }
 
+    public void SelectLocation(Vector3 location)
+    {
+        transform.position = new Vector3(location.x, 25, location.z);
+    }
+
     #endregion
 
     #region _Spawning_Enemies_
@@ -84,13 +86,21 @@ public class EnemyDirector : MonoBehaviour
         return randomEnemySelection[choice];
     }
 
-    private bool SpawnEnemy()
+    public bool SpawnEnemy(EnemyCamp enemyCamp = null)
     {
         GameObject randomEnemy = SelectRandomEnemy();
         Vector3 location = CheckForValidSpawn();
         if (randomEnemy == null || location == new Vector3(0, 100, 0)) { return false; }
 
         GameObject newEnemy = Instantiate(randomEnemy, location, Quaternion.identity, enemyParent);
+        if (enemyCamp != null)
+        {
+            StationaryEnemy gun = newEnemy.GetComponentInChildren<StationaryEnemy>();
+            gun.isCampEnemy = true; //pretty sure this is not gonna work
+            gun.enemyCamp = enemyCamp;
+        }
+
+
         currentSpawnAttempts = 0;
         return true;
     }

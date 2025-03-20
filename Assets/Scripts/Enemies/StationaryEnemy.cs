@@ -17,6 +17,7 @@ public class StationaryEnemy : MonoBehaviour
 
     [SerializeField] private GameObject gameObjectToDestory;
     [SerializeField] public GameObject parentSettlement;
+    [SerializeField] public EnemyCamp enemyCamp;
     [Space]
     [Header("Detection")]
     [SerializeField] private List<Transform> targets;
@@ -35,13 +36,17 @@ public class StationaryEnemy : MonoBehaviour
     [SerializeField] private float bulletSpread = 3f;
     private bool isFiring;
     public bool isReloading;
-    [SerializeField] public bool isPrioSettlements = false;
 
     private bool _requestedShoot;
 
     private Coroutine firingCoroutine;
 
     [SerializeField] private bool alive = true;
+
+    [Space]
+    [Header("Specialization")]
+    [SerializeField] public bool isPrioSettlements = false;
+    [SerializeField] public bool isCampEnemy = false;
 
     void Start()
     {
@@ -54,7 +59,11 @@ public class StationaryEnemy : MonoBehaviour
         healthBar.ScaleUI();
 
         targets = ed.targetList;
-        ++ed.enemiesAlive;
+        if (isCampEnemy)
+            ++enemyCamp.campEnemiesAlive;
+        else
+            ++ed.enemiesAlive;
+        
         currentAmmo = maxAmmo;
     }
 
@@ -67,7 +76,8 @@ public class StationaryEnemy : MonoBehaviour
         else
         {
             print(transform.name + ": im dead!!");
-            --ed.enemiesAlive;
+            if (!isCampEnemy)
+                --ed.enemiesAlive;
 
             if (parentSettlement != null)
             {
@@ -76,6 +86,11 @@ public class StationaryEnemy : MonoBehaviour
                 set.LoseMeter(3f);
                 --set.panicEnemies;
             }
+            else if (enemyCamp != null)
+            {
+                --enemyCamp.GetComponent<EnemyCamp>().campEnemiesAlive;
+            }
+
             Destroy((gameObjectToDestory != null ? gameObjectToDestory : this.gameObject));
         }
     }

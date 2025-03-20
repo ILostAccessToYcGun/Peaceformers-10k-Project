@@ -165,6 +165,7 @@ public class DayNightCycleManager : MonoBehaviour
 
         md.GenerateNodes();
         ed.GenerateEnemies();
+        CampEnemySpawnCheck();
     }
 
     public void EndOfDayCheck()
@@ -190,7 +191,6 @@ public class DayNightCycleManager : MonoBehaviour
                 }
             }
             SettlementEnemySpawnCheck();
-
 
             //we wanna run a check to see if the player is not within X distance to the camp
             if (!playerCamp.SafeDistanceCheck())
@@ -231,6 +231,16 @@ public class DayNightCycleManager : MonoBehaviour
                         settlement.panicEnemies += ed.SpawnSettlementEnemeies(settlement.gameObject, otherSettlement.gameObject);
                 }
             }
+        }
+    }
+
+    public void CampEnemySpawnCheck()
+    {
+        EnemyCamp[] camps = FindObjectsByType<EnemyCamp>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+        
+        foreach (EnemyCamp camp in camps)
+        {
+            camp.UpdateCamp();
         }
     }
 
