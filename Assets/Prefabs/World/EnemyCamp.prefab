@@ -58,9 +58,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ed: {fileID: 0}
   campEnemiesAlive: 0
-  campEnemyLimit: 3
+  EnemySpawnAmountRange: {x: 2, y: 4}
   respawnCooldown: 3
   respawnTimer: 0
+  barrels:
+  - {fileID: 5168532492673932788}
 --- !u!1 &7705867873398635116
 GameObject:
   m_ObjectHideFlags: 0
@@ -475,6 +477,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4308463287167097925, guid: 4b40f047afd3f6d40983f74c3fd22d0d, type: 3}
   m_PrefabInstance: {fileID: 4512402380172697442}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5168532492673932788 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8729408628118176406, guid: 4b40f047afd3f6d40983f74c3fd22d0d, type: 3}
+  m_PrefabInstance: {fileID: 4512402380172697442}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2aa78afb9c7ec324abec28d22de9cdc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4804333036425647995
 PrefabInstance:
   m_ObjectHideFlags: 0

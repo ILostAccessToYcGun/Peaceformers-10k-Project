@@ -3,15 +3,21 @@ using UnityEngine;
 
 public class MapDirector : MonoBehaviour
 {
-    [SerializeField] List<GameObject> resourceNodeSelection;
-    [Space]
-    [Header("Node Info")]
-    [SerializeField] public int nodesAlive;
-    [SerializeField] int nodeLimit;
+    
     [SerializeField] int currentSpawnAttempts;
     [Space]
+    [Header("Node Info")]
+    [SerializeField] List<GameObject> resourceNodeSelection;
+    [SerializeField] public int nodesAlive;
+    [SerializeField] int nodeLimit;
+    [Space]
+    [Header("EnemyCamp Info")]
+    [SerializeField] List<GameObject> enemyCampSelection;
+    [SerializeField] int enemyCampLimit;
+    [Space]
+    [Header("Parents")]
     [SerializeField] Transform nodeParent;
-    LayerMask whiteListMasks;
+    [SerializeField] Transform enemyCampParent;
 
     private GameObject SelectRandomNode()
     {
@@ -20,25 +26,19 @@ public class MapDirector : MonoBehaviour
         return resourceNodeSelection[choice];
     }
 
-    private Vector3 CheckForValidSpawn()
+    private Vector3 CheckForValidSpawn(float radius = 2f)
     {
         RaycastHit hit;
-        whiteListMasks = LayerMask.GetMask("Ground");
+        LayerMask whiteListMasks = LayerMask.GetMask("Ground");
 
-        bool rayHit = Physics.SphereCast(transform.position, 2f, -transform.up, out hit, 100f, whiteListMasks);
-
-        //Debug.Log(hit.collider.gameObject.layer);
-
-        // Does the ray intersect any objects excluding the player layer
+        bool rayHit = Physics.SphereCast(transform.position, radius, -transform.up, out hit, 100f, whiteListMasks);
         if (rayHit)
-        {
-            //if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
             return hit.point;
-        }
+
         return new Vector3(0, 100, 0);
     }
 
-    private void SelectRandomLocation()
+    private void SelectRandomLocation(float radius = 2f)
     {
         bool isValidLocation = false;
 
@@ -49,7 +49,7 @@ public class MapDirector : MonoBehaviour
 
             transform.position = new Vector3(posX, 25, posZ);
 
-            if (CheckForValidSpawn() != new Vector3(0, 100, 0))
+            if (CheckForValidSpawn(radius) != new Vector3(0, 100, 0))
                 isValidLocation = true; break;
         }
     }
@@ -74,7 +74,6 @@ public class MapDirector : MonoBehaviour
         {
             if (currentSpawnAttempts >= 1000) { break; }
             
-
             SelectRandomLocation();
             if (!SpawnNode())
             {
@@ -98,6 +97,42 @@ public class MapDirector : MonoBehaviour
         for (int i = 0; i < itemsOnTheGround.Length; i++)
         {
             Destroy(itemsOnTheGround[i].gameObject);
+        }
+    }
+
+    private GameObject SelectRandomCamp()
+    {
+        if (enemyCampSelection.Count < 1) { return null; }
+        int choice = Random.Range(0, enemyCampSelection.Count);
+        return enemyCampSelection[choice];
+    }
+
+    private bool SpawnCamp()
+    {
+        GameObject randomCamp = SelectRandomCamp();
+        Vector3 location = CheckForValidSpawn();
+        if (randomCamp == null || location == new Vector3(0, 100, 0)) { return false; }
+
+        GameObject newCamp = Instantiate(randomCamp, location, Quaternion.identity);
+
+        currentSpawnAttempts = 0;
+        return true;
+    }
+
+    public void GenerateCamps()
+    {
+        Debug.Log("generate enemy camps");
+        currentSpawnAttempts = 0;
+        for (int i = 0; i < enemyCampLimit; i++)
+        {
+            if (currentSpawnAttempts >= 1000) { break; }
+            Debug.Log("try");
+            SelectRandomLocation(30f);
+            if (!SpawnCamp())
+            {
+                i--;
+                ++currentSpawnAttempts;
+            }
         }
     }
 }

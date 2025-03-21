@@ -103,6 +103,12 @@ public class InteractableInventory : BaseInteractable
 
     public void RandomizeInventoryLoot()
     {
+        if (inventory == null)
+        {
+            Invoke("RandomizeInventoryLoot", 0.5f);
+            return;
+        }
+            
         inventory.DestroyInventory();
         inventory.inventoryWidth = (int)inventorySize.x;
         inventory.inventoryHeight = (int)inventorySize.y;
@@ -174,6 +180,7 @@ public class InteractableInventory : BaseInteractable
         itemInventory.Clear();
         itemDet.Clear();
 
+        currentValue = 0;
         List<Item> blackList = new List<Item>();
 
         for (int j = 0; j < inventory.inventory.Capacity; j++)
@@ -210,6 +217,8 @@ public class InteractableInventory : BaseInteractable
                             blackList.Add(currentItem);
                             itemInventory.Add(addingItem);
                             itemDet.Add(new Vector3(currentItem.stackAmount, currentItem.GetCurrentInventorySlot().inventoryPosition.x, currentItem.GetCurrentInventorySlot().inventoryPosition.y));
+
+                            currentValue += (int)((float)currentItem.stackAmount * (currentItem.itemName == Item.Name.AmmoCrate ? 0.25f : 1f));
                         }
                     }
                     else
@@ -217,6 +226,10 @@ public class InteractableInventory : BaseInteractable
                         blackList.Add(currentItem);
                         itemInventory.Add(addingItem);
                         itemDet.Add(new Vector3(currentItem.stackAmount, currentItem.GetCurrentInventorySlot().inventoryPosition.x, currentItem.GetCurrentInventorySlot().inventoryPosition.y));
+
+                        //update the current item value
+                        currentValue += (int)( (float)currentItem.stackAmount * (currentItem.itemName == Item.Name.AmmoCrate ? 0.25f : 1f ) );
+
                     }
                 }
             }
@@ -250,6 +263,17 @@ public class InteractableInventory : BaseInteractable
 
     private void Start()
     {
+        //okay i think this is going to crash but ill try anyway
+        Inventory[] invs = FindObjectsByType<Inventory>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+        foreach (Inventory inv in invs)
+        {
+            if (!inv.isPlayerInventory)
+            {
+                inventory = inv;
+                break;
+            }
+        }
+
         if (isRandomizingSize)
             RandomizeInventorySize((int)inventorySizeRangeX.x, (int)inventorySizeRangeY.x, (int)inventorySizeRangeX.y, (int)inventorySizeRangeY.y);
         if (isRandomizingLoot)
@@ -260,15 +284,7 @@ public class InteractableInventory : BaseInteractable
     {
         base.Awake();
         GameObject mainCanvas = FindAnyObjectByType<PlayerUIToggler>().gameObject;
-
         playerUIToggler = mainCanvas.GetComponent<PlayerUIToggler>();
-
-        //GameObject secondInventory = .gameObject;
-
-        //Inventory testInventory = mainCanvas.GetComponentInChildren<Inventory>();
-        //Debug.Log(testInventory);
-
-        //inventoryPanel = inventory.gameObject.GetComponentInChildren<RectTransform>();
     }
 
 

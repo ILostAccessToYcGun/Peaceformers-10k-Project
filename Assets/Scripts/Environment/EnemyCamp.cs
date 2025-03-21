@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyCamp : MonoBehaviour
@@ -14,6 +15,7 @@ public class EnemyCamp : MonoBehaviour
     [SerializeField] Vector2 EnemySpawnAmountRange;
     [SerializeField] int respawnCooldown;
     [SerializeField] int respawnTimer;
+    [SerializeField] List<InteractableInventory> barrels;
 
 
     private void Awake()
@@ -52,12 +54,14 @@ public class EnemyCamp : MonoBehaviour
                             spawnAttemps = 0;
                         }
                     }
-
-                    
-                    
-                    
                 }
                 respawnTimer = respawnCooldown;
+
+                //refill the barrels
+                foreach (InteractableInventory barrel in barrels)
+                {
+                    barrel.RandomizeInventoryLoot();
+                }
             }
             else
                 --respawnTimer;

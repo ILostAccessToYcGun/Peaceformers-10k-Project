@@ -236,7 +236,7 @@ public class DayNightCycleManager : MonoBehaviour
 
     public void CampEnemySpawnCheck()
     {
-        EnemyCamp[] camps = FindObjectsByType<EnemyCamp>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+        EnemyCamp[] camps = FindObjectsByType<EnemyCamp>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         
         foreach (EnemyCamp camp in camps)
         {
@@ -301,6 +301,7 @@ public class DayNightCycleManager : MonoBehaviour
         ed = FindAnyObjectByType<EnemyDirector>();
         ed.ResetDifficulty();
         ui = FindAnyObjectByType<PlayerUIToggler>();
+        md.GenerateCamps();
         BeginDay();
 
         if (UIUpdateFrequency == 0)
