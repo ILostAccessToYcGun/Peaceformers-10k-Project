@@ -5269,6 +5269,12 @@ MonoBehaviour:
   range: 20
   timeBetweenShots: 0.11
   reloadTime: 1.5
+  M_maxAmmo: 0
+  M_baseDmg: 0
+  M_bulletForce: 0
+  M_range: 0
+  M_timeBetweenShots: 0
+  M_reloadTime: 0
   muzzlePoint: {fileID: 1093982059}
   muzzleFlash: {fileID: 100008, guid: 9058260c08717d340aa6d4f552e69e27, type: 3}
   hitVfx: {fileID: 100008, guid: c460780050234874594e9f7a0f7decc6, type: 3}
@@ -6381,6 +6387,7 @@ GameObject:
   - component: {fileID: 1001539038}
   - component: {fileID: 1001539037}
   - component: {fileID: 1001539039}
+  - component: {fileID: 1001539040}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -6542,12 +6549,38 @@ MonoBehaviour:
   batteryFill: {fileID: 823034905}
   batteryLoss: {fileID: 431790269}
   lossLerpSpeed: 2
+  maxBattery: 100
   currentBattery: 0
-  passiveLossRate: 0.375
+  passiveLossRate: 0.5
   goodHealthColor: {r: 0, g: 1, b: 0, a: 1}
   watchOutColor: {r: 1, g: 0.5882353, b: 0, a: 1}
   criticalColor: {r: 1, g: 0, b: 0, a: 1}
+  M_maxBattery: 100
+  M_passiveLossRate: 0
   dayNightCycleManager: {fileID: 1676149430}
+--- !u!114 &1001539040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001539033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91c9d4e3d5a98154a83f2f59efab9144, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movement: {fileID: 1678360442}
+  gun: {fileID: 833486680}
+  battery: {fileID: 1001539039}
+  healthBar: {fileID: 1061388202}
+  upgrade1: {fileID: 1188601806}
+  upgrade2: {fileID: 1747216921}
+  upgrade3: {fileID: 1526777606}
+  tempMaxDashHold: 0
+  tempBulletDamageHold: 0
+  tempMaxAmmoHold: 0
+  methodIndexBlacklist: 
 --- !u!1 &1008345532
 GameObject:
   m_ObjectHideFlags: 0
@@ -7133,11 +7166,13 @@ MonoBehaviour:
   healthbarLoss: {fileID: 1921783089}
   lossLerpSpeed: 2
   maxHealth: 100
+  M_maxHealth: 0
   goodHealthColor: {r: 1, g: 1, b: 1, a: 1}
   watchOutColor: {r: 0.9843138, g: 0.41960788, b: 0.1137255, a: 1}
   criticalColor: {r: 1, g: 0.2509804, b: 0.2509804, a: 1}
   pb: {fileID: 1001539039}
   damageToEnergyLoss: 0.1
+  M_damageToEnergyLoss: 0
 --- !u!1 &1062445180 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 1a562b8555fbe9241a8657dba1dbaa2b, type: 3}
@@ -7793,7 +7828,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1188601807}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1188601807
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9975,7 +10022,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1526777607}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1526777607
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11192,6 +11251,7 @@ MonoBehaviour:
   md: {fileID: 0}
   ed: {fileID: 0}
   ui: {fileID: 0}
+  up: {fileID: 0}
   updateTime: 1
   twelveHourClock: 0
   time: 0
@@ -11299,6 +11359,20 @@ MonoBehaviour:
   goodboostColor: {r: 0.756942, g: 0.84092885, b: 0.8490566, a: 1}
   watchOutColor: {r: 0.9843138, g: 0.41960788, b: 0.1137255, a: 1}
   criticalColor: {r: 1, g: 0.25, b: 0.25, a: 1}
+  M_walkSpeed: 20
+  M_sprintMultiplier: 1.3
+  M_airSpeed: 15
+  M_airAcceleration: 90
+  M_jumpSpeed: 20
+  M_dashSpeed: 40
+  M_dashBetweenCooldown: 0.2
+  M_dashRecoveryCooldown: 0.3
+  M_maxDashes: 2
+  M_maxBoost: 100
+  M_boostGain: 2
+  M_dashBoostLoss: 20
+  M_sprintBoostLoss: 4
+  M_jumpBoostLoss: 20
 --- !u!4 &1678360443
 Transform:
   m_ObjectHideFlags: 0
@@ -12351,7 +12425,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1747216922}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1747216922
 MonoBehaviour:
   m_ObjectHideFlags: 0

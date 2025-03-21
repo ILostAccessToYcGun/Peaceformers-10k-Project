@@ -20,6 +20,7 @@ public class DayNightCycleManager : MonoBehaviour
     [SerializeField] MapDirector md;
     [SerializeField] EnemyDirector ed;
     [SerializeField] PlayerUIToggler ui;
+    [SerializeField] PlayerUpgrades up;
 
     public enum twelveHour { AM, PM }
     
@@ -107,6 +108,9 @@ public class DayNightCycleManager : MonoBehaviour
         ToggleTime(!enable);
         dayEndPanel.gameObject.SetActive(enable);
         ui.SetUIOpenBool(enable);
+
+        if (!enable)
+            up.ClearBlacklist();
     }
 
     public void UpdateTimeUI()
@@ -158,6 +162,9 @@ public class DayNightCycleManager : MonoBehaviour
 
     public void BeginDay()
     {
+        PlayerHealthBar php = FindAnyObjectByType<PlayerHealthBar>();
+        php.SetHealth(php.GetMaxHealth());
+
         SetTime(6, 0);
         addQuestCoolDownTimer = 0f;
         moonLight.intensity = 0;
@@ -171,34 +178,39 @@ public class DayNightCycleManager : MonoBehaviour
     public void EndOfDayCheck()
     {
         if (hour == 12 && twelveHourClock == twelveHour.AM)
+            EndDay();
+    }
+
+    public void EndDay()
+    {
+        DayEndPanel(true);
+        up.SelectSemiRandomUpgrades();
+
+        ed.AddEnemyCountEntry();
+        ed.IncreaseDifficulty();
+        cm.IncrementDayCount();
+        md.DestroyWorldItems();
+
+        List<QuestDisplay> currentQuests = playerQuestBoard.GetQuests();
+        for (int i = 0; i < currentQuests.Count; i++)
         {
-            DayEndPanel(true);
-            ed.AddEnemyCountEntry();
-            ed.IncreaseDifficulty();
-            cm.IncrementDayCount();
-            md.DestroyWorldItems();
-
-            List<QuestDisplay> currentQuests = playerQuestBoard.GetQuests();
-            for (int i = 0; i < currentQuests.Count; i++)
+            currentQuests[i].UpdateDaysLeft();
+            if (!currentQuests[i].questObject.CheckQuestValidity())
             {
-                currentQuests[i].UpdateDaysLeft();
-                if (!currentQuests[i].questObject.CheckQuestValidity())
-                {
-                    //quest has expired, immediatly abandon it
-                    currentQuests[i].otherQuestBoard.RemoveQuestFromBoard(currentQuests[i].questObject.GetCorrespondingSettlementQuestDisplayUI(), QuestBoard.RemoveType.Remove);
-                    currentQuests[i].parentQuestBoard.RemoveQuestFromBoard(currentQuests[i].questObject.GetCorrespondingPlayerQuestDisplayUI(), QuestBoard.RemoveType.Remove);
-                    i--;
-                }
+                //quest has expired, immediatly abandon it
+                currentQuests[i].otherQuestBoard.RemoveQuestFromBoard(currentQuests[i].questObject.GetCorrespondingSettlementQuestDisplayUI(), QuestBoard.RemoveType.Remove);
+                currentQuests[i].parentQuestBoard.RemoveQuestFromBoard(currentQuests[i].questObject.GetCorrespondingPlayerQuestDisplayUI(), QuestBoard.RemoveType.Remove);
+                i--;
             }
-            SettlementEnemySpawnCheck();
+        }
+        SettlementEnemySpawnCheck();
 
-            //we wanna run a check to see if the player is not within X distance to the camp
-            if (!playerCamp.SafeDistanceCheck())
-            {
-                //if the player is outside the distance range, randomly remove half their items
-                playerInventory.RemoveHalfInventory();
-            }
-
+        //we wanna run a check to see if the player is not within X distance to the camp
+        if (!playerCamp.SafeDistanceCheck())
+        {
+            //if the player is outside the distance range, randomly remove half their items
+            playerInventory.RemoveHalfInventory();
+            FindAnyObjectByType<PlayerMovement>().ResetPos();
         }
     }
 
@@ -301,6 +313,8 @@ public class DayNightCycleManager : MonoBehaviour
         ed = FindAnyObjectByType<EnemyDirector>();
         ed.ResetDifficulty();
         ui = FindAnyObjectByType<PlayerUIToggler>();
+        up = FindAnyObjectByType<PlayerUpgrades>();
+
         md.GenerateCamps();
         BeginDay();
 
