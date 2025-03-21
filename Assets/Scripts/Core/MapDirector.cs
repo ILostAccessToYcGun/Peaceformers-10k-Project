@@ -127,7 +127,7 @@ public class MapDirector : MonoBehaviour
         {
             if (currentSpawnAttempts >= 1000) { break; }
             Debug.Log("try");
-            SelectRandomLocation(30f);
+            SelectRandomLocation(50f);
             if (!SpawnCamp())
             {
                 i--;
