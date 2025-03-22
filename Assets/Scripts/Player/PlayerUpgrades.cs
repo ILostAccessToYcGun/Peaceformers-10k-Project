@@ -28,7 +28,7 @@ public class PlayerUpgrades : MonoBehaviour
 
 
 
-    public void Mobility()
+    public void Mobility_onClick()
     {
         movement.M_walkSpeed = Mathf.Clamp(movement.M_walkSpeed + 1.8f, 18f, 36f);
         movement.M_sprintMultiplier = Mathf.Clamp(movement.M_sprintMultiplier + 0.16f, 1.6f, 3.2f);
@@ -37,7 +37,7 @@ public class PlayerUpgrades : MonoBehaviour
         movement.M_jumpSpeed = Mathf.Clamp(movement.M_jumpSpeed + 2f, 20f, 40f);
     }
 
-    public void Dash()
+    public void Dash_onClick()
     {
         movement.M_dashSpeed = Mathf.Clamp(movement.M_dashSpeed + 4.5f, 45f, 90f);
         movement.M_dashBetweenCooldown = Mathf.Clamp(movement.M_dashBetweenCooldown - 0.01f, 0.1f, 0.2f);
@@ -49,7 +49,7 @@ public class PlayerUpgrades : MonoBehaviour
             tempMaxDashHold = 0;
         }
     }
-    public void Boost()
+    public void Boost_onClick()
     {
         movement.M_maxBoost = Mathf.Clamp(movement.M_maxBoost + 10f, 100f, 200f);
         movement.M_boostGain = Mathf.Clamp(movement.M_boostGain + 0.5f, 5f, 10f);
@@ -62,7 +62,7 @@ public class PlayerUpgrades : MonoBehaviour
 
     #region _Gun_
 
-    public void Bullets()
+    public void Bullets_onClick()
     {
         ++tempBulletDamageHold;
         if (tempBulletDamageHold == 2)
@@ -74,7 +74,7 @@ public class PlayerUpgrades : MonoBehaviour
         gun.M_range = Mathf.Clamp(gun.M_range + 2f, 20f, 40f);
     }
 
-    public void Magazine()
+    public void Magazine_onClick()
     {
         ++tempMaxAmmoHold;
         if (tempMaxAmmoHold == 2)
@@ -93,7 +93,7 @@ public class PlayerUpgrades : MonoBehaviour
 
     #region _Battery_
 
-    public void Battery()
+    public void Battery_onClick()
     {
         battery.M_maxBattery = Mathf.Clamp(gun.M_reloadTime + 10f, 100f, 200f);
         battery.M_passiveLossRate = Mathf.Clamp(gun.M_reloadTime - 0.025f, 0.25f, 0.5f);
@@ -103,7 +103,7 @@ public class PlayerUpgrades : MonoBehaviour
 
     #region _Health_Bar_
 
-    public void Frame()
+    public void Frame_onClick()
     {
         healthBar.M_maxHealth = Mathf.Clamp(gun.M_reloadTime + 10f, 100f, 200f);
         healthBar.M_damageToEnergyLoss = Mathf.Clamp(gun.M_reloadTime - 0.005f, 0.05f, 0.1f);
@@ -136,7 +136,9 @@ public class PlayerUpgrades : MonoBehaviour
                     break;
             }
         }
-        
+        //abandonConfirmButton.onClick.RemoveAllListeners();
+        //abandonConfirmButton.onClick.AddListener(this.ButtonConfirmAbandon_onClick);
+
         target.onClick.RemoveAllListeners();
         bool isValidUpgrade = false;
         int choice = 0;
@@ -159,31 +161,31 @@ public class PlayerUpgrades : MonoBehaviour
         switch (choice)
         {
             case 0:
-                target.onClick.AddListener(this.Mobility);
+                target.onClick.AddListener(this.Mobility_onClick);
                 methodIndexBlacklist.Add(0);
                 break;
             case 1:
-                target.onClick.AddListener(this.Dash);
+                target.onClick.AddListener(this.Dash_onClick);
                 methodIndexBlacklist.Add(1);
                 break;
             case 2:
-                target.onClick.AddListener(this.Boost);
+                target.onClick.AddListener(this.Boost_onClick);
                 methodIndexBlacklist.Add(2);
                 break;
             case 3:
-                target.onClick.AddListener(this.Bullets);
+                target.onClick.AddListener(this.Bullets_onClick);
                 methodIndexBlacklist.Add(3);
                 break;
             case 4:
-                target.onClick.AddListener(this.Magazine);
+                target.onClick.AddListener(this.Magazine_onClick);
                 methodIndexBlacklist.Add(4);
                 break;
             case 5:
-                target.onClick.AddListener(this.Battery);
+                target.onClick.AddListener(this.Battery_onClick);
                 methodIndexBlacklist.Add(5);
                 break;
             case 6:
-                target.onClick.AddListener(this.Frame);
+                target.onClick.AddListener(this.Frame_onClick);
                 methodIndexBlacklist.Add(6);
                 break;
         }
