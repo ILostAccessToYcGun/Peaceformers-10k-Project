@@ -169,7 +169,7 @@ public class DayNightCycleManager : MonoBehaviour
         addQuestCoolDownTimer = 0f;
         moonLight.intensity = 0;
         sunLight.intensity = 0.7f;
-
+        
         md.GenerateNodes();
         ed.GenerateEnemies();
         CampEnemySpawnCheck();

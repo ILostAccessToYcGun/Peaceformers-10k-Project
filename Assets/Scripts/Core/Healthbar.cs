@@ -36,19 +36,19 @@ public class Healthbar : MonoBehaviour
 
     public void SetHealth(float newHealth)
     {
-        currentHealth = Mathf.Clamp(newHealth, 0, M_maxHealth);
+        currentHealth = Mathf.Clamp(newHealth, 0.1f, M_maxHealth);
         UpdateHealthbar();
     }
 
     public virtual void LoseHealth(float amount)
     {
-        currentHealth = Mathf.Clamp(currentHealth - amount, 0, M_maxHealth);
+        currentHealth = Mathf.Clamp(currentHealth - amount, 0.1f, M_maxHealth);
         UpdateHealthbar();
     }
 
     public void GainHealth(float amount)
     {
-        currentHealth = Mathf.Clamp(currentHealth + amount, 0, M_maxHealth);
+        currentHealth = Mathf.Clamp(currentHealth + amount, 0.1f, M_maxHealth);
         UpdateHealthbar();
     }
 
@@ -58,7 +58,11 @@ public class Healthbar : MonoBehaviour
 
     protected void UpdateHealthbar()
     {
-        float healthRatio = currentHealth / M_maxHealth;
+        float healthRatio;
+        if (M_maxHealth == 0)
+            healthRatio = 1f;
+        else
+            healthRatio = currentHealth / M_maxHealth;
 
         healthbarFill.fillAmount = healthRatio;
 
@@ -68,7 +72,7 @@ public class Healthbar : MonoBehaviour
             healthbarFill.color = watchOutColor;
         else
             healthbarFill.color = criticalColor;
-
+        
         StopAllCoroutines();
         StartCoroutine(LerpHealthbarLoss(healthRatio));
     }

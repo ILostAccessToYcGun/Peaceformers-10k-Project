@@ -50,20 +50,20 @@ public class StationaryEnemy : MonoBehaviour
 
     void Start()
     {
-        //currentTarget = FindAnyObjectByType<PlayerMovement>().transform;
+        ////currentTarget = FindAnyObjectByType<PlayerMovement>().transform;
         ed = FindAnyObjectByType<EnemyDirector>();
 
         modDmg = baseDmg;
         SetModDmg(ed.damageMultiplier);
         healthBar.SetMaxHealth(healthBar.GetMaxHealth() * ed.healthMultiplier);
-        healthBar.ScaleUI();
+        healthBar.ScaleUI(); //
 
         targets = ed.targetList;
         if (isCampEnemy)
-            ++enemyCamp.campEnemiesAlive;
+          ++enemyCamp.campEnemiesAlive;
         else
-            ++ed.enemiesAlive;
-        
+          ++ed.enemiesAlive;
+
         currentAmmo = maxAmmo;
     }
 

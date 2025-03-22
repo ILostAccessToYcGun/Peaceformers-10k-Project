@@ -14,7 +14,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
     public enum Name { Wood, Stone, Scrap, AmmoCrate };
 
     [Header("Categories")]
-    [SerializeField] Type itemType = Type.Resource;
+    //[SerializeField] Type itemType = Type.Resource;
     [SerializeField] public Name itemName;
 
     [Space]
@@ -581,7 +581,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
         else
             parentInventory = FindAnyObjectByType<PlayerUIToggler>().gameObject;
 
-        this.transform.parent = parentInventory.transform;
+        transform.SetParent(parentInventory.transform);
     }
 
     public void InstantiateWorldObject(int worldStackAmount, bool isDestroy = true)
