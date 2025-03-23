@@ -29,13 +29,27 @@ public class MapDirector : MonoBehaviour
     private Vector3 CheckForValidSpawn(float radius = 2f)
     {
         RaycastHit hit;
-        LayerMask whiteListMasks = LayerMask.GetMask("Ground");
+        //LayerMask whiteListMasks = LayerMask.GetMask("Ground", "uhhhh"); //i think this is a white list 
+        LayerMask whiteListMasks = LayerMask.GetMask("Ground", "SpawnBlackList", "Default"); //i think this is a white list
 
         bool rayHit = Physics.SphereCast(transform.position, radius, -transform.up, out hit, 100f, whiteListMasks);
+        Debug.Log(hit);
+        if (hit.transform != null)
+        {
+            if (hit.transform.gameObject.layer == LayerMask.NameToLayer("SpawnBlackList") || hit.transform.gameObject.layer == LayerMask.NameToLayer("Default")) 
+            { 
+                return new Vector3(0, -1, 0);
+            }
+        }
+        else
+        {
+            return new Vector3(0, -1, 0);
+        }
+
         if (rayHit)
             return hit.point;
 
-        return new Vector3(0, 100, 0);
+        return new Vector3(0, -1, 0);
     }
 
     private void SelectRandomLocation(float radius = 2f)
@@ -47,9 +61,9 @@ public class MapDirector : MonoBehaviour
             int posX = Random.Range(-600, 601);
             int posZ = Random.Range(-600, 601);
 
-            transform.position = new Vector3(posX, 25, posZ);
+            transform.position = new Vector3(posX, 75, posZ);
 
-            if (CheckForValidSpawn(radius) != new Vector3(0, 100, 0))
+            if (CheckForValidSpawn(radius) != new Vector3(0, -1, 0))
                 isValidLocation = true; break;
         }
     }
@@ -58,7 +72,7 @@ public class MapDirector : MonoBehaviour
     {
         GameObject randomNode = SelectRandomNode();
         Vector3 location = CheckForValidSpawn();
-        if (randomNode == null || location == new Vector3(0, 100, 0)) { return false; }
+        if (randomNode == null || location == new Vector3(0, -1, 0)) { return false; }
 
         GameObject newNode = Instantiate(randomNode, location, Quaternion.identity, nodeParent);
 
@@ -111,7 +125,7 @@ public class MapDirector : MonoBehaviour
     {
         GameObject randomCamp = SelectRandomCamp();
         Vector3 location = CheckForValidSpawn();
-        if (randomCamp == null || location == new Vector3(0, 100, 0)) { return false; }
+        if (randomCamp == null || location == new Vector3(0, -1, 0)) { return false; }
 
         GameObject newCamp = Instantiate(randomCamp, location, Quaternion.identity);
 
@@ -127,12 +141,44 @@ public class MapDirector : MonoBehaviour
         {
             if (currentSpawnAttempts >= 1000) { break; }
             Debug.Log("try");
-            SelectRandomLocation(50f);
+            SelectRandomLocation(40f);
             if (!SpawnCamp())
             {
                 i--;
                 ++currentSpawnAttempts;
             }
+        }
+    }
+
+    private void Update()
+    {
+        
+        if (Input.GetKey(KeyCode.M))
+        {
+
+            RaycastHit hit;
+            LayerMask whiteListMasks = LayerMask.GetMask("Ground", "SpawnBlackList", "Default"); //i think this is a white list
+            bool isValid = false;
+            bool rayHit = Physics.SphereCast(transform.position, 25f, -transform.up, out hit, 100f, whiteListMasks);
+            Debug.Log(hit);
+            if (rayHit)
+                isValid = true;
+            else
+                isValid = false;
+
+
+            if (hit.transform != null)
+            {
+                if (hit.transform.gameObject.layer == LayerMask.NameToLayer("SpawnBlackList") || hit.transform.gameObject.layer == LayerMask.NameToLayer("Default"))
+                {
+                    isValid = false;
+                }
+            }
+            else
+                isValid = false;
+
+            
+            Debug.Log("isValid = " + isValid);
         }
     }
 }
