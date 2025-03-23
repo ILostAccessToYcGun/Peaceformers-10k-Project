@@ -400,7 +400,7 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
 
             if (canDash)
             {
-                M_dashBetweenCooldown = 0.2f;
+                M_dashBetweenCooldown = 0.2f; //this value too
                 dashes--;
                 boostCapacity -= M_dashBoostLoss;
                 _requestedDash = false;
