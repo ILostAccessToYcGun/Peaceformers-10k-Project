@@ -257,7 +257,7 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
         {
             if (dashes < M_maxDashes)
                 dashes++;
-            M_dashRecoveryCooldown = 2f;
+            M_dashRecoveryCooldown = 2f; //this value
         }
         else if (M_dashRecoveryCooldown < 0f && dashes == M_maxDashes)
         {
