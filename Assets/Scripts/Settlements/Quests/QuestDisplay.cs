@@ -21,7 +21,7 @@ public class QuestDisplay : MonoBehaviour
 
     public void SetUpQuestDisplay()
     {
-        //settlementIcon = questObject.parentSettlement.icon
+        SetIcon();
         if (questObject != null)
         {
             if (questObject.GetDescription() != "")
@@ -51,8 +51,13 @@ public class QuestDisplay : MonoBehaviour
         otherQuestBoard = newBoard;
     }
 
-    #region _Button_
+    public void SetIcon()
+    {
+        if (settlementIcon != null)
+            settlementIcon.sprite = questObject.parentSettlement.GetIcon();
+    }
 
+    #region _Button_
     public void ButtonAbandonedQuest()
     {
         Debug.Log("abandon");
