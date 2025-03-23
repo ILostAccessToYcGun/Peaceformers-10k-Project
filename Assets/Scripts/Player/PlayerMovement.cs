@@ -115,8 +115,8 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
     [SerializeField] public float M_jumpSpeed;
 
     [SerializeField] public float M_dashSpeed;
-    [SerializeField] public float M_dashBetweenCooldown;
-    [SerializeField] public float M_dashRecoveryCooldown;
+    [SerializeField] public float M_dashBetweenCooldown;       //these 2 values are not correct, they are timers, not stats, change that
+    [SerializeField] public float M_dashRecoveryCooldown;      //these 2 values are not correct, they are timers, not stats, change that
     [SerializeField] public int M_maxDashes;
 
     [SerializeField] public float M_maxBoost;
