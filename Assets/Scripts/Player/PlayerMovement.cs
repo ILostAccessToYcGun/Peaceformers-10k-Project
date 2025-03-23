@@ -161,8 +161,8 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
         M_jumpSpeed = jumpSpeed;
 
         M_dashSpeed = dashSpeed;
-        M_dashBetweenCooldown = dashBetweenCooldown;
-        M_dashRecoveryCooldown = dashRecoveryCooldown;
+        M_dashBetweenCooldown = 0.2f;
+        M_dashRecoveryCooldown = 2f;
         M_maxDashes = maxDashes;
 
         M_maxBoost = maxBoost;
@@ -251,23 +251,23 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
 
     public void UpdateBody(float deltaTime)
     {
-        if (M_dashRecoveryCooldown > 0f && dashes < M_maxDashes)
-            M_dashRecoveryCooldown -= deltaTime;
-        else if (M_dashRecoveryCooldown <= 0f && dashes < M_maxDashes)
+        if (dashRecoveryCooldown > 0f && dashes < M_maxDashes)
+            dashRecoveryCooldown -= deltaTime;
+        else if (dashRecoveryCooldown <= 0f && dashes < M_maxDashes)
         {
             if (dashes < M_maxDashes)
                 dashes++;
-            M_dashRecoveryCooldown = 2f; //this value
+            dashRecoveryCooldown = M_dashRecoveryCooldown;
         }
-        else if (M_dashRecoveryCooldown < 0f && dashes == M_maxDashes)
+        else if (dashRecoveryCooldown < 0f && dashes == M_maxDashes)
         {
-            M_dashRecoveryCooldown = 0f;
+            dashRecoveryCooldown = 0f;
         }
 
-        if (M_dashBetweenCooldown > 0f)
-            M_dashBetweenCooldown -= deltaTime;
-        else if (M_dashBetweenCooldown < 0f)
-            M_dashBetweenCooldown = 0f;
+        if (dashBetweenCooldown > 0f)
+            dashBetweenCooldown -= deltaTime;
+        else if (dashBetweenCooldown < 0f)
+            dashBetweenCooldown = 0f;
 
         if (dashes > M_maxDashes)
             dashes = M_maxDashes;
@@ -396,11 +396,11 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
 
         if (_requestedDash)
         {
-            var canDash = (M_dashBetweenCooldown == 0f) && (dashes > 0) && boostCapacity >= M_dashBoostLoss;
+            var canDash = (dashBetweenCooldown == 0f) && (dashes > 0) && boostCapacity >= M_dashBoostLoss;
 
             if (canDash)
             {
-                M_dashBetweenCooldown = 0.2f; //this value too
+                dashBetweenCooldown = M_dashBetweenCooldown;
                 dashes--;
                 boostCapacity -= M_dashBoostLoss;
                 _requestedDash = false;

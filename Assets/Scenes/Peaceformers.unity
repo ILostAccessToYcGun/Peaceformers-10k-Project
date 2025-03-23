@@ -11414,7 +11414,7 @@ MonoBehaviour:
   M_jumpSpeed: 20
   M_dashSpeed: 40
   M_dashBetweenCooldown: 0.2
-  M_dashRecoveryCooldown: 0.3
+  M_dashRecoveryCooldown: 2
   M_maxDashes: 2
   M_maxBoost: 100
   M_boostGain: 2

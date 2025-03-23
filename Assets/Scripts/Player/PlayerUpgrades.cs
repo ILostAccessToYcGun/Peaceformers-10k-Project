@@ -49,7 +49,7 @@ public class PlayerUpgrades : MonoBehaviour
         Debug.Log("Dash Upgrade");
         movement.M_dashSpeed = Mathf.Clamp(movement.M_dashSpeed + 4.5f, 45f, 90f);
         movement.M_dashBetweenCooldown = Mathf.Clamp(movement.M_dashBetweenCooldown - 0.01f, 0.1f, 0.2f);
-        movement.M_dashRecoveryCooldown = Mathf.Clamp(movement.M_dashRecoveryCooldown - 0.015f, 0.15f, 0.3f);
+        movement.M_dashRecoveryCooldown = Mathf.Clamp(movement.M_dashRecoveryCooldown - 0.1f, 1f, 2f);
         tempMaxDashHold += 1;
         if (tempMaxDashHold == 5)
         {
