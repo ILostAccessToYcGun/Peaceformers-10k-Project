@@ -24,13 +24,21 @@ public class PlayerGun : MonoBehaviour
     [SerializeField] private GameObject bulletPrefab;
     [Space]
     [Header("Current Weapon")]
-    [SerializeField] private int maxAmmo = 100;
+    [SerializeField] private int maxAmmo = 25;
     [SerializeField] private int currentAmmo;
     [SerializeField] private int baseDmg = 8;
     [SerializeField] private float bulletForce = 60f;
     [SerializeField] private float range = 100f;
     [SerializeField] private float timeBetweenShots = 0.04f;
     [SerializeField] private float reloadTime = 1.5f;
+    [Space]
+    [Header("Weapon Modified Stats")]
+    [SerializeField] public int M_maxAmmo;
+    [SerializeField] public int M_baseDmg;
+    [SerializeField] public float M_bulletForce;
+    [SerializeField] public float M_range;
+    [SerializeField] public float M_timeBetweenShots;
+    [SerializeField] public float M_reloadTime;
     [Space]
     [Header("Visuals")]
     [SerializeField] private Transform muzzlePoint;
@@ -51,11 +59,23 @@ public class PlayerGun : MonoBehaviour
     [SerializeField] private Inventory ammoInventory;
     [SerializeField] private Item ammo;
 
+    
 
     void Start()
     {
         currentAmmo = maxAmmo;
         pb = GetComponentInParent<PlayerBattery>();
+        ResetStats();
+    }
+
+    public void ResetStats()
+    {
+        M_maxAmmo = maxAmmo;
+        M_baseDmg = baseDmg;
+        M_bulletForce = bulletForce;
+        M_range = range;
+        M_timeBetweenShots = timeBetweenShots;
+        M_reloadTime = reloadTime;
     }
 
     public void RotateGunTowardsMouse()
@@ -67,7 +87,7 @@ public class PlayerGun : MonoBehaviour
         {
             if (hit.transform.CompareTag("Target"))
             {
-                if (Vector3.Distance(transform.position, hit.transform.position) <= range)
+                if (Vector3.Distance(transform.position, hit.transform.position) <= M_range)
                     currentTarget = hit.transform;
                 else
                     currentTarget = null;
@@ -78,7 +98,7 @@ public class PlayerGun : MonoBehaviour
             }
         }
 
-        Vector3 targetPoint = currentTarget ? currentTarget.position : ray.GetPoint(range);
+        Vector3 targetPoint = currentTarget ? currentTarget.position : ray.GetPoint(M_range);
         Vector3 direction = (targetPoint - playerRoot.position).normalized;
         direction.y = 0f;
 
@@ -110,7 +130,7 @@ public class PlayerGun : MonoBehaviour
             StartCoroutine(Reload());
         }
 
-        ammoText.text = currentAmmo + "/" + maxAmmo;
+        ammoText.text = currentAmmo + "/" + M_maxAmmo;
     }
 
     IEnumerator ContinuousFire()
@@ -133,7 +153,7 @@ public class PlayerGun : MonoBehaviour
                 _requestedShoot = false;
             }
 
-            yield return new WaitForSeconds(timeBetweenShots);
+            yield return new WaitForSeconds(M_timeBetweenShots);
         }
 
         isFiring = false;
@@ -153,8 +173,8 @@ public class PlayerGun : MonoBehaviour
         }
 
         GameObject b = Instantiate(bulletPrefab, muzzlePoint.position, Quaternion.LookRotation(direction));
-        b.GetComponent<Rigidbody>().linearVelocity = direction * bulletForce;
-        b.GetComponent<Bullet>().baseDmg = baseDmg;
+        b.GetComponent<Rigidbody>().linearVelocity = direction * M_bulletForce;
+        b.GetComponent<Bullet>().baseDmg = M_baseDmg;
         b.GetComponent<Bullet>().source = GetComponentInParent<PlayerMovement>().transform;
 
         Destroy(b, 5f);
@@ -162,20 +182,11 @@ public class PlayerGun : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(shootingPoint.position, direction, out hit, Mathf.Infinity))
         {
-            //Healthbar hp = hit.collider.GetComponentInChildren<Healthbar>();
-            //if (hp != null)
-            //{
-            //    hp.LoseHealth(baseDmg);
-            //}
-
-            //GameObject h = Instantiate(hitVfx, hit.transform.position, Quaternion.LookRotation(hit.normal));
-            //Destroy(h, 0.1f);
-
             StartCoroutine(CreateBulletTrail(hit.point));
         }
         else
         {
-            StartCoroutine(CreateBulletTrail(muzzlePoint.position + direction * range)); 
+            StartCoroutine(CreateBulletTrail(muzzlePoint.position + direction * M_range)); 
         }
 
         pb.LoseBattery(0.05f);
@@ -221,10 +232,10 @@ public class PlayerGun : MonoBehaviour
         reloadCircle.fillAmount = 0f;
         float elapsedTime = 0f;
 
-        while (elapsedTime < reloadTime)
+        while (elapsedTime < M_reloadTime)
         {
             elapsedTime += Time.deltaTime;
-            reloadCircle.fillAmount = elapsedTime / reloadTime; 
+            reloadCircle.fillAmount = elapsedTime / M_reloadTime; 
             yield return null;
         }
 
@@ -238,6 +249,6 @@ public class PlayerGun : MonoBehaviour
 
     private int GetAmmo()
     {
-        return ammoInventory.RemoveItemFromInventory(ammo, maxAmmo - currentAmmo);
+        return ammoInventory.RemoveItemFromInventory(ammo, M_maxAmmo - currentAmmo);
     }
 }

@@ -19,6 +19,8 @@ public class DayNightCycleManager : MonoBehaviour
     [SerializeField] CalendarManger cm;
     [SerializeField] MapDirector md;
     [SerializeField] EnemyDirector ed;
+    [SerializeField] PlayerUIToggler ui;
+    [SerializeField] PlayerUpgrades up;
 
     public enum twelveHour { AM, PM }
     
@@ -31,6 +33,8 @@ public class DayNightCycleManager : MonoBehaviour
     [SerializeField] public int hour = 6;
     [SerializeField] public int minute;
 
+    [Space]
+    [Header("User Interface")]
     [SerializeField] TextMeshProUGUI timeUI;
     [SerializeField] int UIUpdateFrequency;
 
@@ -49,82 +53,15 @@ public class DayNightCycleManager : MonoBehaviour
     [Header("Other Elements")]
     [SerializeField] QuestBoard playerQuestBoard;
     [SerializeField] List<Settlement> settlements;
+    [SerializeField] Camp playerCamp;
+    [SerializeField] Inventory playerInventory;
+    [SerializeField] float addQuestCoolDownTimer; //make this private
+    [SerializeField] float addQuestCoolDown;
 
-    public void DisableTime() { updateTime = false; }
-    public void EnableTime() {  updateTime = true; }
+    #region _Time_
 
-    public void DayEndPanel(bool enable)
-    {
-        DisableTime();
-        dayEndPanel.gameObject.SetActive(enable);
-    }
+    public void ToggleTime(bool toggle) { updateTime = toggle; }
 
-
-    public void UpdateTimeUI() 
-    {
-        string hourZero;
-        string minuteZero;
-
-        if (hour < 10)
-            hourZero = "0";
-        else
-            hourZero = null;
-
-        if (minute < 10)
-            minuteZero = "0";
-        else
-            minuteZero = null;
-
-        timeUI.text = hourZero + hour + ":" + minuteZero + minute + twelveHourClock;
-    }
-
-    public void UpdateLightIntensity()
-    {
-        //360 minutes = 0.5
-        //720 minutes = 1
-        //1080 minutes = 0.5 1.5
-        //1440 minutes = 0   2
-
-        if (totalTime <= 1080)
-        {
-
-            sunLight.intensity = Mathf.Clamp(Mathf.Lerp(sunLight.intensity, (totalTime <= 720 ? totalTime * 1.5f / 720 : 2f - ((totalTime / 720)) * 0.5f), Time.deltaTime / 10f), 0f, 1f);
-            moonLight.intensity = Mathf.Lerp(moonLight.intensity, 0, Time.deltaTime / 10f);
-        }
-        else
-        {
-            sunLight.intensity = Mathf.Lerp(sunLight.intensity, 0, Time.deltaTime / 10f);
-            moonLight.intensity = Mathf.Clamp(Mathf.Lerp(moonLight.intensity, (totalTime / 720f) - 1f, Time.deltaTime / 10f), 0f, 0.75f);
-        }
-        
-
-
-        
-    }
-
-    public void UpdateLightAngle()
-    {
-        //360 minutes = 180 degrees 6am
-        //720 minutes = 90 degrees 12pm
-        //1080 minutes = 0 degrees 6pm
-        //1440 minutes = -90 degrees 6pm
-
-        sunLightAngle = Mathf.Lerp(sunLightAngle, ((totalTime / 1440f) * -360f) - 90f, Time.deltaTime);
-        sunLight.gameObject.transform.localEulerAngles = new Vector3(sunLightAngle, 90f, 0);
-        
-        moonLightAngle = Mathf.Lerp(moonLightAngle, ((totalTime / 1440f) * -360f) - 270f, Time.deltaTime);
-        moonLight.gameObject.transform.localEulerAngles = new Vector3(moonLightAngle, 90f, 0);
-    }
-
-    public void BeginDay()
-    {
-        SetTime(6, 0);
-        moonLight.intensity = 0;
-        sunLight.intensity = 0.7f;
-
-        md.GenerateNodes();
-        ed.GenerateEnemies();
-    }
     public void SetTime(int _hour, int _minute)
     {
         hour = _hour;
@@ -133,7 +70,7 @@ public class DayNightCycleManager : MonoBehaviour
         sunLightAngle = ((totalTime / 1440f) * -360f) - 90f;
         sunLight.gameObject.transform.localEulerAngles = new Vector3(sunLightAngle, 90f, 0);
 
-        
+
         moonLightAngle = ((totalTime / 1440f) * -360f) - 270f;
         moonLight.gameObject.transform.localEulerAngles = new Vector3(moonLightAngle, 90f, 0);
         UpdateTimeUI();
@@ -158,75 +95,194 @@ public class DayNightCycleManager : MonoBehaviour
             }
         }
         if (minute % UIUpdateFrequency == 0)
-        {
             UpdateTimeUI();
-        }
         EndOfDayCheck();
+    }
+
+    #endregion
+
+    #region _UI_
+
+    public void DayEndPanel(bool enable)
+    {
+        ToggleTime(!enable);
+        dayEndPanel.gameObject.SetActive(enable);
+        ui.SetUIOpenBool(enable);
+
+        if (!enable)
+            up.ClearBlacklist();
+    }
+
+    public void UpdateTimeUI()
+    {
+        string hourZero;
+        string minuteZero;
+
+        if (hour < 10)
+            hourZero = "0";
+        else
+            hourZero = null;
+
+        if (minute < 10)
+            minuteZero = "0";
+        else
+            minuteZero = null;
+
+        timeUI.text = hourZero + hour + ":" + minuteZero + minute + twelveHourClock;
+    }
+
+    #endregion
+
+    #region _Light_
+    public void UpdateLightIntensity()
+    {
+        if (totalTime <= 1080)
+        {
+            sunLight.intensity = Mathf.Clamp(Mathf.Lerp(sunLight.intensity, (totalTime <= 720 ? totalTime * 1.5f / 720 : 2f - ((totalTime / 720)) * 0.5f), Time.deltaTime / 10f), 0f, 1f);
+            moonLight.intensity = Mathf.Lerp(moonLight.intensity, 0, Time.deltaTime / 10f);
+        }
+        else
+        {
+            sunLight.intensity = Mathf.Lerp(sunLight.intensity, 0, Time.deltaTime / 10f);
+            moonLight.intensity = Mathf.Clamp(Mathf.Lerp(moonLight.intensity, (totalTime / 720f) - 1f, Time.deltaTime / 10f), 0f, 0.75f);
+        }
+    }
+
+    public void UpdateLightAngle()
+    {
+        sunLightAngle = Mathf.Lerp(sunLightAngle, ((totalTime / 1440f) * -360f) - 90f, Time.deltaTime);
+        sunLight.gameObject.transform.localEulerAngles = new Vector3(sunLightAngle, 90f, 0);
+        moonLightAngle = Mathf.Lerp(moonLightAngle, ((totalTime / 1440f) * -360f) - 270f, Time.deltaTime);
+        moonLight.gameObject.transform.localEulerAngles = new Vector3(moonLightAngle, 90f, 0);
+    }
+
+    #endregion
+
+    #region _Day_Methods_
+
+    public void BeginDay()
+    {
+        PlayerHealthBar php = FindAnyObjectByType<PlayerHealthBar>();
+        php.SetHealth(php.GetMaxHealth());
+
+        SetTime(6, 0);
+        addQuestCoolDownTimer = 0f;
+        moonLight.intensity = 0;
+        sunLight.intensity = 0.7f;
+        
+        md.GenerateNodes();
+        ed.GenerateEnemies();
+        CampEnemySpawnCheck();
     }
 
     public void EndOfDayCheck()
     {
         if (hour == 12 && twelveHourClock == twelveHour.AM)
-        {
-            ed.AddEnemyCountEntry();
-            BeginDay();
-            cm.IncrementDayCount();
-            //do something like upgrades
-            
-            md.DestroyWorldItems();
-
-            List<QuestDisplay> currentQuests = playerQuestBoard.GetQuests();
-            for (int i = 0; i < currentQuests.Count; i++)
-            {
-                currentQuests[i].UpdateDaysLeft();
-                if (!currentQuests[i].questObject.CheckQuestValidity())
-                {
-                    //quest has expired, immediatly abandon it
-                    currentQuests[i].otherQuestBoard.RemoveQuestFromBoard(currentQuests[i].questObject.GetCorrespondingSettlementQuestDisplayUI(), QuestBoard.RemoveType.Remove);
-                    currentQuests[i].parentQuestBoard.RemoveQuestFromBoard(currentQuests[i].questObject.GetCorrespondingPlayerQuestDisplayUI(), QuestBoard.RemoveType.Remove);
-                    
-                    i--;
-                }
-            }
-            GameObject highestUpkeep = settlements[0].gameObject;
-            float highestUpkeepCount =  0;
-            foreach (Settlement settlement in settlements)
-            {
-                if (settlement.GetCurrentUpKeep() > highestUpkeepCount)
-                {
-                    highestUpkeepCount = settlement.GetCurrentUpKeep();
-                    highestUpkeep = settlement.gameObject;
-                }
-            }
-
-
-            foreach (Settlement settlement in settlements)
-            {
-                if (settlement.currentlyEndangered)
-                {
-                    settlement.currentlyEndangered = false;
-                    settlement.panicEnemies += ed.SpawnSettlementEnemeies(settlement.gameObject, highestUpkeep);
-                }
-
-                foreach (Settlement otherSettlement in settlements)
-                {
-                    if (otherSettlement!= settlement)
-                    {
-                        //compare this settlement to the other settlements
-                        //if the difference between the upkeeps is greater than 30, send more bois
-                        if (otherSettlement.GetCurrentUpKeep() - settlement.GetCurrentUpKeep() >= 30f)
-                        {
-                            settlement.panicEnemies += ed.SpawnSettlementEnemeies(settlement.gameObject, otherSettlement.gameObject);
-                        }
-                    }
-                }
-            }
-
-            //spawn Settlement enemies
-        }
-            
+            EndDay();
     }
 
+    public void EndDay()
+    {
+        DayEndPanel(true);
+        up.SelectSemiRandomUpgrades();
+
+        ed.AddEnemyCountEntry();
+        ed.IncreaseDifficulty();
+        cm.IncrementDayCount();
+        md.DestroyWorldItems();
+
+        List<QuestDisplay> currentQuests = playerQuestBoard.GetQuests();
+        for (int i = 0; i < currentQuests.Count; i++)
+        {
+            currentQuests[i].UpdateDaysLeft();
+            if (!currentQuests[i].questObject.CheckQuestValidity())
+            {
+                //quest has expired, immediatly abandon it
+                currentQuests[i].otherQuestBoard.RemoveQuestFromBoard(currentQuests[i].questObject.GetCorrespondingSettlementQuestDisplayUI(), QuestBoard.RemoveType.Remove);
+                currentQuests[i].parentQuestBoard.RemoveQuestFromBoard(currentQuests[i].questObject.GetCorrespondingPlayerQuestDisplayUI(), QuestBoard.RemoveType.Remove);
+                i--;
+            }
+        }
+        SettlementEnemySpawnCheck();
+
+        //we wanna run a check to see if the player is not within X distance to the camp
+        if (!playerCamp.SafeDistanceCheck())
+        {
+            //if the player is outside the distance range, randomly remove half their items
+            playerInventory.RemoveHalfInventory();
+            FindAnyObjectByType<PlayerMovement>().ResetPos();
+        }
+    }
+
+    public void SettlementEnemySpawnCheck()
+    {
+        GameObject highestUpkeep = settlements[0].gameObject;
+        float highestUpkeepCount = 0;
+        foreach (Settlement settlement in settlements)
+        {
+            if (settlement.GetCurrentUpKeep() > highestUpkeepCount)
+            {
+                highestUpkeepCount = settlement.GetCurrentUpKeep();
+                highestUpkeep = settlement.gameObject;
+            }
+        }
+
+        foreach (Settlement settlement in settlements)
+        {
+            if (settlement.currentlyEndangered)
+            {
+                settlement.currentlyEndangered = false;
+                settlement.panicEnemies += ed.SpawnSettlementEnemeies(settlement.gameObject, highestUpkeep);
+            }
+
+            foreach (Settlement otherSettlement in settlements)
+            {
+                if (otherSettlement != settlement)
+                {
+                    if (otherSettlement.GetCurrentUpKeep() - settlement.GetCurrentUpKeep() >= 30f)
+                        settlement.panicEnemies += ed.SpawnSettlementEnemeies(settlement.gameObject, otherSettlement.gameObject);
+                }
+            }
+        }
+    }
+
+    public void CampEnemySpawnCheck()
+    {
+        EnemyCamp[] camps = FindObjectsByType<EnemyCamp>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        
+        foreach (EnemyCamp camp in camps)
+        {
+            camp.UpdateCamp();
+        }
+    }
+
+    #endregion
+
+    public void AllocateQuests()
+    {
+        List<Settlement> whiteListQuestAdd = new List<Settlement>();
+        List<int> questCounts = new List<int>();
+        for (int i = 0; i < settlements.Count; ++i) //loop through the settlements
+        {
+            questCounts.Add(settlements[i].questGiver.quests.Count);
+        }
+
+        int smallest = questCounts[0];
+        foreach (int num in questCounts)
+        {
+            if (num < smallest)
+                smallest = num;
+        }
+
+        for (int i = 0; i < questCounts.Count; ++i)
+        {
+            if (questCounts[i] - smallest <= 1)
+                whiteListQuestAdd.Add(settlements[i]); 
+        }
+
+        Settlement settlementRecievingQuest = whiteListQuestAdd[Random.Range(0, whiteListQuestAdd.Count)];
+        settlementRecievingQuest.questGiver.AddQuestToGiver();
+    }
 
     private void Update()
     {
@@ -238,11 +294,16 @@ public class DayNightCycleManager : MonoBehaviour
                 time = 0;
             }
             totalTime += Time.deltaTime / 0.29166f;
+            addQuestCoolDownTimer -= Time.deltaTime / 0.29166f;
+            if (addQuestCoolDownTimer <= 0)
+            {
+                AllocateQuests();
+                addQuestCoolDownTimer = addQuestCoolDown;
+            }
             UpdateLightAngle();
             UpdateLightIntensity();
             time += Time.deltaTime;
         }
-        
     }
 
     private void Awake()
@@ -250,12 +311,14 @@ public class DayNightCycleManager : MonoBehaviour
         cm = FindAnyObjectByType<CalendarManger>();
         md = FindAnyObjectByType<MapDirector>();
         ed = FindAnyObjectByType<EnemyDirector>();
+        ed.ResetDifficulty();
+        ui = FindAnyObjectByType<PlayerUIToggler>();
+        up = FindAnyObjectByType<PlayerUpgrades>();
+
+        md.GenerateCamps();
         BeginDay();
 
         if (UIUpdateFrequency == 0)
-        {
             UIUpdateFrequency = 20;
-        }
-        
     }
 }

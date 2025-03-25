@@ -30,6 +30,7 @@ public class SettlementQuestBoard : QuestBoard
         currentViewingSettlement = qg.GetSettlement();
         currentSettlementMaxUpkeep = currentViewingSettlement.GetMaxUpKeep();
         currentSettlementName.text = currentViewingSettlement.GetSettlementName();
+        currentSettlementIcon.sprite = currentViewingSettlement.GetIcon();
     }
 
     public void ResetCurrentViewingSettlement()

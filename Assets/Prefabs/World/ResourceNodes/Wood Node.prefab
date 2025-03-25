@@ -16,7 +16,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!224 &8391843083478530878
 RectTransform:
@@ -91,7 +91,7 @@ GameObject:
   m_TagString: Target
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &8403848742960169232
 Transform:
@@ -147,7 +147,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resourceHealthBar: {fileID: 2563859046377071783}
   resourceNodeTitle: {fileID: 1414687270716254063}
-  resourceType: {fileID: 8154398913341998294, guid: bf655943204a01144a2bfd77b73e451d, type: 3}
+  resourceType: {fileID: 1966892282438000027, guid: bf655943204a01144a2bfd77b73e451d, type: 3}
   resourceCount: 0
   resourceCountReleased: 0
   nodeMaxHealth: 30
@@ -167,7 +167,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &8597229157700028397
 Transform:
@@ -201,7 +201,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!224 &1350713932338291398
 RectTransform:
@@ -278,7 +278,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!224 &7399391664495937783
 RectTransform:
@@ -380,7 +380,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!224 &7458938400211326453
 RectTransform:
@@ -517,7 +517,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!224 &6449945411819933134
 RectTransform:
@@ -593,7 +593,8 @@ MonoBehaviour:
   healthbarFill: {fileID: 5650601308439126667}
   healthbarLoss: {fileID: 823744423266640713}
   lossLerpSpeed: 2
-  maxHealth: 160
+  maxHealth: 30
+  M_maxHealth: 30
   goodHealthColor: {r: 1, g: 1, b: 1, a: 1}
   watchOutColor: {r: 0.9843138, g: 0.41960788, b: 0.1137255, a: 1}
   criticalColor: {r: 1, g: 0.25, b: 0.25, a: 1}
@@ -649,6 +650,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tree
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 0cf399f4963a0504794de0ef9cafca0f, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 1300264252759386080, guid: 0cf399f4963a0504794de0ef9cafca0f, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.5
@@ -668,6 +673,10 @@ PrefabInstance:
     - target: {fileID: 1300264252759386080, guid: 0cf399f4963a0504794de0ef9cafca0f, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9013638940889411661, guid: 0cf399f4963a0504794de0ef9cafca0f, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:

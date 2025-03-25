@@ -105,6 +105,33 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
 
     private Vector3 startPos;
 
+    [Space]
+    [Header("Movement Modified Stats")]
+    [SerializeField] public float M_walkSpeed;
+    [SerializeField] public float M_sprintMultiplier;
+
+    [SerializeField] public float M_airSpeed;
+    [SerializeField] public float M_airAcceleration;
+    [SerializeField] public float M_jumpSpeed;
+
+    [SerializeField] public float M_dashSpeed;
+    [SerializeField] public float M_dashBetweenCooldown;       //these 2 values are not correct, they are timers, not stats, change that
+    [SerializeField] public float M_dashRecoveryCooldown;      //these 2 values are not correct, they are timers, not stats, change that
+    [SerializeField] public int M_maxDashes;
+
+    [SerializeField] public float M_maxBoost;
+    [SerializeField] public float M_boostGain;
+    [SerializeField] public float M_dashBoostLoss;
+    [SerializeField] public float M_sprintBoostLoss;
+    [SerializeField] public float M_jumpBoostLoss;
+
+
+
+
+
+
+
+
     public void ResetPos()
     {
         print("Resetting position");
@@ -118,11 +145,32 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
 
         _lastState = _state;
 
-        dashes = maxDashes;
-        boostCapacity = maxBoost;
+        dashes = M_maxDashes;
+        boostCapacity = M_maxBoost;
 
         motor.CharacterController = this;
         pb = GetComponentInParent<PlayerBattery>();
+
+
+
+        M_walkSpeed = walkSpeed;
+        M_sprintMultiplier = sprintMultiplier;
+
+        M_airSpeed = airSpeed;
+        M_airAcceleration = airAcceleration;
+        M_jumpSpeed = jumpSpeed;
+
+        M_dashSpeed = dashSpeed;
+        M_dashBetweenCooldown = 0.2f;
+        M_dashRecoveryCooldown = 2f;
+        M_maxDashes = maxDashes;
+
+        M_maxBoost = maxBoost;
+        M_boostGain = boostGain;
+        M_dashBoostLoss = dashBoostLoss;
+        M_sprintBoostLoss = sprintBoostLoss;
+        M_jumpBoostLoss = jumpBoostLoss;
+
     }
 
     public void UpdateInput(CharacterInput input)
@@ -137,7 +185,7 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
         _requestedMovement = input.Rotation * _requestedMovement;
 
         var wasRequestingJump = _requestedJump;
-        _requestedJump = _requestedJump || input.Jump && boostCapacity > jumpBoostLoss;
+        _requestedJump = _requestedJump || input.Jump && boostCapacity > M_jumpBoostLoss;
         if (_requestedJump && !wasRequestingJump)
         {
             _timeSinceJumpRequest = 0f;
@@ -171,13 +219,13 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
             }
         }
 
-        float boostRatio = boostCapacity / maxBoost;
+        float boostRatio = boostCapacity / M_maxBoost;
 
         boostBarFill.fillAmount = boostRatio;
 
-        if (boostCapacity > (maxBoost / 2))
+        if (boostCapacity > (M_maxBoost / 2))
             boostBarFill.color = goodboostColor;
-        else if (boostCapacity > (maxBoost / 4))
+        else if (boostCapacity > (M_maxBoost / 4))
             boostBarFill.color = watchOutColor;
         else
             boostBarFill.color = criticalColor;
@@ -203,15 +251,15 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
 
     public void UpdateBody(float deltaTime)
     {
-        if (dashRecoveryCooldown > 0f && dashes < maxDashes)
+        if (dashRecoveryCooldown > 0f && dashes < M_maxDashes)
             dashRecoveryCooldown -= deltaTime;
-        else if (dashRecoveryCooldown <= 0f && dashes < maxDashes)
+        else if (dashRecoveryCooldown <= 0f && dashes < M_maxDashes)
         {
-            if (dashes < maxDashes)
+            if (dashes < M_maxDashes)
                 dashes++;
-            dashRecoveryCooldown = 2f;
+            dashRecoveryCooldown = M_dashRecoveryCooldown;
         }
-        else if (dashRecoveryCooldown < 0f && dashes == maxDashes)
+        else if (dashRecoveryCooldown < 0f && dashes == M_maxDashes)
         {
             dashRecoveryCooldown = 0f;
         }
@@ -221,17 +269,17 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
         else if (dashBetweenCooldown < 0f)
             dashBetweenCooldown = 0f;
 
-        if (dashes > maxDashes)
-            dashes = maxDashes;
+        if (dashes > M_maxDashes)
+            dashes = M_maxDashes;
 
         if(_requestedSprint)
         {
-            boostCapacity = Mathf.Clamp(boostCapacity - (sprintBoostLoss * deltaTime), 0, maxBoost);
-            pb.LoseBattery(sprintBoostLoss * deltaTime * 0.025f);
+            boostCapacity = Mathf.Clamp(boostCapacity - (M_sprintBoostLoss * deltaTime), 0, M_maxBoost);
+            pb.LoseBattery(M_sprintBoostLoss * deltaTime * 0.025f);
         }
         else
         {
-            boostCapacity = Mathf.Clamp(boostCapacity + (boostGain * deltaTime), 0, maxBoost);
+            boostCapacity = Mathf.Clamp(boostCapacity + (M_boostGain * deltaTime), 0, M_maxBoost);
         }
     }
 
@@ -253,10 +301,10 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
             ) * _requestedMovement.magnitude;
 
             //THE SCHMOVEMENT. THE HE. THE SCHMOVER.
-            var targetVelocity = groundedMovement * walkSpeed;
+            var targetVelocity = groundedMovement * M_walkSpeed;
 
             //if sprinting
-            targetVelocity *= (_requestedSprint && boostCapacity > 0) ? sprintMultiplier : 1f;
+            targetVelocity *= (_requestedSprint && boostCapacity > 0) ? M_sprintMultiplier : 1f;
 
             var moveVelocity = Vector3.Lerp
             (
@@ -292,13 +340,13 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
                 );
 
                 //calculate movement force
-                var movementForce = planarMovement * airAcceleration * deltaTime;
+                var movementForce = planarMovement * M_airAcceleration * deltaTime;
                 var targetPlanarVelocity = currentPlanarVelocity + movementForce;
 
                 //if sprinting
-                targetPlanarVelocity *= (_requestedSprint && boostCapacity > 0) ? sprintMultiplier : 1f;
+                targetPlanarVelocity *= (_requestedSprint && boostCapacity > 0) ? M_sprintMultiplier : 1f;
 
-                targetPlanarVelocity = Vector3.ClampMagnitude(targetPlanarVelocity, airSpeed);
+                targetPlanarVelocity = Vector3.ClampMagnitude(targetPlanarVelocity, M_airSpeed);
 
                 currentVelocity += targetPlanarVelocity - currentPlanarVelocity;
             }
@@ -316,13 +364,13 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
         if (_requestedJump)
         {
             var grounded = motor.GroundingStatus.IsStableOnGround;
-            var canCoyoteJump = _timeSinceUngrounded < coyoteTime && !_ungroundedDueToJump && boostCapacity >= jumpBoostLoss;
+            var canCoyoteJump = _timeSinceUngrounded < coyoteTime && !_ungroundedDueToJump && boostCapacity >= M_jumpBoostLoss;
 
             //we JUMPIN
             if (grounded || canCoyoteJump)
             {
-                boostCapacity -= jumpBoostLoss;
-                pb.LoseBattery(jumpBoostLoss * 0.025f);
+                boostCapacity -= M_jumpBoostLoss;
+                pb.LoseBattery(M_jumpBoostLoss * 0.025f);
                 _requestedJump = false;
 
                 //unstick that thang
@@ -332,7 +380,7 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
 
                 //Set minimum vertical speed to the jump speed
                 var currentVerticalSpeed = Vector3.Dot(currentVelocity, motor.CharacterUp);
-                var targetVerticalSpeed = Mathf.Max(currentVerticalSpeed, jumpSpeed);
+                var targetVerticalSpeed = Mathf.Max(currentVerticalSpeed, M_jumpSpeed);
 
                 currentVelocity += motor.CharacterUp * (targetVerticalSpeed - currentVerticalSpeed);
             }
@@ -348,15 +396,15 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
 
         if (_requestedDash)
         {
-            var canDash = (dashBetweenCooldown == 0f) && (dashes > 0) && boostCapacity >= dashBoostLoss;
+            var canDash = (dashBetweenCooldown == 0f) && (dashes > 0) && boostCapacity >= M_dashBoostLoss;
 
             if (canDash)
             {
-                dashBetweenCooldown = 0.2f;
+                dashBetweenCooldown = M_dashBetweenCooldown;
                 dashes--;
-                boostCapacity -= dashBoostLoss;
+                boostCapacity -= M_dashBoostLoss;
                 _requestedDash = false;
-                pb.LoseBattery(dashBoostLoss * 0.025f);
+                pb.LoseBattery(M_dashBoostLoss * 0.025f);
 
 
                 var dashDirection = _requestedMovement.normalized;
@@ -366,7 +414,7 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
                     dashDirection = Vector3.ProjectOnPlane(root.forward, motor.CharacterUp).normalized;
                 }
 
-                var dashVelocity = dashDirection * dashSpeed;
+                var dashVelocity = dashDirection * M_dashSpeed;
 
                 currentVelocity = new Vector3(dashVelocity.x, currentVelocity.y, dashVelocity.z);
             }

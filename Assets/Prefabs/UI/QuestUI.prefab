@@ -64,7 +64,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.60574335, b: 0, a: 1}
+  m_Color: {r: 0.8, g: 0.48430496, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -94,13 +94,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   questObject: {fileID: 0}
-  questBoard: {fileID: 0}
+  parentQuestBoard: {fileID: 0}
+  otherQuestBoard: {fileID: 0}
   settlementIcon: {fileID: 1830613860240950166}
   description: {fileID: 5828499586071871699}
   completionSlider: {fileID: 7316570163266045026}
   sliderFill: {fileID: 1635416436308942885}
   completionPercentage: {fileID: 845787299515947313}
   daysLeft: {fileID: 5969697046943511343}
+  abandonVerification: {fileID: 0}
+  abandonConfirmButton: {fileID: 0}
+  correspondingDisplay: {fileID: 0}
 --- !u!1 &1361807206154362491
 GameObject:
   m_ObjectHideFlags: 0
@@ -1226,14 +1230,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.018557072, g: 0, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300006, guid: b0abee70a854b954989a9863f1bcd77c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e2697bc26d2c861409dc98861fab88b2, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

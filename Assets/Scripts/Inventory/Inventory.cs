@@ -313,7 +313,7 @@ public class Inventory : MonoBehaviour
                 
             }
         }
-        Debug.Log("itemSearchCount=" + itemSearchCount);
+        //Debug.Log("itemSearchCount=" + itemSearchCount); /
         return itemSearchCount;
     }
 
@@ -338,7 +338,7 @@ public class Inventory : MonoBehaviour
 
     #region _Inventory_Management_
 
-    public void AddItemToInventory(Item itemToAdd, int amount)
+    public int AddItemToInventory(Item itemToAdd, int amount)
     {
         int decreaseAmount = amount;
         for (int i = amount; i > 0;)
@@ -349,12 +349,14 @@ public class Inventory : MonoBehaviour
                 if (amount > itemToAdd.stackLimit)
                 {
                     decreaseAmount = itemToAdd.stackLimit;
-                    itemToAdd.InstantiateWorldObject(itemToAdd.stackLimit);
+                    //itemToAdd.InstantiateWorldObject(itemToAdd.stackLimit); //this is bugging
+                    return itemToAdd.stackLimit;
                 }
                 else
                 {
                     decreaseAmount = amount;
-                    itemToAdd.InstantiateWorldObject(amount);
+                    //itemToAdd.InstantiateWorldObject(amount); //this is bugging
+                    return amount;
                 }
             }
 
@@ -413,6 +415,7 @@ public class Inventory : MonoBehaviour
             amount -= decreaseAmount;
             i -= decreaseAmount;
         }
+        return 0;
     }
 
     public int AddItemToInventory(Item itemToAdd, int amount, int x, int y)
@@ -532,6 +535,32 @@ public class Inventory : MonoBehaviour
         return removeCount;
     }
 
+    public void RemoveHalfInventory()
+    {
+        int totalAmount = FindItemCountOfName(Item.Name.Wood) + FindItemCountOfName(Item.Name.Stone) + FindItemCountOfName(Item.Name.Scrap) + (FindItemCountOfName(Item.Name.AmmoCrate) / 4);
+        if (totalAmount == 0) return;
+
+        if (totalAmount % 2 == 1)
+            totalAmount--;
+        int halfAmount = totalAmount / 2;
+        //loop untill this number is 0;
+        //choose a random item to remove
+        //if the item is found in the inventory, reduce the stack amount by one
+        //reduce the half amount by 1
+
+        while (halfAmount > 0)
+        {
+            Item.Name choice = (Item.Name)Random.Range(0, 4);
+            InventorySlot removeSlot = FindTopSlotWithItem(choice);
+            if (removeSlot != null)
+            {
+                removeSlot.GetHeldItem().DecreaseStackAmount((removeSlot.GetHeldItem().itemName == Item.Name.AmmoCrate ? 4 : 1));
+                --halfAmount;
+            }
+        }
+    }
+
+
     //this feature is pretty much only for the secondary inventory
     public void CopyInventory(List<Item> inventoryToCopy, List<Vector3> itemDetails)
     {
@@ -539,35 +568,6 @@ public class Inventory : MonoBehaviour
         for (int k = 0; k < inventoryToCopy.Count; k++)
         {
             AddItemToInventory(inventoryToCopy[k], (int)itemDetails[k].x, (int)itemDetails[k].y, (int)itemDetails[k].z);
-
-            //bool foundCorrespondingPosition = false;
-            //Vector2 itemPosition = inventoryToCopy[k].GetCurrentInventorySlot().inventoryPosition;
-
-            //for (int j = 0; j < inventory.Capacity; j++)
-            //{
-            //    for (int i = 0; i < inventory[j].Capacity; i++)
-            //    {
-            //        if (foundCorrespondingPosition) { break; }
-
-            //        InventorySlot slot = inventory[j][i];
-            //        if (slot.inventoryPosition == itemPosition)
-            //        {
-            //            GameObject copied = Instantiate(inventoryToCopy[k].gameObject, slot.transform.position + new Vector3(0, 0, 1), slot.transform.rotation, parent.transform);
-            //            copied.transform.localScale = Vector3.one;
-
-            //            Item copiedItem = copied.GetComponent<Item>();
-            //            copiedItem.currentInventory = this;
-            //            copiedItem.SetStackAmount(amounts[k]);
-            //            copiedItem.SearchAndMoveToNearestInventorySlot();
-            //            foundCorrespondingPosition = true;
-            //        }
-            //    }
-            //}
-
-            //if (!foundCorrespondingPosition)
-            //{
-            //    AddItemToInventory(inventoryToCopy[k], amounts[k]);
-            //}
         }
     }
 

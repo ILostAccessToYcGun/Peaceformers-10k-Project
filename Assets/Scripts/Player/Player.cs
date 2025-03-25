@@ -18,6 +18,10 @@ public class Player : MonoBehaviour
     [SerializeField] private float closestPrompt;
 
     private PlayerActionInputs _inputActions;
+    //[Space]
+    //[SerializeField] public List<Upgrade> upgrades //these are scripatbel objects that get generated and added  to the player?
+    //nah thats way too complicated, basically, we are gonna have an upgrades script that holds a bunch of values just to view them later
+    //the upgrade script will be connected to the other player components and upgrade their M_ values, not the base values
 
     public void AddInteractionPrompt(InteractionPrompt newPrompt, float distance)
     {

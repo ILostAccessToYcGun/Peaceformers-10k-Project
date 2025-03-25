@@ -45,7 +45,7 @@ public class QuestBoard : MonoBehaviour
 
     public virtual QuestDisplay AddQuestToBoard(QuestObject newObject = null)
     {
-        Debug.Log(baseQuestObject);
+        //Debug.Log(baseQuestObject);
         if (newObject == null)
         {
             newObject = Instantiate(baseQuestObject);
@@ -81,11 +81,11 @@ public class QuestBoard : MonoBehaviour
         //update the quest object resource count
         foreach (QuestDisplay display in questsDisplays) //loop through the player's quests
         {
-            Debug.Log("updating...");
+            //Debug.Log("updating...");
             Item.Name resourceToFind = display.questObject.GetResource();//find the needed material name/type
-            Debug.Log("resourceToFind = " + resourceToFind);
+            //Debug.Log("resourceToFind = " + resourceToFind);
             int newResourceCount = playerInventory.FindItemCountOfName(resourceToFind);
-            Debug.Log("newResourceCount = " + newResourceCount);
+            //Debug.Log("newResourceCount = " + newResourceCount);
 
             if (newResourceCount > display.questObject.GetResourceRequirement())
                 display.questObject.SetResourceCount(display.questObject.GetResourceRequirement());

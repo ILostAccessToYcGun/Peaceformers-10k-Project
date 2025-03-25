@@ -7,7 +7,7 @@ public class ResourceNode : MonoBehaviour
     [Header("Resource")]
     [SerializeField] Healthbar resourceHealthBar; //resource's health bar, when you shoot it, it goes down, when its 0 the resource dies
     [SerializeField] TextMeshProUGUI resourceNodeTitle; //resource's health bar, when you shoot it, it goes down, when its 0 the resource dies
-    [SerializeField] WorldItem resourceType; //this is the resource that the node will spit out
+    [SerializeField] GameObject resourceType; //this is the resource that the node will spit out
     [SerializeField] int resourceCount; //this is the total number of resources that will be obtained when you fully destroy a node
     [SerializeField] int resourceCountReleased;
     [Space]
@@ -36,18 +36,23 @@ public class ResourceNode : MonoBehaviour
     {
         md = FindAnyObjectByType<MapDirector>();
         ++md.nodesAlive;
-        resourceHealthBar.SetMaxHealth(nodeMaxHealth);
         RandomizeResourceCount(7, 14);
-        SetResourceNodeTitle(resourceType.inventoryItem.itemName.ToString() + " Node");
+        SetResourceNodeTitle(resourceType.GetComponent<WorldItem>().inventoryItem.itemName.ToString() + " Node");
     }
 
+    private void Start()
+    {
+        resourceHealthBar.SetMaxHealth(nodeMaxHealth);
+    }
     // Update is called once per frame
     void Update()
     {
         //for now the detection code will be here,
         //but maybe make a child of the healthbar script to override the lose health function to update this instead of updating every frame
 
-        if (resourceHealthBar.GetCurrentHealth() == 0)
+        Debug.Log(resourceHealthBar.GetCurrentHealth());
+
+        if (resourceHealthBar.GetCurrentHealth() <= 0)
         {
             if (resourceCountReleased < resourceCount)
             {

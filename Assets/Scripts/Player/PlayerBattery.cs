@@ -9,7 +9,7 @@ public class PlayerBattery : MonoBehaviour
     [SerializeField] private Image batteryLoss;
     [SerializeField] private float lossLerpSpeed = 2f;
     [Space]
-    private float maxBattery = 100f;
+    [SerializeField] private float maxBattery = 100f;
     [SerializeField] private float currentBattery;
     [SerializeField] private float passiveLossRate;
 
@@ -18,20 +18,29 @@ public class PlayerBattery : MonoBehaviour
     [SerializeField] private Color watchOutColor;
     [SerializeField] private Color criticalColor;
 
+    [Header("Battery Modified Stats")]
     [Space]
-    [SerializeField] private DayNightCycleManager dayNightCycleManager;
+    [SerializeField] public float M_maxBattery;
+    [SerializeField] public float M_passiveLossRate;
+
+
+    [Space]
+    [SerializeField] public DayNightCycleManager dayNightCycleManager;
 
 
     void Start()
     {
-        currentBattery = maxBattery;
+        currentBattery = M_maxBattery;
         UpdateBattery();
+
+        M_maxBattery = maxBattery;
+        M_passiveLossRate = passiveLossRate;
     }
 
     void Update()
     {
         //LoseBattery(0.29166f);
-        LoseBattery(0.29166f/100f/2f * passiveLossRate);
+        LoseBattery(0.29166f/100f/2f * M_passiveLossRate);
 
         if (currentBattery <= 0f)
         {
@@ -42,25 +51,25 @@ public class PlayerBattery : MonoBehaviour
 
     public void SetBattery(float newHealth)
     {
-        currentBattery = Mathf.Clamp(newHealth, 0, maxBattery);
+        currentBattery = Mathf.Clamp(newHealth, 0, M_maxBattery);
         UpdateBattery();
     }
 
     public void LoseBattery(float amount)
     {
-        currentBattery = Mathf.Clamp(currentBattery - amount, 0, maxBattery);
+        currentBattery = Mathf.Clamp(currentBattery - amount, 0, M_maxBattery);
         UpdateBattery();
     }
 
     public void GainBattery(float amount)
     {
-        currentBattery = Mathf.Clamp(currentBattery + amount, 0, maxBattery);
+        currentBattery = Mathf.Clamp(currentBattery + amount, 0, M_maxBattery);
         UpdateBattery();
     }
 
     private void UpdateBattery()
     {
-        float healthRatio = currentBattery / maxBattery;
+        float healthRatio = currentBattery / M_maxBattery;
 
         batteryFill.fillAmount = healthRatio;
 

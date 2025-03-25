@@ -19,13 +19,15 @@ public class Settlement : BaseInteractable
     [Header("UI")]
     [SerializeField] private Image upkeepMeter;
     [SerializeField] private TextMeshProUGUI nametag;
+    [SerializeField] private Sprite icon;
     [Space]
     [SerializeField] private Color goodHealthColor;
     [SerializeField] private Color watchOutColor;
     [SerializeField] private Color criticalColor;
-    [SerializeField] private QuestGiver questGiver;
+    [SerializeField] public QuestGiver questGiver;
 
-
+    [Space]
+    [Header("Behaviour")]
     [SerializeField] public int panicEnemies;
     [SerializeField] public bool currentlyEndangered;
 
@@ -118,4 +120,5 @@ public class Settlement : BaseInteractable
     public string GetSettlementName() { return settlementName; }
     public float GetCurrentUpKeep() { return currentUpkeep; }
     public float GetMaxUpKeep() { return maxUpkeep; }
+    public Sprite GetIcon() { return icon; }
 }

@@ -9,7 +9,8 @@ public class Healthbar : MonoBehaviour
     [SerializeField] private Image healthbarLoss;
     [SerializeField] private float lossLerpSpeed = 2f; 
     [Space]
-    [SerializeField]protected float maxHealth = 100f;
+    [SerializeField] private float maxHealth = 100f;
+    [SerializeField] public float M_maxHealth;
     protected float currentHealth;
 
     [Space]
@@ -18,55 +19,60 @@ public class Healthbar : MonoBehaviour
     [SerializeField] private Color criticalColor;
     
 
-    void Start()
+    public virtual void Start()
     {
+        M_maxHealth = maxHealth;
         ScaleUI();
     }
 
     public void ScaleUI()
     {
-        float newScaleX = maxHealth * 0.0022f;
+        float newScaleX = M_maxHealth * 0.0022f;
         mainBar.localScale = new Vector3(newScaleX, mainBar.localScale.y, mainBar.localScale.z);
 
-        currentHealth = maxHealth;
+        currentHealth = M_maxHealth;
         UpdateHealthbar();
     }
 
     public void SetHealth(float newHealth)
     {
-        currentHealth = Mathf.Clamp(newHealth, 0, maxHealth);
+        currentHealth = Mathf.Clamp(newHealth, -0.1f, M_maxHealth);
         UpdateHealthbar();
     }
 
     public virtual void LoseHealth(float amount)
     {
-        currentHealth = Mathf.Clamp(currentHealth - amount, 0, maxHealth);
+        currentHealth = Mathf.Clamp(currentHealth - amount, -0.1f, M_maxHealth);
         UpdateHealthbar();
     }
 
     public void GainHealth(float amount)
     {
-        currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+        currentHealth = Mathf.Clamp(currentHealth + amount, -0.1f, M_maxHealth);
         UpdateHealthbar();
     }
 
     public float GetCurrentHealth() { return currentHealth; }
-    public void SetMaxHealth(float newMaxHealth) { maxHealth = newMaxHealth; }
-    public float GetMaxHealth() { return maxHealth; }
+    public void SetMaxHealth(float newMaxHealth) { M_maxHealth = newMaxHealth; ScaleUI(); }
+    public float GetMaxHealth() { return M_maxHealth; }
 
-    protected void UpdateHealthbar()
+    public void UpdateHealthbar()
     {
-        float healthRatio = currentHealth / maxHealth;
+        float healthRatio;
+        if (M_maxHealth == 0)
+            healthRatio = 1f;
+        else
+            healthRatio = currentHealth / M_maxHealth;
 
         healthbarFill.fillAmount = healthRatio;
 
-        if (currentHealth > (maxHealth / 2))
+        if (currentHealth > (M_maxHealth / 2))
             healthbarFill.color = goodHealthColor;
-        else if (currentHealth > (maxHealth / 4))
+        else if (currentHealth > (M_maxHealth / 4))
             healthbarFill.color = watchOutColor;
         else
             healthbarFill.color = criticalColor;
-
+        
         StopAllCoroutines();
         StartCoroutine(LerpHealthbarLoss(healthRatio));
     }

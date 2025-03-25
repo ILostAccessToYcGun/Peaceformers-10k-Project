@@ -64,7 +64,7 @@ MonoBehaviour:
   currentAmmo: 0
   baseDmg: 12
   modDmg: 0
-  bulletForce: 160
+  bulletForce: 320
   timeBetweenShots: 2
   reloadTime: 4
   bulletSpread: 0.01

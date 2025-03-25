@@ -27,9 +27,17 @@ public class WorldItem : BaseInteractable
         //print("Open Item prompt");
         if (playerInventory != null)
         {
-            playerInventory.AddItemToInventory(inventoryItem, itemStackCount);
+            int doesntFit = playerInventory.AddItemToInventory(inventoryItem, itemStackCount);
             Debug.Log("itemStackCount = " + itemStackCount);
-            Destroy(this.gameObject);
+
+            if (doesntFit != 0)
+            {
+                itemStackCount = doesntFit;
+                UpdateStackCount();
+                AddPopUpForce();
+            }
+            else
+                Destroy(this.gameObject);
         }
         else
             Debug.Log("player's inventory not found");
