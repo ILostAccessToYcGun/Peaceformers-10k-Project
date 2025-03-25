@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Transactions;
 using Unity.VisualScripting.Antlr3.Runtime.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerUIToggler : MonoBehaviour
 {
@@ -45,6 +46,19 @@ public class PlayerUIToggler : MonoBehaviour
     [Space]
     [Header("GeneralManagement")]
     [SerializeField] private bool isUIOpen;
+
+    [Space]
+    [Header("PauseUI")]
+    [SerializeField] private RectTransform pauseUI;
+    [SerializeField] private Vector3 shownPos_p;
+    [SerializeField] private Vector3 hiddenPos_p;
+    [SerializeField] private bool pauseIsShowing = false;
+
+    [Header("OptionsUI")]
+    [SerializeField] private RectTransform optionsUI;
+    [SerializeField] private Vector3 shownPos_o;
+    [SerializeField] private Vector3 hiddenPos_o;
+    [SerializeField] public bool optionsIsShowing = false;
 
     public bool GetUIOpenBool() { return isUIOpen; }
     public void SetUIOpenBool(bool toggle) { isUIOpen = toggle; }
@@ -179,6 +193,50 @@ public class PlayerUIToggler : MonoBehaviour
 
     public bool GetSettlementQuestBool() { return settlementQuestIsShowing; }
 
+    public void TogglePauseUI()
+    {
+        
+        BackOutOfCurrentUI(5);
+        
+        if (pauseIsShowing)
+        {
+            Time.timeScale = 1;
+            LeanTween.move(pauseUI, hiddenPos_p, timeToMove).setIgnoreTimeScale(true).setEase(LeanTweenType.easeOutCubic);
+            SetUIOpenBool(false);
+           
+        }
+        else
+        {
+            Time.timeScale = 0;
+            LeanTween.move(pauseUI, shownPos_p, timeToMove / 2).setIgnoreTimeScale(true).setEase(LeanTweenType.easeOutBack);
+            SetUIOpenBool(true);
+            
+        }
+        pauseIsShowing = !pauseIsShowing;
+    }
+
+    public void ToggleOptionsUI()
+    {
+
+        BackOutOfCurrentUI(6);
+
+        if (optionsIsShowing)
+        {
+            LeanTween.move(optionsUI, hiddenPos_o, timeToMove).setIgnoreTimeScale(true).setEase(LeanTweenType.easeOutCubic);
+            SetUIOpenBool(false);
+            //Time.timeScale = 1;
+        }
+        else
+        {
+            Time.timeScale = 0;
+            LeanTween.move(optionsUI, shownPos_o, timeToMove / 2).setIgnoreTimeScale(true).setEase(LeanTweenType.easeOutBack);
+            SetUIOpenBool(true);
+            //Time.timeScale = 0;
+        }
+        optionsIsShowing = !optionsIsShowing;
+    }
+
+
     public void BackOutOfCurrentUI(int blackList = -1)
     {
         if (settlementIsShowing && blackList != 0)
@@ -206,5 +264,23 @@ public class PlayerUIToggler : MonoBehaviour
             ToggleSettlementQuestUI();
             return;
         }
+        if (pauseIsShowing && blackList != 5)
+        {
+            TogglePauseUI();
+            return;
+        }
+        if (optionsIsShowing && blackList != 6)
+        {
+            ToggleOptionsUI();
+            //TogglePauseUI();
+            return;
+        }
+    }
+
+
+    public void SaveAndQuit()
+    {
+        //save a file
+        SceneManager.LoadScene(0);
     }
 }

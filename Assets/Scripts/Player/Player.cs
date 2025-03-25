@@ -128,7 +128,18 @@ public class Player : MonoBehaviour
 
         if (ui.BackOut.WasPressedThisFrame())
         {
-            playerUIToggler.BackOutOfCurrentUI();
+            if (playerUIToggler.GetUIOpenBool())
+            {
+                if (playerUIToggler.optionsIsShowing)
+                {
+                    playerUIToggler.ToggleOptionsUI();
+                    playerUIToggler.TogglePauseUI();
+                }
+                else
+                    playerUIToggler.BackOutOfCurrentUI();
+            }
+            else
+                playerUIToggler.TogglePauseUI();
         }
 
         #endregion
