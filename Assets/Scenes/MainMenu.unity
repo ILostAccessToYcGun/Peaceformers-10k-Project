@@ -4736,9 +4736,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Bambi Davis - Programmer
+  m_text: 'The B-Listers
 
-    Yoga Gunawan - Programmer'
+    Ethan "Bambi" Davis
+
+    Yoga Gunawan'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ebcf30964bc8fdd4d8255b662e39a350, type: 2}
   m_sharedMaterial: {fileID: 5627060112372618412, guid: ebcf30964bc8fdd4d8255b662e39a350, type: 2}
