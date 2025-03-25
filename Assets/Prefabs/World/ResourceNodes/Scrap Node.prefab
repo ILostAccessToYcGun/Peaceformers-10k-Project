@@ -255,7 +255,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resourceHealthBar: {fileID: 2563859046377071783}
   resourceNodeTitle: {fileID: 1414687270716254063}
-  resourceType: {fileID: 8154398913341998294, guid: e64b25b68280b9f448a8f87c0afbb7bf, type: 3}
+  resourceType: {fileID: 1966892282438000027, guid: e64b25b68280b9f448a8f87c0afbb7bf, type: 3}
   resourceCount: 0
   resourceCountReleased: 0
   nodeMaxHealth: 120
@@ -701,7 +701,8 @@ MonoBehaviour:
   healthbarFill: {fileID: 5650601308439126667}
   healthbarLoss: {fileID: 823744423266640713}
   lossLerpSpeed: 2
-  maxHealth: 160
+  maxHealth: 120
+  M_maxHealth: 120
   goodHealthColor: {r: 1, g: 1, b: 1, a: 1}
   watchOutColor: {r: 0.9843138, g: 0.41960788, b: 0.1137255, a: 1}
   criticalColor: {r: 1, g: 0.25, b: 0.25, a: 1}

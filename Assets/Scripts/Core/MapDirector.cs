@@ -33,7 +33,6 @@ public class MapDirector : MonoBehaviour
         LayerMask whiteListMasks = LayerMask.GetMask("Ground", "SpawnBlackList", "Default"); //i think this is a white list
 
         bool rayHit = Physics.SphereCast(transform.position, radius, -transform.up, out hit, 100f, whiteListMasks);
-        Debug.Log(hit);
         if (hit.transform != null)
         {
             if (hit.transform.gameObject.layer == LayerMask.NameToLayer("SpawnBlackList") || hit.transform.gameObject.layer == LayerMask.NameToLayer("Default")) 

@@ -36,27 +36,27 @@ public class Healthbar : MonoBehaviour
 
     public void SetHealth(float newHealth)
     {
-        currentHealth = Mathf.Clamp(newHealth, 0.1f, M_maxHealth);
+        currentHealth = Mathf.Clamp(newHealth, -0.1f, M_maxHealth);
         UpdateHealthbar();
     }
 
     public virtual void LoseHealth(float amount)
     {
-        currentHealth = Mathf.Clamp(currentHealth - amount, 0.1f, M_maxHealth);
+        currentHealth = Mathf.Clamp(currentHealth - amount, -0.1f, M_maxHealth);
         UpdateHealthbar();
     }
 
     public void GainHealth(float amount)
     {
-        currentHealth = Mathf.Clamp(currentHealth + amount, 0.1f, M_maxHealth);
+        currentHealth = Mathf.Clamp(currentHealth + amount, -0.1f, M_maxHealth);
         UpdateHealthbar();
     }
 
     public float GetCurrentHealth() { return currentHealth; }
-    public void SetMaxHealth(float newMaxHealth) { M_maxHealth = newMaxHealth; }
+    public void SetMaxHealth(float newMaxHealth) { M_maxHealth = newMaxHealth; ScaleUI(); }
     public float GetMaxHealth() { return M_maxHealth; }
 
-    protected void UpdateHealthbar()
+    public void UpdateHealthbar()
     {
         float healthRatio;
         if (M_maxHealth == 0)
