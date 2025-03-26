@@ -7,6 +7,7 @@ public class PlayerHealthBar : Healthbar
     [SerializeField] PlayerBattery pb;
     [SerializeField] float damageToEnergyLoss;
     [SerializeField] public float M_damageToEnergyLoss;
+    [SerializeField] public bool dead = false;
 
     public override void Start()
     {
@@ -16,13 +17,18 @@ public class PlayerHealthBar : Healthbar
 
     public override void LoseHealth(float amount)
     {
-        currentHealth = Mathf.Clamp(currentHealth - amount, 0, M_maxHealth);
+        currentHealth = Mathf.Clamp(currentHealth - amount, -0.1f, M_maxHealth);
         pb.LoseBattery(amount * M_damageToEnergyLoss);
         UpdateHealthbar();
 
         if (currentHealth <= 0)
         {
-            pb.dayNightCycleManager.EndDay();
+            if (!dead)
+            {
+                dead = true;
+                Debug.Log("die");
+                pb.dayNightCycleManager.EndDay();
+            }
         }
     }
 

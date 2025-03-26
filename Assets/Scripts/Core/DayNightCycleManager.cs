@@ -110,7 +110,11 @@ public class DayNightCycleManager : MonoBehaviour
         ui.SetUIOpenBool(enable);
 
         if (!enable)
+        {
             up.ClearBlacklist();
+            FindAnyObjectByType<PlayerHealthBar>().dead = false;
+        }
+            
     }
 
     public void UpdateTimeUI()
@@ -183,14 +187,24 @@ public class DayNightCycleManager : MonoBehaviour
 
     public void EndDay()
     {
+        //we wanna run a check to see if the player is not within X distance to the camp
+        if (!playerCamp.SafeDistanceCheck())
+        {
+            //if the player is outside the distance range, randomly remove half their items
+            playerInventory.RemoveHalfInventory();
+            FindAnyObjectByType<PlayerMovement>().ResetPos();
+        }
+
+        if (cm.IncrementDayCount())
+            return;
+
         DayEndPanel(true);
         up.SelectSemiRandomUpgrades();
 
         ed.AddEnemyCountEntry();
         ed.IncreaseDifficulty();
-        cm.IncrementDayCount();
         md.DestroyWorldItems();
-
+        
         List<QuestDisplay> currentQuests = playerQuestBoard.GetQuests();
         for (int i = 0; i < currentQuests.Count; i++)
         {
@@ -204,14 +218,8 @@ public class DayNightCycleManager : MonoBehaviour
             }
         }
         SettlementEnemySpawnCheck();
-
-        //we wanna run a check to see if the player is not within X distance to the camp
-        if (!playerCamp.SafeDistanceCheck())
-        {
-            //if the player is outside the distance range, randomly remove half their items
-            playerInventory.RemoveHalfInventory();
-            FindAnyObjectByType<PlayerMovement>().ResetPos();
-        }
+        
+        //we should probably reduce each settlement's upkeep by the amount they would have lost if we end early, so we dont scam the system
     }
 
     public void SettlementEnemySpawnCheck()

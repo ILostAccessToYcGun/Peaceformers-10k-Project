@@ -107,7 +107,7 @@ public class QuestDisplay : MonoBehaviour
 
     public void UpdateDaysLeft()
     {
-        Debug.Log(questObject.GetDayDue());
+        //Debug.Log(questObject.GetDayDue());
         questObject.correspondingPlayerQuestDisplayUI.daysLeft.text = (questObject.GetDayDue() - questObject.calendar.GetDayCount()).ToString();
         if (questObject.correspondingSettlementQuestDisplayUI != null)
             questObject.correspondingSettlementQuestDisplayUI.daysLeft.text = (questObject.GetDayDue() - questObject.calendar.GetDayCount()).ToString();

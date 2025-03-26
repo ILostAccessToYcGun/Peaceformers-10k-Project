@@ -13,16 +13,6 @@ public class Options : MonoBehaviour
     [SerializeField] Slider music;
     [SerializeField] TextMeshProUGUI sfxAmount;
     [SerializeField] TextMeshProUGUI musicAmount;
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void FullScreen()
     {
@@ -40,7 +30,6 @@ public class Options : MonoBehaviour
     {
         Debug.Log(music.value * 100f);
         musicAmount.text = (Mathf.FloorToInt(music.value * 100f)).ToString();
-
     }
 
     public void ResetSettings()

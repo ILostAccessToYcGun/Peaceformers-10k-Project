@@ -134,12 +134,12 @@ public class MapDirector : MonoBehaviour
 
     public void GenerateCamps()
     {
-        Debug.Log("generate enemy camps");
+        //Debug.Log("generate enemy camps");
         currentSpawnAttempts = 0;
         for (int i = 0; i < enemyCampLimit; i++)
         {
             if (currentSpawnAttempts >= 1000) { break; }
-            Debug.Log("try");
+            //Debug.Log("try");
             SelectRandomLocation(40f);
             if (!SpawnCamp())
             {

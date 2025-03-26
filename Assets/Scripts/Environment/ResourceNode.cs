@@ -50,7 +50,7 @@ public class ResourceNode : MonoBehaviour
         //for now the detection code will be here,
         //but maybe make a child of the healthbar script to override the lose health function to update this instead of updating every frame
 
-        Debug.Log(resourceHealthBar.GetCurrentHealth());
+        //Debug.Log(resourceHealthBar.GetCurrentHealth());
 
         if (resourceHealthBar.GetCurrentHealth() <= 0)
         {

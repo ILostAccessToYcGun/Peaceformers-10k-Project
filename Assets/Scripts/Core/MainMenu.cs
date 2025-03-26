@@ -48,7 +48,8 @@ public class MainMenu : MonoBehaviour
         //if (check for save)
         //continueButton.interactable = false;
         //else
-        continueButton.interactable = false;
+        if (continueButton)
+            continueButton.interactable = false;
     }
 
     public void NewGame()
@@ -70,7 +71,14 @@ public class MainMenu : MonoBehaviour
 
     public void StartGame()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene(1);
+    }
+
+    public void ReturnToMainMenu()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(0);
     }
 
     public void Continue()

@@ -145,7 +145,7 @@ public class InteractableInventory : BaseInteractable
                 }
                 //Debug.Log("actualAmount: " + actualAmount);
                 overspillValue = inventory.AddItemToInventory(addingItem, actualAmount, randX, randY);
-                Debug.Log(addingItem.itemName + "Amount: " + actualAmount + ". overspillValue: " + overspillValue);
+                //Debug.Log(addingItem.itemName + "Amount: " + actualAmount + ". overspillValue: " + overspillValue);
                 if (overspillValue > 0)
                 {
                     if (addingItem.itemName == Item.Name.AmmoCrate)
@@ -170,7 +170,7 @@ public class InteractableInventory : BaseInteractable
 
             //i += itemValue;
         }
-        Debug.Log("Inventory is set up and should have items");
+        //Debug.Log("Inventory is set up and should have items");
         inventory.ClearInventory();
         inventory.DestroyInventory();
     }

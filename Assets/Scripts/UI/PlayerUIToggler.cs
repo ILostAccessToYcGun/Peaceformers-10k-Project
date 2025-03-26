@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Transactions;
+using TMPro;
 using Unity.VisualScripting.Antlr3.Runtime.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -59,6 +60,14 @@ public class PlayerUIToggler : MonoBehaviour
     [SerializeField] private Vector3 shownPos_o;
     [SerializeField] private Vector3 hiddenPos_o;
     [SerializeField] public bool optionsIsShowing = false;
+
+    [Header("EndUI")]
+    [SerializeField] private RectTransform endUI;
+    [SerializeField] private TextMeshProUGUI endTitle;
+    [SerializeField] private TextMeshProUGUI endStats;
+    [SerializeField] private Vector3 shownPos_end;
+    [SerializeField] private Vector3 hiddenPos_end;
+    [SerializeField] public bool endIsShowing = false;
 
     public bool GetUIOpenBool() { return isUIOpen; }
     public void SetUIOpenBool(bool toggle) { isUIOpen = toggle; }
@@ -217,7 +226,6 @@ public class PlayerUIToggler : MonoBehaviour
 
     public void ToggleOptionsUI()
     {
-
         BackOutOfCurrentUI(6);
 
         if (optionsIsShowing)
@@ -234,6 +242,26 @@ public class PlayerUIToggler : MonoBehaviour
             //Time.timeScale = 0;
         }
         optionsIsShowing = !optionsIsShowing;
+    }
+
+    public void ToggleEndUI(string title = "End", string stats = "ur trash")
+    {
+        endTitle.text = title;
+        endStats.text = stats;
+        BackOutOfCurrentUI();
+
+        if (endIsShowing)
+        {
+            LeanTween.move(endUI, hiddenPos_end, timeToMove).setIgnoreTimeScale(true).setEase(LeanTweenType.easeOutCubic);
+            SetUIOpenBool(false);
+        }
+        else
+        {
+            Time.timeScale = 0;
+            LeanTween.move(endUI, shownPos_end, timeToMove / 2).setIgnoreTimeScale(true).setEase(LeanTweenType.easeOutBack);
+            SetUIOpenBool(true);
+        }
+        endIsShowing = !endIsShowing;
     }
 
 
@@ -272,7 +300,6 @@ public class PlayerUIToggler : MonoBehaviour
         if (optionsIsShowing && blackList != 6)
         {
             ToggleOptionsUI();
-            //TogglePauseUI();
             return;
         }
     }

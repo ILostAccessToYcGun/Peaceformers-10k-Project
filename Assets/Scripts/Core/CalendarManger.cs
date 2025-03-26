@@ -10,13 +10,18 @@ public class CalendarManger : MonoBehaviour
     public Month currentMonth = Month.November;
     public TextMeshProUGUI dateText;
 
+    [SerializeField] PlayerUIToggler ui;
 
-    public void CheckIfEndDayCountReached()
+
+    public bool CheckIfEndDayCountReached()
     {
         if (date > endDate)
         {
+            ui.ToggleEndUI("You Win!");
             Debug.Log("you won, go to game manager");
+            return true;
         }
+        return false;
     }
 
     public void UpdateDateText()
@@ -39,12 +44,12 @@ public class CalendarManger : MonoBehaviour
         date = count;
         UpdateDateText();
     }
-    public void IncrementDayCount() 
+    public bool IncrementDayCount() 
     { 
         date++;
-        //Debug.Log("the should only happen once");
+        Debug.Log("the should only happen once");
         UpdateDateText();
-        CheckIfEndDayCountReached();
+        return CheckIfEndDayCountReached();
     }
 
     public int GetDayCount() { return date; }

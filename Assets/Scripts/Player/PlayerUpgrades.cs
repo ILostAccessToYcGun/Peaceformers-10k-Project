@@ -166,20 +166,16 @@ public class PlayerUpgrades : MonoBehaviour
         upgradeConfirm.onClick.RemoveListener(Battery);
         upgradeConfirm.onClick.RemoveListener(Frame);
         upgradeConfirm.onClick.AddListener(func);
+        upgradeConfirm.interactable = true;
     }
 
 
     public void SelectSemiRandomUpgrades()
     {
+        upgradeConfirm.interactable = false;
         //basically it will choose one of the methods above to apply to the button's function
         //then it will black list that method, so it cant get added to another upgrade,
         //meaning you cant get 2 instances of the same upgrade on the same screen
-
-
-        //this needs to be fixed, methods are potentialy missing the onClick?
-
-        
-        
 
         foreach (GameObject buttons in upgradeButtons)
         {
