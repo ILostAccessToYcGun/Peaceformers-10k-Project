@@ -17,7 +17,7 @@ public class CalendarManger : MonoBehaviour
     {
         if (date > endDate)
         {
-            ui.ToggleEndUI("You Win!");
+            ui.ShowEndUI("You Win!");
             Debug.Log("you won, go to game manager");
             return true;
         }

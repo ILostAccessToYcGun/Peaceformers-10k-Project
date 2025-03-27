@@ -54,7 +54,7 @@ public class Settlement : BaseInteractable
             if (isAlive)
             {
                 isAlive = false;
-                FindAnyObjectByType<PlayerUIToggler>().ToggleEndUI("You Lost!");
+                FindAnyObjectByType<PlayerUIToggler>().ShowEndUI("You Lost!");
             }
         }
 
@@ -100,10 +100,21 @@ public class Settlement : BaseInteractable
         stationary = true;
     }
 
-    public void LoseMeter(float value)
+    public bool LoseMeter(float value)
     {
         currentUpkeep = Mathf.Clamp(currentUpkeep - value, 0, maxUpkeep);
         stationary = true;
+
+        if (currentUpkeep <= 0)
+        {
+            if (isAlive)
+            {
+                isAlive = false;
+                FindAnyObjectByType<PlayerUIToggler>().ShowEndUI("You Lost!");
+                return false;
+            }
+        }
+        return true;
     }
 
     protected override void OpenPrompt()

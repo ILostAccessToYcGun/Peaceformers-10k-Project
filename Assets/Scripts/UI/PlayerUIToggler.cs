@@ -244,24 +244,26 @@ public class PlayerUIToggler : MonoBehaviour
         optionsIsShowing = !optionsIsShowing;
     }
 
-    public void ToggleEndUI(string title = "End", string stats = "ur trash")
+    public void ShowEndUI(string title = "End", string stats = "ur trash")
     {
         endTitle.text = title;
         endStats.text = stats;
         BackOutOfCurrentUI();
 
-        if (endIsShowing)
-        {
-            LeanTween.move(endUI, hiddenPos_end, timeToMove).setIgnoreTimeScale(true).setEase(LeanTweenType.easeOutCubic);
-            SetUIOpenBool(false);
-        }
-        else
-        {
-            Time.timeScale = 0;
-            LeanTween.move(endUI, shownPos_end, timeToMove / 2).setIgnoreTimeScale(true).setEase(LeanTweenType.easeOutBack);
-            SetUIOpenBool(true);
-        }
-        endIsShowing = !endIsShowing;
+        //if (endIsShowing)
+        //{
+        //    LeanTween.move(endUI, hiddenPos_end, timeToMove).setIgnoreTimeScale(true).setEase(LeanTweenType.easeOutCubic);
+        //    SetUIOpenBool(false);
+        //}
+        //else
+        //{
+            
+        //}
+
+        Time.timeScale = 0;
+        LeanTween.move(endUI, shownPos_end, timeToMove / 2).setIgnoreTimeScale(true).setEase(LeanTweenType.easeOutBack);
+        SetUIOpenBool(true);
+        endIsShowing = true;
     }
 
 

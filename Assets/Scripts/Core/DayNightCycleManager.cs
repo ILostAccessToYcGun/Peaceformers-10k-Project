@@ -105,6 +105,8 @@ public class DayNightCycleManager : MonoBehaviour
 
     public void DayEndPanel(bool enable)
     {
+        if (enable)
+            ui.BackOutOfCurrentUI();
         ToggleTime(!enable);
         dayEndPanel.gameObject.SetActive(enable);
         ui.SetUIOpenBool(enable);
@@ -114,7 +116,6 @@ public class DayNightCycleManager : MonoBehaviour
             up.ClearBlacklist();
             FindAnyObjectByType<PlayerHealthBar>().dead = false;
         }
-            
     }
 
     public void UpdateTimeUI()
@@ -198,6 +199,23 @@ public class DayNightCycleManager : MonoBehaviour
         if (cm.IncrementDayCount())
             return;
 
+        if (!(hour == 12 && twelveHourClock == twelveHour.AM))
+        {
+            float difference = 1465f - totalTime;
+            Debug.Log(difference * 0.2f);
+            foreach (Settlement set in settlements)
+            {
+                //1465 total time
+                //lose 0.06 upkeep per second
+                //3.428649798 minutes per second
+                //0.2057189879 loss per minute
+                //-0.2 per minute
+
+                if (!set.LoseMeter(difference * 0.01f))
+                    return;
+            }
+        }
+
         DayEndPanel(true);
         up.SelectSemiRandomUpgrades();
 
@@ -218,8 +236,11 @@ public class DayNightCycleManager : MonoBehaviour
             }
         }
         SettlementEnemySpawnCheck();
-        
+
         //we should probably reduce each settlement's upkeep by the amount they would have lost if we end early, so we dont scam the system
+
+        
+        
     }
 
     public void SettlementEnemySpawnCheck()

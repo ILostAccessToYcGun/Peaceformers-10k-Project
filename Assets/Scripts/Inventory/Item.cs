@@ -576,12 +576,26 @@ public class Item : MonoBehaviour, IPointerClickHandler
 
     public void SetParentInventoryObject(GameObject newParent)
     {
+        
         if (newParent != null)
+        {
+            Inventory[] invs = FindObjectsByType<Inventory>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+            foreach (Inventory inv in invs)
+            {
+                if (inv.isPlayerInventory)
+                    inv.playerQuestBoard.UpdateQuests();
+            }
             parentInventory = newParent;
+        }
+            
         else
             parentInventory = FindAnyObjectByType<PlayerUIToggler>().gameObject;
 
         transform.SetParent(parentInventory.transform);
+
+        
+
+
     }
 
     public void InstantiateWorldObject(int worldStackAmount, bool isDestroy = true)
