@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -186,7 +187,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
                                 {
                                     if (currentInventory.inventory != null)
                                     {
-                                        Item currentItem = currentInventory.inventory[h][w].GetHeldItem();
+                                        Item currentItem = slot.parentInventory.inventory[h][w].GetHeldItem();
                                         if (currentItem != null) //if there is something inside the checking cells
                                         {
                                             if (w == (int)slotPosition.x && h == (int)slotPosition.y)
@@ -202,6 +203,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
                                 }
                             }
                         }
+
 
                         if (itemDoesFitInsideInventoryFrame && (itemDoesNotCollideWithOtherItems || firstCellisLikeItem))
                         {
