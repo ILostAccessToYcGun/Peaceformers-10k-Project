@@ -79,6 +79,17 @@ public class MapDirector : MonoBehaviour
         return true;
     }
 
+    public bool SpawnNode(int node, Vector3 location)
+    {
+        GameObject randomNode = resourceNodeSelection[node];
+        if (randomNode == null || location == new Vector3(0, -1, 0)) { return false; }
+
+        GameObject newNode = Instantiate(randomNode, location, Quaternion.identity, nodeParent);
+
+        currentSpawnAttempts = 0;
+        return true;
+    }
+
     public void GenerateNodes()
     {
         if (nodesAlive >= nodeLimit) { return; }
