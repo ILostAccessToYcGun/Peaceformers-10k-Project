@@ -30,12 +30,14 @@ public class Settlement : BaseInteractable
     [Header("Behaviour")]
     [SerializeField] public int panicEnemies;
     [SerializeField] public bool currentlyEndangered;
+    [SerializeField] public bool isAlive = true;
 
 
 
     protected override void Awake()
     {
         base.Awake();
+        isAlive = true;
         questGiver = GetComponent<QuestGiver>();
     }
     protected void Start()
@@ -47,6 +49,15 @@ public class Settlement : BaseInteractable
 
     protected override void Update()
     {
+        if (currentUpkeep <= 0)
+        {
+            if (isAlive)
+            {
+                isAlive = false;
+                FindAnyObjectByType<PlayerUIToggler>().ShowEndUI("You Lost!");
+            }
+        }
+
         if (!stationary) 
         {
             currentStayTime = 0;
@@ -89,10 +100,21 @@ public class Settlement : BaseInteractable
         stationary = true;
     }
 
-    public void LoseMeter(float value)
+    public bool LoseMeter(float value)
     {
         currentUpkeep = Mathf.Clamp(currentUpkeep - value, 0, maxUpkeep);
         stationary = true;
+
+        if (currentUpkeep <= 0)
+        {
+            if (isAlive)
+            {
+                isAlive = false;
+                FindAnyObjectByType<PlayerUIToggler>().ShowEndUI("You Lost!");
+                return false;
+            }
+        }
+        return true;
     }
 
     protected override void OpenPrompt()

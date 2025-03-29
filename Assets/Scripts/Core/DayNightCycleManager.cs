@@ -105,12 +105,17 @@ public class DayNightCycleManager : MonoBehaviour
 
     public void DayEndPanel(bool enable)
     {
+        if (enable)
+            ui.BackOutOfCurrentUI();
         ToggleTime(!enable);
         dayEndPanel.gameObject.SetActive(enable);
         ui.SetUIOpenBool(enable);
 
         if (!enable)
+        {
             up.ClearBlacklist();
+            FindAnyObjectByType<PlayerHealthBar>().dead = false;
+        }
     }
 
     public void UpdateTimeUI()
@@ -183,14 +188,41 @@ public class DayNightCycleManager : MonoBehaviour
 
     public void EndDay()
     {
+        //we wanna run a check to see if the player is not within X distance to the camp
+        if (!playerCamp.SafeDistanceCheck())
+        {
+            //if the player is outside the distance range, randomly remove half their items
+            playerInventory.RemoveHalfInventory();
+            FindAnyObjectByType<PlayerMovement>().ResetPos();
+        }
+
+        if (cm.IncrementDayCount())
+            return;
+
+        if (!(hour == 12 && twelveHourClock == twelveHour.AM))
+        {
+            float difference = 1465f - totalTime;
+            Debug.Log(difference * 0.2f);
+            foreach (Settlement set in settlements)
+            {
+                //1465 total time
+                //lose 0.06 upkeep per second
+                //3.428649798 minutes per second
+                //0.2057189879 loss per minute
+                //-0.2 per minute
+
+                if (!set.LoseMeter(difference * 0.01f))
+                    return;
+            }
+        }
+
         DayEndPanel(true);
         up.SelectSemiRandomUpgrades();
 
         ed.AddEnemyCountEntry();
         ed.IncreaseDifficulty();
-        cm.IncrementDayCount();
         md.DestroyWorldItems();
-
+        
         List<QuestDisplay> currentQuests = playerQuestBoard.GetQuests();
         for (int i = 0; i < currentQuests.Count; i++)
         {
@@ -205,13 +237,10 @@ public class DayNightCycleManager : MonoBehaviour
         }
         SettlementEnemySpawnCheck();
 
-        //we wanna run a check to see if the player is not within X distance to the camp
-        if (!playerCamp.SafeDistanceCheck())
-        {
-            //if the player is outside the distance range, randomly remove half their items
-            playerInventory.RemoveHalfInventory();
-            FindAnyObjectByType<PlayerMovement>().ResetPos();
-        }
+        //we should probably reduce each settlement's upkeep by the amount they would have lost if we end early, so we dont scam the system
+
+        
+        
     }
 
     public void SettlementEnemySpawnCheck()

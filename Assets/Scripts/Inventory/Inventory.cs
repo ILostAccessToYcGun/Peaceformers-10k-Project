@@ -438,7 +438,7 @@ public class Inventory : MonoBehaviour
 
         if (addedItem.SearchForNearestValidInventorySlot() == 0 || addedItem.SearchForNearestValidInventorySlot() == 2)
         {
-            Debug.Log("bad spot try again");
+            //Debug.Log("bad spot try again");
             Destroy(added);
             return returnOverspill;
         }
@@ -466,7 +466,7 @@ public class Inventory : MonoBehaviour
 
         if (playerQuestBoard != null)
         {
-            Debug.Log("we should be updating the quests");
+            //Debug.Log("we should be updating the quests");
             playerQuestBoard.UpdateQuests();
         }
         return returnOverspill;

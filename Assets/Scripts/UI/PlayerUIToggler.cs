@@ -1,8 +1,10 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Transactions;
+using TMPro;
 using Unity.VisualScripting.Antlr3.Runtime.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerUIToggler : MonoBehaviour
 {
@@ -45,6 +47,27 @@ public class PlayerUIToggler : MonoBehaviour
     [Space]
     [Header("GeneralManagement")]
     [SerializeField] private bool isUIOpen;
+
+    [Space]
+    [Header("PauseUI")]
+    [SerializeField] private RectTransform pauseUI;
+    [SerializeField] private Vector3 shownPos_p;
+    [SerializeField] private Vector3 hiddenPos_p;
+    [SerializeField] private bool pauseIsShowing = false;
+
+    [Header("OptionsUI")]
+    [SerializeField] private RectTransform optionsUI;
+    [SerializeField] private Vector3 shownPos_o;
+    [SerializeField] private Vector3 hiddenPos_o;
+    [SerializeField] public bool optionsIsShowing = false;
+
+    [Header("EndUI")]
+    [SerializeField] private RectTransform endUI;
+    [SerializeField] private TextMeshProUGUI endTitle;
+    [SerializeField] private TextMeshProUGUI endStats;
+    [SerializeField] private Vector3 shownPos_end;
+    [SerializeField] private Vector3 hiddenPos_end;
+    [SerializeField] public bool endIsShowing = false;
 
     public bool GetUIOpenBool() { return isUIOpen; }
     public void SetUIOpenBool(bool toggle) { isUIOpen = toggle; }
@@ -179,6 +202,71 @@ public class PlayerUIToggler : MonoBehaviour
 
     public bool GetSettlementQuestBool() { return settlementQuestIsShowing; }
 
+    public void TogglePauseUI()
+    {
+        
+        BackOutOfCurrentUI(5);
+        
+        if (pauseIsShowing)
+        {
+            Time.timeScale = 1;
+            LeanTween.move(pauseUI, hiddenPos_p, timeToMove).setIgnoreTimeScale(true).setEase(LeanTweenType.easeOutCubic);
+            SetUIOpenBool(false);
+           
+        }
+        else
+        {
+            Time.timeScale = 0;
+            LeanTween.move(pauseUI, shownPos_p, timeToMove / 2).setIgnoreTimeScale(true).setEase(LeanTweenType.easeOutBack);
+            SetUIOpenBool(true);
+            
+        }
+        pauseIsShowing = !pauseIsShowing;
+    }
+
+    public void ToggleOptionsUI()
+    {
+        BackOutOfCurrentUI(6);
+
+        if (optionsIsShowing)
+        {
+            LeanTween.move(optionsUI, hiddenPos_o, timeToMove).setIgnoreTimeScale(true).setEase(LeanTweenType.easeOutCubic);
+            SetUIOpenBool(false);
+            //Time.timeScale = 1;
+        }
+        else
+        {
+            Time.timeScale = 0;
+            LeanTween.move(optionsUI, shownPos_o, timeToMove / 2).setIgnoreTimeScale(true).setEase(LeanTweenType.easeOutBack);
+            SetUIOpenBool(true);
+            //Time.timeScale = 0;
+        }
+        optionsIsShowing = !optionsIsShowing;
+    }
+
+    public void ShowEndUI(string title = "End", string stats = "ur trash")
+    {
+        endTitle.text = title;
+        endStats.text = stats;
+        BackOutOfCurrentUI();
+
+        //if (endIsShowing)
+        //{
+        //    LeanTween.move(endUI, hiddenPos_end, timeToMove).setIgnoreTimeScale(true).setEase(LeanTweenType.easeOutCubic);
+        //    SetUIOpenBool(false);
+        //}
+        //else
+        //{
+            
+        //}
+
+        Time.timeScale = 0;
+        LeanTween.move(endUI, shownPos_end, timeToMove / 2).setIgnoreTimeScale(true).setEase(LeanTweenType.easeOutBack);
+        SetUIOpenBool(true);
+        endIsShowing = true;
+    }
+
+
     public void BackOutOfCurrentUI(int blackList = -1)
     {
         if (settlementIsShowing && blackList != 0)
@@ -206,5 +294,22 @@ public class PlayerUIToggler : MonoBehaviour
             ToggleSettlementQuestUI();
             return;
         }
+        if (pauseIsShowing && blackList != 5)
+        {
+            TogglePauseUI();
+            return;
+        }
+        if (optionsIsShowing && blackList != 6)
+        {
+            ToggleOptionsUI();
+            return;
+        }
+    }
+
+
+    public void SaveAndQuit()
+    {
+        //save a file
+        SceneManager.LoadScene(0);
     }
 }

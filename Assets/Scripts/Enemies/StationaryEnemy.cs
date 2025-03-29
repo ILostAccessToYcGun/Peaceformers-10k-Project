@@ -8,6 +8,7 @@ public class StationaryEnemy : MonoBehaviour
     [Header("Objects")]
     [SerializeField] public EnemyDirector ed;
     [SerializeField] public Healthbar healthBar;
+    [SerializeField] public MapDirector md;
 
     [SerializeField] private Transform modelTransform;
     [SerializeField] private Transform[] shootingPoints;
@@ -52,6 +53,7 @@ public class StationaryEnemy : MonoBehaviour
     {
         ////currentTarget = FindAnyObjectByType<PlayerMovement>().transform;
         ed = FindAnyObjectByType<EnemyDirector>();
+        md = FindAnyObjectByType<MapDirector>();
 
         modDmg = baseDmg;
         SetModDmg(ed.damageMultiplier);
@@ -90,6 +92,8 @@ public class StationaryEnemy : MonoBehaviour
             {
                 --enemyCamp.GetComponent<EnemyCamp>().campEnemiesAlive;
             }
+
+            md.SpawnNode(2, this.transform.position);
 
             Destroy((gameObjectToDestory != null ? gameObjectToDestory : this.gameObject));
         }

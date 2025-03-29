@@ -126,18 +126,11 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
     [SerializeField] public float M_jumpBoostLoss;
 
 
-
-
-
-
-
-
     public void ResetPos()
     {
         print("Resetting position");
-        this.transform.position = startPos;
+        motor.SetPosition(startPos);
     }
-
 
     public void Initialize()
     {

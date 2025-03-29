@@ -79,6 +79,17 @@ public class MapDirector : MonoBehaviour
         return true;
     }
 
+    public bool SpawnNode(int node, Vector3 location)
+    {
+        GameObject randomNode = resourceNodeSelection[node];
+        if (randomNode == null || location == new Vector3(0, -1, 0)) { return false; }
+
+        GameObject newNode = Instantiate(randomNode, location, Quaternion.identity, nodeParent);
+
+        currentSpawnAttempts = 0;
+        return true;
+    }
+
     public void GenerateNodes()
     {
         if (nodesAlive >= nodeLimit) { return; }
@@ -134,12 +145,12 @@ public class MapDirector : MonoBehaviour
 
     public void GenerateCamps()
     {
-        Debug.Log("generate enemy camps");
+        //Debug.Log("generate enemy camps");
         currentSpawnAttempts = 0;
         for (int i = 0; i < enemyCampLimit; i++)
         {
             if (currentSpawnAttempts >= 1000) { break; }
-            Debug.Log("try");
+            //Debug.Log("try");
             SelectRandomLocation(40f);
             if (!SpawnCamp())
             {

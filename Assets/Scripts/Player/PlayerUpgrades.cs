@@ -128,8 +128,8 @@ public class PlayerUpgrades : MonoBehaviour
     public void Battery()
     {
         Debug.Log("Battery Upgrade");
-        battery.M_maxBattery = Mathf.Clamp(gun.M_reloadTime + 10f, 100f, 200f);
-        battery.M_passiveLossRate = Mathf.Clamp(gun.M_reloadTime - 0.025f, 0.25f, 0.5f);
+        battery.M_maxBattery = Mathf.Clamp(battery.M_maxBattery + 10f, 100f, 200f);
+        battery.M_passiveLossRate = Mathf.Clamp(battery.M_passiveLossRate - 0.025f, 0.25f, 0.5f);
     }
     public void BatterySelect()
     {
@@ -144,8 +144,8 @@ public class PlayerUpgrades : MonoBehaviour
     public void Frame() 
     {
         Debug.Log("Frame Upgrade");
-        healthBar.M_maxHealth = Mathf.Clamp(gun.M_reloadTime + 10f, 100f, 200f);
-        healthBar.M_damageToEnergyLoss = Mathf.Clamp(gun.M_reloadTime - 0.005f, 0.05f, 0.1f);
+        healthBar.M_maxHealth = Mathf.Clamp(healthBar.M_maxHealth + 10f, 100f, 200f);
+        healthBar.M_damageToEnergyLoss = Mathf.Clamp(healthBar.M_damageToEnergyLoss - 0.005f, 0.05f, 0.1f);
     }
     public void FrameSelect()
     {
@@ -166,20 +166,16 @@ public class PlayerUpgrades : MonoBehaviour
         upgradeConfirm.onClick.RemoveListener(Battery);
         upgradeConfirm.onClick.RemoveListener(Frame);
         upgradeConfirm.onClick.AddListener(func);
+        upgradeConfirm.interactable = true;
     }
 
 
     public void SelectSemiRandomUpgrades()
     {
+        upgradeConfirm.interactable = false;
         //basically it will choose one of the methods above to apply to the button's function
         //then it will black list that method, so it cant get added to another upgrade,
         //meaning you cant get 2 instances of the same upgrade on the same screen
-
-
-        //this needs to be fixed, methods are potentialy missing the onClick?
-
-        
-        
 
         foreach (GameObject buttons in upgradeButtons)
         {

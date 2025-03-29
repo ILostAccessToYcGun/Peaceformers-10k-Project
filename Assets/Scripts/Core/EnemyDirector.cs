@@ -108,7 +108,6 @@ public class EnemyDirector : MonoBehaviour
     public void GenerateEnemies()
     {
         //if (enemiesAlive >= enemyLimit) { return; }
-        Debug.Log("here");
         currentSpawnAttempts = 0;
         GetAndRemoveTopEnemyCountHistoryEntry();
         for (int i = 0; i < enemyRespawnCount; ++i)

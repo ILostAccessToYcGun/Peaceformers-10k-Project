@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
     [SerializeField] private PlayerMovement playerCharacter;
     [SerializeField] private PlayerCamera playerCamera;
     [SerializeField] private PlayerGun playerGun;
+    [SerializeField] private PlayerHealthBar playerhp;
     [Space]
     [SerializeField] private CameraSpring cameraSpring;
     [SerializeField] private CameraLean cameraLean;
@@ -67,6 +68,7 @@ public class Player : MonoBehaviour
         playerCamera.Initialize(playerCharacter.GetCameraTarget());
         cameraSpring.Initialize();
         cameraLean.Initialize();
+        playerhp.dead = false;
     }
 
     void OnDestroy()
@@ -128,7 +130,22 @@ public class Player : MonoBehaviour
 
         if (ui.BackOut.WasPressedThisFrame())
         {
-            playerUIToggler.BackOutOfCurrentUI();
+            if (playerUIToggler.GetUIOpenBool())
+            {
+                if (playerUIToggler.optionsIsShowing)
+                {
+                    playerUIToggler.ToggleOptionsUI();
+                    playerUIToggler.TogglePauseUI();
+                }
+                else
+                {
+                    if (!playerUIToggler.endIsShowing)
+                        playerUIToggler.BackOutOfCurrentUI();
+                }
+                    
+            }
+            else
+                playerUIToggler.TogglePauseUI();
         }
 
         #endregion
