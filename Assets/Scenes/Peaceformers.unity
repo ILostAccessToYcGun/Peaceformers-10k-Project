@@ -1170,7 +1170,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &116678910
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19214,6 +19214,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8729408628118176406, guid: 4b40f047afd3f6d40983f74c3fd22d0d, type: 3}
       propertyPath: isRandomizingSize
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8729408628118176406, guid: 4b40f047afd3f6d40983f74c3fd22d0d, type: 3}
+      propertyPath: itemInventory.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8775341356557442398, guid: 4b40f047afd3f6d40983f74c3fd22d0d, type: 3}
