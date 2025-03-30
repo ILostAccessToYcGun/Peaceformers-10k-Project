@@ -17,6 +17,15 @@ public class TutorialDirector : MonoBehaviour
      * as well as another overload for the 1st tutorial fade, to add a button to skip all tutorial pop-ups
      
 
+    I guess since I also want the player to walk around during the tutorial,
+    we will need a system that disables pretty much all the starting functionality and only starts it after the tutorial is done,
+     so maybe we do an if check and if the player unchecked the tutorial,
+    the tutorial will activate everything on start-up, else after they finish the tutorial. 
+    This includes warping the player back to the start and probs like a fade to black
+    That basically means that I need to script things, like enemies and settlement quests
+    which sounds like a pain so its probably easier just to make a tutorial scene
+    //but oh well
+
 
         *I think the tutorial will be like this
         *1 opening screen saying welcome to this game

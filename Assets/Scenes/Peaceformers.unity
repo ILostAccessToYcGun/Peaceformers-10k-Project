@@ -1170,7 +1170,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &116678910
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5178,7 +5178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlightFrame: {fileID: 116678910}
-  moveTime: 3
+  moveTime: 1.5
   tempTarget: {fileID: 1701812651}
 --- !u!4 &537790597
 Transform:
