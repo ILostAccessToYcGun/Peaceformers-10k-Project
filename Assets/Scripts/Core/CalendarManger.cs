@@ -59,11 +59,14 @@ public class CalendarManger : MonoBehaviour
 
 
 
-
-
-    private void Awake()
+    public void InitializeManager()
     {
         SetEndDayCount(14);
         SetDayCount(1);
+    }
+
+    private void Awake()
+    {
+        //InitializeManager();
     }
 }

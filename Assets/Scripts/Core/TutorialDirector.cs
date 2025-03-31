@@ -51,6 +51,12 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] float moveTime;
     [SerializeField] GameObject tempTarget;
 
+    [Space]
+    [Header("Managers")]
+    [SerializeField] DayNightCycleManager dm;
+    [SerializeField] CalendarManger cm;
+    [SerializeField] MapDirector md;
+
     public void HighlightElement(GameObject focus, Vector2 highLightSize)
     {
         highlightFrame.LeanScale(highLightSize, moveTime).setEase(LeanTweenType.easeOutExpo);
@@ -66,6 +72,25 @@ public class TutorialDirector : MonoBehaviour
     public void MoveHighlight(Vector3 position)
     {
         LeanTween.move(highlightFrame, position, moveTime).setEase(LeanTweenType.easeOutExpo);
+    }
+
+
+    public void ScriptedReasourceNode()
+    {
+        md.SpawnNode(0, this.transform.position);
+    }
+
+    public void InitializeManagers()
+    {
+        dm.InitializeManger();
+        dm.ToggleTime(true);
+        cm.InitializeManager();
+    }
+
+    private void Awake()
+    {
+        //InitializeManagers();
+        ScriptedReasourceNode();
     }
 
     private void Update()

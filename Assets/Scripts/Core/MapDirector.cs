@@ -160,35 +160,35 @@ public class MapDirector : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
+    //private void Update()
+    //{
         
-        if (Input.GetKey(KeyCode.M))
-        {
+    //    if (Input.GetKey(KeyCode.M))
+    //    {
 
-            RaycastHit hit;
-            LayerMask whiteListMasks = LayerMask.GetMask("Ground", "SpawnBlackList", "Default"); //i think this is a white list
-            bool isValid = false;
-            bool rayHit = Physics.SphereCast(transform.position, 25f, -transform.up, out hit, 100f, whiteListMasks);
-            Debug.Log(hit);
-            if (rayHit)
-                isValid = true;
-            else
-                isValid = false;
+    //        RaycastHit hit;
+    //        LayerMask whiteListMasks = LayerMask.GetMask("Ground", "SpawnBlackList", "Default"); //i think this is a white list
+    //        bool isValid = false;
+    //        bool rayHit = Physics.SphereCast(transform.position, 25f, -transform.up, out hit, 100f, whiteListMasks);
+    //        Debug.Log(hit);
+    //        if (rayHit)
+    //            isValid = true;
+    //        else
+    //            isValid = false;
 
 
-            if (hit.transform != null)
-            {
-                if (hit.transform.gameObject.layer == LayerMask.NameToLayer("SpawnBlackList") || hit.transform.gameObject.layer == LayerMask.NameToLayer("Default"))
-                {
-                    isValid = false;
-                }
-            }
-            else
-                isValid = false;
+    //        if (hit.transform != null)
+    //        {
+    //            if (hit.transform.gameObject.layer == LayerMask.NameToLayer("SpawnBlackList") || hit.transform.gameObject.layer == LayerMask.NameToLayer("Default"))
+    //            {
+    //                isValid = false;
+    //            }
+    //        }
+    //        else
+    //            isValid = false;
 
             
-            Debug.Log("isValid = " + isValid);
-        }
-    }
+    //        Debug.Log("isValid = " + isValid);
+    //    }
+    //}
 }

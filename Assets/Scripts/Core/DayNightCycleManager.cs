@@ -335,7 +335,7 @@ public class DayNightCycleManager : MonoBehaviour
         }
     }
 
-    private void Awake()
+    public void InitializeManger()
     {
         cm = FindAnyObjectByType<CalendarManger>();
         md = FindAnyObjectByType<MapDirector>();
@@ -349,5 +349,11 @@ public class DayNightCycleManager : MonoBehaviour
 
         if (UIUpdateFrequency == 0)
             UIUpdateFrequency = 20;
+    }
+
+    private void Awake()
+    {
+        SetTime(6, 0);
+        //InitializeManger();
     }
 }
