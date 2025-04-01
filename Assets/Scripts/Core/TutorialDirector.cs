@@ -89,7 +89,7 @@ public class TutorialDirector : MonoBehaviour
 
     private void Awake()
     {
-        //InitializeManagers();
+        InitializeManagers();
         ScriptedReasourceNode();
     }
 
