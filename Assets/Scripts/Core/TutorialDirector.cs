@@ -46,10 +46,15 @@ public class TutorialDirector : MonoBehaviour
         *"The harsh winter here lasts 14 days, Good Luck!"
      
      */
-
+    [Space]
+    [Header("Tutorial")]
     [SerializeField] RectTransform highlightFrame;
     [SerializeField] float moveTime;
     [SerializeField] GameObject tempTarget;
+    [SerializeField] int tutoIndex = 0;
+    [Space]
+    [Header("Screens")]
+    [SerializeField] RectTransform controls;
 
     [Space]
     [Header("Managers")]
@@ -80,6 +85,61 @@ public class TutorialDirector : MonoBehaviour
         md.SpawnNode(0, this.transform.position);
     }
 
+    public void AdvanceTutorial()
+    {
+        //this should increment the index by 1 and then perform actions based on what index we are at
+
+        switch (tutoIndex)
+        {
+            case 0:
+                Debug.Log("before");
+                break;
+
+            case 1:
+                Debug.Log("1--");
+                controls.gameObject.SetActive(false);
+                break;
+
+            case 2:
+                Debug.Log("2--");
+                break;
+
+            case 3:
+                Debug.Log("3--");
+                break;
+
+            case 4:
+                Debug.Log("4--");
+                break;
+        }
+
+        ++tutoIndex;
+
+        switch (tutoIndex)
+        {
+            case 0:
+                Debug.Log("HUH");
+                break;
+
+            case 1:
+                Debug.Log("1++");
+                controls.gameObject.SetActive(true);
+                break;
+
+            case 2:
+                Debug.Log("2++");
+                break;
+
+            case 3:
+                Debug.Log("3++");
+                break;
+
+            case 4:
+                Debug.Log("4++");
+                break;
+        }
+    }
+
     public void InitializeManagers()
     {
         dm.InitializeManger();
@@ -91,6 +151,7 @@ public class TutorialDirector : MonoBehaviour
     {
         InitializeManagers();
         ScriptedReasourceNode();
+        AdvanceTutorial();
     }
 
     private void Update()
