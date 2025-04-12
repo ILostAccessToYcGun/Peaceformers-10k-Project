@@ -1,4 +1,6 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TutorialDirector : MonoBehaviour
 {
@@ -52,9 +54,49 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] float moveTime;
     [SerializeField] GameObject tempTarget;
     [SerializeField] int tutoIndex = 0;
+
+    [SerializeField] Vector3 onPos;
+    [SerializeField] Vector3 offPos;
     [Space]
     [Header("Screens")]
+    [SerializeField] RectTransform intro;
     [SerializeField] RectTransform controls;
+
+    [Space]
+    [Header("Controls")]
+    #region _Keys_
+
+    [SerializeField] Image wKey;
+    [SerializeField] TextMeshProUGUI wText;
+    [SerializeField] bool wBool;
+    [Space]
+    [SerializeField] Image aKey;
+    [SerializeField] TextMeshProUGUI aText;
+    [SerializeField] bool aBool;
+    [Space]
+    [SerializeField] Image sKey;
+    [SerializeField] TextMeshProUGUI sText;
+    [SerializeField] bool sBool;
+    [Space]
+    [SerializeField] Image dKey;
+    [SerializeField] TextMeshProUGUI dText;
+    [SerializeField] bool dBool;
+    [Space]
+    [SerializeField] Image spaceKey;
+    [SerializeField] TextMeshProUGUI spaceText;
+    [SerializeField] bool spaceBool;
+    [Space]
+    [SerializeField] Image shiftKey;
+    [SerializeField] TextMeshProUGUI shiftText;
+    [SerializeField] bool shiftBool;
+    [Space]
+    [SerializeField] Image qKey;
+    [SerializeField] TextMeshProUGUI qText;
+    [SerializeField] bool qBool;
+
+
+    #endregion
+
 
     [Space]
     [Header("Managers")]
@@ -80,6 +122,154 @@ public class TutorialDirector : MonoBehaviour
     }
 
 
+
+    #region _Toggle_Keys_
+
+    public void ToggleW(Image key, TextMeshProUGUI letter, bool toggle)
+    {
+        if (toggle)
+        {
+            LeanTween.color(key.rectTransform, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, Wcallback, wText.color, Color.black, moveTime);
+        }
+        else
+        {
+            LeanTween.color(key.rectTransform, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, Wcallback, wText.color, Color.white, moveTime);
+        }
+        wBool = toggle;
+    }
+    public void Wcallback(Color val)
+    {
+        wText.color = val;
+    }
+
+    public void ToggleA(Image key, TextMeshProUGUI letter, bool toggle)
+    {
+        if (toggle)
+        {
+            LeanTween.color(key.rectTransform, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, Acallback, aText.color, Color.black, moveTime);
+        }
+        else
+        {
+            LeanTween.color(key.rectTransform, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, Acallback, aText.color, Color.white, moveTime);
+        }
+        aBool = toggle;
+    }
+    public void Acallback(Color val)
+    {
+        aText.color = val;
+    }
+
+    public void ToggleS(Image key, TextMeshProUGUI letter, bool toggle)
+    {
+        if (toggle)
+        {
+            LeanTween.color(key.rectTransform, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, Scallback, sText.color, Color.black, moveTime);
+        }
+        else
+        {
+            LeanTween.color(key.rectTransform, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, Scallback, sText.color, Color.white, moveTime);
+        }
+        sBool = toggle;
+    }
+    public void Scallback(Color val)
+    {
+        sText.color = val;
+    }
+
+    public void ToggleD(Image key, TextMeshProUGUI letter, bool toggle)
+    {
+        if (toggle)
+        {
+            LeanTween.color(key.rectTransform, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, Dcallback, dText.color, Color.black, moveTime);
+        }
+        else
+        {
+            LeanTween.color(key.rectTransform, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, Dcallback, dText.color, Color.white, moveTime);
+        }
+        dBool = toggle;
+    }
+    public void Dcallback(Color val)
+    {
+        dText.color = val;
+    }
+
+    public void ToggleSPACE(Image key, TextMeshProUGUI letter, bool toggle)
+    {
+        if (toggle)
+        {
+            LeanTween.color(key.rectTransform, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, SPACEcallback, spaceText.color, Color.black, moveTime);
+        }
+        else
+        {
+            LeanTween.color(key.rectTransform, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, SPACEcallback, spaceText.color, Color.white, moveTime);
+        }
+        spaceBool = toggle;
+    }
+    public void SPACEcallback(Color val)
+    {
+        spaceText.color = val;
+    }
+
+    public void ToggleSHIFT(Image key, TextMeshProUGUI letter, bool toggle)
+    {
+        if (toggle)
+        {
+            LeanTween.color(key.rectTransform, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, SHIFTcallback, shiftText.color, Color.black, moveTime);
+        }
+        else
+        {
+            LeanTween.color(key.rectTransform, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, SHIFTcallback, shiftText.color, Color.white, moveTime);
+        }
+        shiftBool = toggle;
+    }
+    public void SHIFTcallback(Color val)
+    {
+        shiftText.color = val;
+    }
+
+    public void ToggleQ(Image key, TextMeshProUGUI letter, bool toggle)
+    {
+        if (toggle)
+        {
+            LeanTween.color(key.rectTransform, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, Qcallback, qText.color, Color.black, moveTime);
+        }
+        else
+        {
+            LeanTween.color(key.rectTransform, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, Qcallback, qText.color, Color.white, moveTime);
+        }
+        qBool = toggle;
+    }
+    public void Qcallback(Color val)
+    {
+        qText.color = val;
+    }
+
+
+
+    #endregion
+
+
+
+
+    public void MoveTutorialScreen(RectTransform tuto, Vector3 position)
+    {
+        LeanTween.move(tuto, position, moveTime).setEase(LeanTweenType.easeOutExpo);
+    }
+
     public void ScriptedReasourceNode()
     {
         md.SpawnNode(0, this.transform.position);
@@ -93,11 +283,14 @@ public class TutorialDirector : MonoBehaviour
         {
             case 0:
                 Debug.Log("before");
+                MoveTutorialScreen(intro, offPos);
+
                 break;
 
             case 1:
                 Debug.Log("1--");
-                controls.gameObject.SetActive(false);
+                MoveTutorialScreen(controls, offPos);
+                //controls.gameObject.SetActive(false);
                 break;
 
             case 2:
@@ -123,7 +316,7 @@ public class TutorialDirector : MonoBehaviour
 
             case 1:
                 Debug.Log("1++");
-                controls.gameObject.SetActive(true);
+                MoveTutorialScreen(controls, onPos);
                 break;
 
             case 2:
@@ -149,9 +342,9 @@ public class TutorialDirector : MonoBehaviour
 
     private void Awake()
     {
-        InitializeManagers();
-        ScriptedReasourceNode();
-        AdvanceTutorial();
+        //InitializeManagers();
+        //ScriptedReasourceNode();
+        //AdvanceTutorial();
     }
 
     private void Update()
@@ -160,6 +353,47 @@ public class TutorialDirector : MonoBehaviour
         if (Input.GetKey(KeyCode.Backspace))
         {
             HighlightElement(tempTarget, new Vector3(3.36f, 1));
+        }
+
+        if (tutoIndex == 1)
+        {
+            //check every frame for the inputs specific inputs
+            //once an input has been pressed, toggle a boolean and change the colour and text of the button
+            //after every input has been pressed, move on to the next stage after a bit
+
+            if (Input.GetKey(KeyCode.W) && !wBool)
+            {
+                ToggleW(wKey, wText, true);
+            }
+            if (Input.GetKey(KeyCode.A) && !aBool)
+            {
+                ToggleA(aKey, aText, true);
+            }
+            if (Input.GetKey(KeyCode.S) && !sBool)
+            {
+                ToggleS(sKey, sText, true);
+            }
+            if (Input.GetKey(KeyCode.D) && !dBool)
+            {
+                ToggleD(dKey, dText, true);
+            }
+            if (Input.GetKey(KeyCode.Space) && !spaceBool)
+            {
+                ToggleSPACE(spaceKey, spaceText, true);
+            }
+            if (Input.GetKey(KeyCode.LeftShift) && !shiftBool)
+            {
+                ToggleSHIFT(shiftKey, shiftText, true);
+            }
+            if (Input.GetKey(KeyCode.Q) && !qBool)
+            {
+                ToggleQ(qKey, qText, true);
+            }
+
+            if (wBool && aBool && sBool && dBool && spaceBool && shiftBool && qBool)
+            {
+                Invoke("AdvanceTutorial", 3f);
+            }
         }
     }
 }
