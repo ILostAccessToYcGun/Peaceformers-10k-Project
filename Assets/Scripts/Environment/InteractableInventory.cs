@@ -175,6 +175,37 @@ public class InteractableInventory : BaseInteractable
         inventory.DestroyInventory();
     }
 
+
+    public void AddInventoryLoot()
+    {
+        if (inventory == null)
+        {
+            Invoke("AddInventoryLoot", 0.5f);
+            return;
+        }
+
+        inventory.DestroyInventory();
+        inventory.inventoryWidth = (int)inventorySize.x;
+        inventory.inventoryHeight = (int)inventorySize.y;
+        inventory.GenerateInventory(inventory.inventoryWidth, inventory.inventoryHeight, 100, 100);
+        inventory.SetInventory(null);
+
+
+        Item addingItem = itemSelection[3].GetComponent<Item>();
+        inventory.AddItemToInventory(addingItem, 60);
+        itemInventory.Add(addingItem);
+        itemDet.Add(new Vector3(60, 0, 0));
+        inventory.AddItemToInventory(addingItem, 60);
+        itemInventory.Add(addingItem);
+        itemDet.Add(new Vector3(60, 1, 0));
+        inventory.AddItemToInventory(addingItem, 60);
+        itemInventory.Add(addingItem);
+        itemDet.Add(new Vector3(60, 2, 0));
+
+        inventory.ClearInventory();
+        inventory.DestroyInventory();
+    }
+
     public void UpdateInventoryLoot()
     {
         itemInventory.Clear();
@@ -260,6 +291,23 @@ public class InteractableInventory : BaseInteractable
         }
     }
 
+    private void InitializeCampInventory1()
+    {
+        inventory.inventoryWidth = (int)inventorySize.x;
+        inventory.inventoryHeight = (int)inventorySize.y;
+        inventory.GenerateInventory(inventory.inventoryWidth, inventory.inventoryHeight, 100, 100);
+        inventory.SetInventory(null);
+        Invoke("CopyAndSetInventory", 0.1f);
+        Invoke("InitializeCampInventory2", 0.1f);
+    }
+
+    private void InitializeCampInventory2()
+    {
+        UpdateInventoryLoot();
+        playerUIToggler.SetSecondaryInventory(null);
+        Invoke("ClearAndDestroyInventory", 0.1f);
+    }
+
 
     private void Start()
     {
@@ -278,6 +326,10 @@ public class InteractableInventory : BaseInteractable
             RandomizeInventorySize((int)inventorySizeRangeX.x, (int)inventorySizeRangeY.x, (int)inventorySizeRangeX.y, (int)inventorySizeRangeY.y);
         if (isRandomizingLoot)
             Invoke("RandomizeInventoryLoot", 0.1f);
+        else
+        {
+            Invoke("AddInventoryLoot", 0.1f);
+        }
     }
 
     protected override void Awake()
