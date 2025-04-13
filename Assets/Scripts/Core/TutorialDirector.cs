@@ -104,6 +104,8 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] CalendarManger cm;
     [SerializeField] MapDirector md;
 
+    [SerializeField] PlayerUIToggler ui;
+
     public void HighlightElement(GameObject focus, Vector2 highLightSize)
     {
         highlightFrame.LeanScale(highLightSize, moveTime).setEase(LeanTweenType.easeOutExpo);
@@ -284,12 +286,12 @@ public class TutorialDirector : MonoBehaviour
             case 0:
                 Debug.Log("before");
                 MoveTutorialScreen(intro, offPos);
-
+                ui.SetUIOpenBool(false);
                 break;
 
             case 1:
                 Debug.Log("1--");
-                MoveTutorialScreen(controls, offPos);
+                MoveTutorialScreen(controls, offPos + new Vector3(1300, 0, 0));
                 //controls.gameObject.SetActive(false);
                 break;
 
@@ -342,8 +344,10 @@ public class TutorialDirector : MonoBehaviour
 
     private void Awake()
     {
+
         //InitializeManagers();
         //ScriptedReasourceNode();
+        ui.SetUIOpenBool(true);
         //AdvanceTutorial();
     }
 
@@ -392,7 +396,7 @@ public class TutorialDirector : MonoBehaviour
 
             if (wBool && aBool && sBool && dBool && spaceBool && shiftBool && qBool)
             {
-                Invoke("AdvanceTutorial", 3f);
+                Invoke("AdvanceTutorial", 2.5f);
             }
         }
     }
