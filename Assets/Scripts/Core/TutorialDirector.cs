@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+//using UnityEngine.UIElements;
 
 public class TutorialDirector : MonoBehaviour
 {
@@ -61,6 +62,8 @@ public class TutorialDirector : MonoBehaviour
     [Header("Screens")]
     [SerializeField] RectTransform intro;
     [SerializeField] RectTransform controls;
+    [SerializeField] RectTransform materials;
+    [SerializeField] RectTransform inventory;
 
     [Space]
     [Header("Controls")]
@@ -94,9 +97,20 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] TextMeshProUGUI qText;
     [SerializeField] bool qBool;
 
-
     #endregion
 
+
+    [Space]
+    [Header("Materials")]
+    [SerializeField] GameObject tutoNode;
+    [SerializeField] Image eKey;
+    [SerializeField] TextMeshProUGUI eText;
+    [SerializeField] bool eBool;
+
+    [Space]
+    [Header("Inventory")]
+    [SerializeField] Image tabKey;
+    [SerializeField] TextMeshProUGUI tabText;
 
     [Space]
     [Header("Managers")]
@@ -104,8 +118,13 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] CalendarManger cm;
     [SerializeField] MapDirector md;
 
+    [Space]
+    [Header("Player")]
     [SerializeField] PlayerUIToggler ui;
+    [SerializeField] PlayerNavigation nav;
+    [SerializeField] Inventory playerInv;
 
+    #region _Highlight_
     public void HighlightElement(GameObject focus, Vector2 highLightSize)
     {
         highlightFrame.LeanScale(highLightSize, moveTime).setEase(LeanTweenType.easeOutExpo);
@@ -123,6 +142,8 @@ public class TutorialDirector : MonoBehaviour
         LeanTween.move(highlightFrame, position, moveTime).setEase(LeanTweenType.easeOutExpo);
     }
 
+    #endregion
+
 
 
     #region _Toggle_Keys_
@@ -132,12 +153,12 @@ public class TutorialDirector : MonoBehaviour
         if (toggle)
         {
             LeanTween.color(key.rectTransform, Color.white, moveTime);
-            LeanTween.value(letter.gameObject, Wcallback, wText.color, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, Wcallback, wText.color, Color.black, 0.5f);
         }
         else
         {
             LeanTween.color(key.rectTransform, Color.black, moveTime);
-            LeanTween.value(letter.gameObject, Wcallback, wText.color, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, Wcallback, wText.color, Color.white, 0.5f);
         }
         wBool = toggle;
     }
@@ -151,12 +172,12 @@ public class TutorialDirector : MonoBehaviour
         if (toggle)
         {
             LeanTween.color(key.rectTransform, Color.white, moveTime);
-            LeanTween.value(letter.gameObject, Acallback, aText.color, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, Acallback, aText.color, Color.black, 0.5f);
         }
         else
         {
             LeanTween.color(key.rectTransform, Color.black, moveTime);
-            LeanTween.value(letter.gameObject, Acallback, aText.color, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, Acallback, aText.color, Color.white, 0.5f);
         }
         aBool = toggle;
     }
@@ -170,12 +191,12 @@ public class TutorialDirector : MonoBehaviour
         if (toggle)
         {
             LeanTween.color(key.rectTransform, Color.white, moveTime);
-            LeanTween.value(letter.gameObject, Scallback, sText.color, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, Scallback, sText.color, Color.black, 0.5f);
         }
         else
         {
             LeanTween.color(key.rectTransform, Color.black, moveTime);
-            LeanTween.value(letter.gameObject, Scallback, sText.color, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, Scallback, sText.color, Color.white, 0.5f);
         }
         sBool = toggle;
     }
@@ -189,12 +210,12 @@ public class TutorialDirector : MonoBehaviour
         if (toggle)
         {
             LeanTween.color(key.rectTransform, Color.white, moveTime);
-            LeanTween.value(letter.gameObject, Dcallback, dText.color, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, Dcallback, dText.color, Color.black, 0.5f);
         }
         else
         {
             LeanTween.color(key.rectTransform, Color.black, moveTime);
-            LeanTween.value(letter.gameObject, Dcallback, dText.color, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, Dcallback, dText.color, Color.white, 0.5f);
         }
         dBool = toggle;
     }
@@ -208,12 +229,12 @@ public class TutorialDirector : MonoBehaviour
         if (toggle)
         {
             LeanTween.color(key.rectTransform, Color.white, moveTime);
-            LeanTween.value(letter.gameObject, SPACEcallback, spaceText.color, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, SPACEcallback, spaceText.color, Color.black, 0.5f);
         }
         else
         {
             LeanTween.color(key.rectTransform, Color.black, moveTime);
-            LeanTween.value(letter.gameObject, SPACEcallback, spaceText.color, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, SPACEcallback, spaceText.color, Color.white, 0.5f);
         }
         spaceBool = toggle;
     }
@@ -227,12 +248,12 @@ public class TutorialDirector : MonoBehaviour
         if (toggle)
         {
             LeanTween.color(key.rectTransform, Color.white, moveTime);
-            LeanTween.value(letter.gameObject, SHIFTcallback, shiftText.color, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, SHIFTcallback, shiftText.color, Color.black, 0.5f);
         }
         else
         {
             LeanTween.color(key.rectTransform, Color.black, moveTime);
-            LeanTween.value(letter.gameObject, SHIFTcallback, shiftText.color, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, SHIFTcallback, shiftText.color, Color.white, 0.5f);
         }
         shiftBool = toggle;
     }
@@ -246,12 +267,12 @@ public class TutorialDirector : MonoBehaviour
         if (toggle)
         {
             LeanTween.color(key.rectTransform, Color.white, moveTime);
-            LeanTween.value(letter.gameObject, Qcallback, qText.color, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, Qcallback, qText.color, Color.black, 0.5f);
         }
         else
         {
             LeanTween.color(key.rectTransform, Color.black, moveTime);
-            LeanTween.value(letter.gameObject, Qcallback, qText.color, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, Qcallback, qText.color, Color.white, 0.5f);
         }
         qBool = toggle;
     }
@@ -261,6 +282,47 @@ public class TutorialDirector : MonoBehaviour
     }
 
 
+
+
+    public void ToggleE(Image key, TextMeshProUGUI letter, bool toggle)
+    {
+        if (toggle)
+        {
+            LeanTween.color(key.rectTransform, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, Ecallback, eText.color, Color.black, 0.5f);
+        }
+        else
+        {
+            LeanTween.color(key.rectTransform, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, Ecallback, eText.color, Color.white, 0.5f);
+        }
+        eBool = toggle;
+    }
+    public void Ecallback(Color val)
+    {
+        eText.color = val;
+    }
+
+
+
+
+    public void ToggleTAB(Image key, TextMeshProUGUI letter, bool toggle)
+    {
+        if (toggle)
+        {
+            LeanTween.color(key.rectTransform, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, TABcallback, tabText.color, Color.black, 0.5f);
+        }
+        else
+        {
+            LeanTween.color(key.rectTransform, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, TABcallback, tabText.color, Color.white, 0.5f);
+        }
+    }
+    public void TABcallback(Color val)
+    {
+        tabText.color = val;
+    }
 
     #endregion
 
@@ -272,10 +334,10 @@ public class TutorialDirector : MonoBehaviour
         LeanTween.move(tuto, position, moveTime).setEase(LeanTweenType.easeOutExpo);
     }
 
-    public void ScriptedReasourceNode()
-    {
-        md.SpawnNode(0, this.transform.position);
-    }
+    //public void ScriptedReasourceNode()
+    //{
+    //    md.SpawnNode(0, this.transform.position);
+    //}
 
     public void AdvanceTutorial()
     {
@@ -297,10 +359,12 @@ public class TutorialDirector : MonoBehaviour
 
             case 2:
                 Debug.Log("2--");
+                MoveTutorialScreen(materials, offPos + new Vector3(1300, 0, 0));
                 break;
 
             case 3:
                 Debug.Log("3--");
+                MoveTutorialScreen(inventory, offPos);
                 break;
 
             case 4:
@@ -317,15 +381,18 @@ public class TutorialDirector : MonoBehaviour
                 break;
 
             case 1:
-                Debug.Log("1++");
                 MoveTutorialScreen(controls, onPos);
+                Debug.Log("1++");
                 break;
 
             case 2:
+                MoveTutorialScreen(materials, onPos);
+                nav.navigationTarget = tutoNode;
                 Debug.Log("2++");
                 break;
 
             case 3:
+                MoveTutorialScreen(inventory, onPos);
                 Debug.Log("3++");
                 break;
 
@@ -359,45 +426,46 @@ public class TutorialDirector : MonoBehaviour
             HighlightElement(tempTarget, new Vector3(3.36f, 1));
         }
 
-        if (tutoIndex == 1)
+        switch (tutoIndex)
         {
-            //check every frame for the inputs specific inputs
-            //once an input has been pressed, toggle a boolean and change the colour and text of the button
-            //after every input has been pressed, move on to the next stage after a bit
+            case 1:
+                if (Input.GetKey(KeyCode.W) && !wBool)
+                    ToggleW(wKey, wText, true);
+                if (Input.GetKey(KeyCode.A) && !aBool)
+                    ToggleA(aKey, aText, true);
+                if (Input.GetKey(KeyCode.S) && !sBool)
+                    ToggleS(sKey, sText, true);
+                if (Input.GetKey(KeyCode.D) && !dBool)
+                    ToggleD(dKey, dText, true);
+                if (Input.GetKey(KeyCode.Space) && !spaceBool)
+                    ToggleSPACE(spaceKey, spaceText, true);
+                if (Input.GetKey(KeyCode.LeftShift) && !shiftBool)
+                    ToggleSHIFT(shiftKey, shiftText, true);
+                if (Input.GetKey(KeyCode.Q) && !qBool)
+                    ToggleQ(qKey, qText, true);
 
-            if (Input.GetKey(KeyCode.W) && !wBool)
-            {
-                ToggleW(wKey, wText, true);
-            }
-            if (Input.GetKey(KeyCode.A) && !aBool)
-            {
-                ToggleA(aKey, aText, true);
-            }
-            if (Input.GetKey(KeyCode.S) && !sBool)
-            {
-                ToggleS(sKey, sText, true);
-            }
-            if (Input.GetKey(KeyCode.D) && !dBool)
-            {
-                ToggleD(dKey, dText, true);
-            }
-            if (Input.GetKey(KeyCode.Space) && !spaceBool)
-            {
-                ToggleSPACE(spaceKey, spaceText, true);
-            }
-            if (Input.GetKey(KeyCode.LeftShift) && !shiftBool)
-            {
-                ToggleSHIFT(shiftKey, shiftText, true);
-            }
-            if (Input.GetKey(KeyCode.Q) && !qBool)
-            {
-                ToggleQ(qKey, qText, true);
-            }
+                if (wBool && aBool && sBool && dBool && spaceBool && shiftBool && qBool && !IsInvoking())
+                {
+                    Invoke("AdvanceTutorial", 2.5f);
+                }
+                    
+                break;
+            case 2:
+                if (Input.GetKey(KeyCode.E) && !eBool)
+                    ToggleE(eKey, eText, true);
 
-            if (wBool && aBool && sBool && dBool && spaceBool && shiftBool && qBool)
-            {
-                Invoke("AdvanceTutorial", 2.5f);
-            }
+                if (playerInv.FindItemCountOfName(Item.Name.Wood) >= 10 && !IsInvoking())
+                    Invoke("AdvanceTutorial", 1f);
+                break;
+
+            case 3:
+                if (Input.GetKey(KeyCode.Tab) && !IsInvoking())
+                {
+                    ToggleTAB(tabKey, tabText, true);
+                    Invoke("AdvanceTutorial", 2.5f);
+                }
+                    
+                break;
         }
     }
 }

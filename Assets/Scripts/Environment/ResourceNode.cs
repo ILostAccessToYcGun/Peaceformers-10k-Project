@@ -36,7 +36,8 @@ public class ResourceNode : MonoBehaviour
     {
         md = FindAnyObjectByType<MapDirector>();
         ++md.nodesAlive;
-        RandomizeResourceCount(7, 14);
+        if (resourceCount == 0)
+            RandomizeResourceCount(7, 14);
         SetResourceNodeTitle(resourceType.GetComponent<WorldItem>().inventoryItem.itemName.ToString() + " Node");
     }
 
