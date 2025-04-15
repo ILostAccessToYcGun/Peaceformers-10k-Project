@@ -93,10 +93,10 @@ public class Inventory : MonoBehaviour
     public void GenerateInventory(int width, int height, int cellWidth, int cellHeight)
     {
         #region _Grid_Layout_
-        gridLayout.padding.left = 10;
-        gridLayout.padding.right = 10;
-        gridLayout.padding.top = 10;
-        gridLayout.padding.bottom = 10;
+        gridLayout.padding.left = 100;
+        gridLayout.padding.right = 100;
+        gridLayout.padding.top = 50;
+        gridLayout.padding.bottom = 50;
         gridLayout.constraintCount = width;
         gridLayout.cellSize = new Vector2(cellWidth, cellHeight);
 

@@ -64,6 +64,11 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] RectTransform controls;
     [SerializeField] RectTransform materials;
     [SerializeField] RectTransform inventory;
+    [SerializeField] RectTransform items;
+    [SerializeField] RectTransform itemsSize;
+    [SerializeField] RectTransform trash;
+    [SerializeField] RectTransform drop;
+    [SerializeField] RectTransform ammo;
 
     [Space]
     [Header("Controls")]
@@ -111,6 +116,10 @@ public class TutorialDirector : MonoBehaviour
     [Header("Inventory")]
     [SerializeField] Image tabKey;
     [SerializeField] TextMeshProUGUI tabText;
+
+    [Header("Ammo")]
+    [SerializeField] Image rKey;
+    [SerializeField] TextMeshProUGUI rText;
 
     [Space]
     [Header("Managers")]
@@ -324,6 +333,24 @@ public class TutorialDirector : MonoBehaviour
         tabText.color = val;
     }
 
+    public void ToggleR(Image key, TextMeshProUGUI letter, bool toggle)
+    {
+        if (toggle)
+        {
+            LeanTween.color(key.rectTransform, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, Rcallback, rText.color, Color.black, 0.5f);
+        }
+        else
+        {
+            LeanTween.color(key.rectTransform, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, Rcallback, rText.color, Color.white, 0.5f);
+        }
+    }
+    public void Rcallback(Color val)
+    {
+        rText.color = val;
+    }
+
     #endregion
 
 
@@ -369,6 +396,25 @@ public class TutorialDirector : MonoBehaviour
 
             case 4:
                 Debug.Log("4--");
+                MoveTutorialScreen(items, offPos);
+                break;
+            case 5:
+                Debug.Log("5--");
+                MoveTutorialScreen(itemsSize, offPos);
+                break;
+
+            case 6:
+                Debug.Log("6--");
+                MoveTutorialScreen(trash, offPos);
+                break;
+            case 7:
+                Debug.Log("7--");
+                MoveTutorialScreen(drop, offPos);
+                break;
+
+            case 8:
+                Debug.Log("8--");
+                MoveTutorialScreen(ammo, offPos);
                 break;
         }
 
@@ -398,6 +444,26 @@ public class TutorialDirector : MonoBehaviour
 
             case 4:
                 Debug.Log("4++");
+                MoveTutorialScreen(items, onPos);
+                break;
+
+            case 5:
+                Debug.Log("5++");
+                MoveTutorialScreen(itemsSize, onPos);
+                break;
+
+            case 6:
+                Debug.Log("6++");
+                MoveTutorialScreen(trash, onPos);
+                break;
+            case 7:
+                Debug.Log("7++");
+                MoveTutorialScreen(drop, onPos);
+                break;
+
+            case 8:
+                Debug.Log("8++");
+                MoveTutorialScreen(ammo, onPos);
                 break;
         }
     }
@@ -462,9 +528,13 @@ public class TutorialDirector : MonoBehaviour
                 if (Input.GetKey(KeyCode.Tab) && !IsInvoking())
                 {
                     ToggleTAB(tabKey, tabText, true);
-                    Invoke("AdvanceTutorial", 2.5f);
-                }
-                    
+                    Invoke("AdvanceTutorial", 1f);
+                }  
+                break;
+
+            case 8:
+                if (Input.GetKey(KeyCode.R) && !IsInvoking())
+                    ToggleR(rKey, rText, true);
                 break;
         }
     }
