@@ -55,13 +55,18 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] float moveTime;
     [SerializeField] GameObject tempTarget;
     [SerializeField] int tutoIndex = 0;
-
     [SerializeField] Vector3 onPos;
     [SerializeField] Vector3 offPos;
+
     [Space]
     [Header("Screens")]
     [SerializeField] RectTransform intro;
     [SerializeField] RectTransform controls;
+    [SerializeField] RectTransform boost;
+    [SerializeField] RectTransform battery;
+    [SerializeField] RectTransform time;
+    [SerializeField] RectTransform date;
+    [SerializeField] RectTransform camp;
     [SerializeField] RectTransform materials;
     [SerializeField] RectTransform inventory;
     [SerializeField] RectTransform items;
@@ -113,6 +118,10 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] bool eBool;
 
     [Space]
+    [Header("Camp")]
+    [SerializeField] GameObject playerCamp;
+
+    [Space]
     [Header("Inventory")]
     [SerializeField] Image tabKey;
     [SerializeField] TextMeshProUGUI tabText;
@@ -132,6 +141,11 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] PlayerUIToggler ui;
     [SerializeField] PlayerNavigation nav;
     [SerializeField] Inventory playerInv;
+
+    [Space]
+    [Header("Quest")]
+    [SerializeField] QuestGiver qg;
+    [SerializeField] QuestObject tutoQuest;
 
     #region _Highlight_
     public void HighlightElement(GameObject focus, Vector2 highLightSize)
@@ -373,47 +387,57 @@ public class TutorialDirector : MonoBehaviour
         switch (tutoIndex)
         {
             case 0:
-                Debug.Log("before");
                 MoveTutorialScreen(intro, offPos);
-                ui.SetUIOpenBool(false);
                 break;
 
             case 1:
-                Debug.Log("1--");
-                MoveTutorialScreen(controls, offPos + new Vector3(1300, 0, 0));
-                //controls.gameObject.SetActive(false);
+                MoveTutorialScreen(controls, offPos);
                 break;
 
             case 2:
-                Debug.Log("2--");
-                MoveTutorialScreen(materials, offPos + new Vector3(1300, 0, 0));
+                MoveTutorialScreen(boost, offPos);
                 break;
 
             case 3:
-                Debug.Log("3--");
-                MoveTutorialScreen(inventory, offPos);
+                MoveTutorialScreen(battery, offPos);
                 break;
 
             case 4:
-                Debug.Log("4--");
-                MoveTutorialScreen(items, offPos);
+                MoveTutorialScreen(time, offPos);
                 break;
+
             case 5:
-                Debug.Log("5--");
-                MoveTutorialScreen(itemsSize, offPos);
+                MoveTutorialScreen(date, offPos);
                 break;
 
             case 6:
-                Debug.Log("6--");
-                MoveTutorialScreen(trash, offPos);
+                MoveTutorialScreen(camp, offPos);
+                ui.SetUIOpenBool(false);
                 break;
+
             case 7:
-                Debug.Log("7--");
-                MoveTutorialScreen(drop, offPos);
+                MoveTutorialScreen(materials, offPos);
                 break;
 
             case 8:
-                Debug.Log("8--");
+                MoveTutorialScreen(inventory, offPos);
+                break;
+
+            case 9:
+                MoveTutorialScreen(items, offPos);
+                break;
+            case 10:
+                MoveTutorialScreen(itemsSize, offPos);
+                break;
+
+            case 11:
+                MoveTutorialScreen(trash, offPos);
+                break;
+            case 12:
+                MoveTutorialScreen(drop, offPos);
+                break;
+
+            case 13:
                 MoveTutorialScreen(ammo, offPos);
                 break;
         }
@@ -422,47 +446,58 @@ public class TutorialDirector : MonoBehaviour
 
         switch (tutoIndex)
         {
-            case 0:
-                Debug.Log("HUH");
-                break;
-
             case 1:
                 MoveTutorialScreen(controls, onPos);
-                Debug.Log("1++");
                 break;
 
             case 2:
-                MoveTutorialScreen(materials, onPos);
-                nav.navigationTarget = tutoNode;
-                Debug.Log("2++");
+                MoveTutorialScreen(boost, onPos);
                 break;
 
             case 3:
-                MoveTutorialScreen(inventory, onPos);
-                Debug.Log("3++");
+                MoveTutorialScreen(battery, onPos);
                 break;
 
             case 4:
-                Debug.Log("4++");
-                MoveTutorialScreen(items, onPos);
+                MoveTutorialScreen(time, onPos);
                 break;
 
             case 5:
-                Debug.Log("5++");
-                MoveTutorialScreen(itemsSize, onPos);
+                MoveTutorialScreen(date, onPos);
                 break;
 
             case 6:
-                Debug.Log("6++");
-                MoveTutorialScreen(trash, onPos);
+                MoveTutorialScreen(camp, onPos);
+                nav.navigationTarget = playerCamp;
                 break;
+
+
             case 7:
-                Debug.Log("7++");
-                MoveTutorialScreen(drop, onPos);
+                MoveTutorialScreen(materials, onPos);
+                nav.navigationTarget = tutoNode;
                 break;
 
             case 8:
-                Debug.Log("8++");
+                MoveTutorialScreen(inventory, onPos);
+                break;
+
+            case 9:
+                MoveTutorialScreen(items, onPos);
+                break;
+
+            case 10:
+                MoveTutorialScreen(itemsSize, onPos);
+                break;
+
+            case 11:
+                MoveTutorialScreen(trash, onPos);
+                break;
+
+            case 12:
+                MoveTutorialScreen(drop, onPos);
+                break;
+
+            case 13:
                 MoveTutorialScreen(ammo, onPos);
                 break;
         }
@@ -470,6 +505,7 @@ public class TutorialDirector : MonoBehaviour
 
     public void InitializeManagers()
     {
+        qg.gameObject.transform.position = new Vector3(-15.52f, 1.5f, 474);
         dm.InitializeManger();
         dm.ToggleTime(true);
         cm.InitializeManager();
@@ -481,6 +517,8 @@ public class TutorialDirector : MonoBehaviour
         //InitializeManagers();
         //ScriptedReasourceNode();
         ui.SetUIOpenBool(true);
+        qg.gameObject.transform.position = new Vector3(-15.52f, 1.5f, 100);
+        qg.AddQuestToGiver(tutoQuest);
         //AdvanceTutorial();
     }
 
@@ -516,7 +554,7 @@ public class TutorialDirector : MonoBehaviour
                 }
                     
                 break;
-            case 2:
+            case 7:
                 if (Input.GetKey(KeyCode.E) && !eBool)
                     ToggleE(eKey, eText, true);
 
@@ -524,7 +562,7 @@ public class TutorialDirector : MonoBehaviour
                     Invoke("AdvanceTutorial", 1f);
                 break;
 
-            case 3:
+            case 8:
                 if (Input.GetKey(KeyCode.Tab) && !IsInvoking())
                 {
                     ToggleTAB(tabKey, tabText, true);
@@ -532,7 +570,7 @@ public class TutorialDirector : MonoBehaviour
                 }  
                 break;
 
-            case 8:
+            case 13:
                 if (Input.GetKey(KeyCode.R) && !IsInvoking())
                     ToggleR(rKey, rText, true);
                 break;

@@ -7,10 +7,10 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 81f19446d2cc84e408f51be5b53f6919, type: 3}
-  m_Name: TestQuestObject
+  m_Name: TuToQuest
   m_EditorClassIdentifier: 
   parentSettlement: {fileID: 0}
   parentQuestGiver: {fileID: 0}
@@ -18,12 +18,16 @@ MonoBehaviour:
   calendar: {fileID: 0}
   correspondingPlayerQuestDisplayUI: {fileID: 0}
   correspondingSettlementQuestDisplayUI: {fileID: 0}
-  state: 0
+  state: 1
   resourceCount: 0
-  resourcesRequired: 2
+  resourcesRequired: 5
   completionPercentage: 0
-  desiredResourceName: 2
-  upKeepGain: 13.3
-  dayDue: 0
+  desiredResourceName: 0
+  upKeepGain: 15
+  dayDue: 4
   timeDue: {x: 0, y: 0}
-  description: 
+  description: 'Collect 5 Wood and Deliver to Midgard before the 4th of November.
+
+
+    Will
+    add 15% to the settlement''s upkeep meter'
