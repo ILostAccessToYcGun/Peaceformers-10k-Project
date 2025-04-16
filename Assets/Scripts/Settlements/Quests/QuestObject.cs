@@ -31,6 +31,8 @@ public class QuestObject : ScriptableObject
     [Space]
     [Header("QuestDisplay")]
     [SerializeField] string description;
+    [Space]
+    [SerializeField] bool isTuto = false;
 
 
     #region _Other_Objects_
@@ -44,7 +46,7 @@ public class QuestObject : ScriptableObject
     public void SetTimeManager() { time = FindAnyObjectByType<DayNightCycleManager>(); ; }
     public DayNightCycleManager GetTimeManager() { return time; }
 
-    public void SetCalenderManaager() { calendar = FindAnyObjectByType<CalendarManger>(); }
+    public void SetCalenderManager() { calendar = FindAnyObjectByType<CalendarManger>(); }
     public CalendarManger GetCalenderManager() { return calendar; }
 
     public void SetCorrespondingPlayerQuestDisplayUI(QuestDisplay newDisplay) { correspondingPlayerQuestDisplayUI = newDisplay; }
@@ -196,9 +198,14 @@ public class QuestObject : ScriptableObject
 
     private void Awake()
     {
-        //Debug.Log("Roo");
+        Debug.Log("Roo");
         SetTimeManager();
-        SetCalenderManaager();
-        SetUpQuest(1, 10);
+        SetCalenderManager();
+        if (!isTuto)
+        {
+            SetUpQuest(1, 10);
+        }
+        
+        
     }
 }

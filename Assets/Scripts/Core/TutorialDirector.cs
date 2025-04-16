@@ -675,13 +675,15 @@ public class TutorialDirector : MonoBehaviour
 
     private void Awake()
     {
-
-        //InitializeManagers();
-        //ScriptedReasourceNode();
         ui.SetUIOpenBool(true);
         qg.gameObject.transform.position = new Vector3(-15.52f, 1.5f, 100);
+    }
+
+    private void Start()
+    {
+        tutoQuest.SetCalenderManager();
+        tutoQuest.SetTimeManager();
         qg.AddQuestToGiver(tutoQuest);
-        //AdvanceTutorial();
     }
 
     private void Update()

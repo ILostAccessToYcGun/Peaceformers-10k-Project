@@ -62,6 +62,28 @@ public class Item : MonoBehaviour, IPointerClickHandler
                     GameObject dropped = Instantiate(this.gameObject, this.transform.position, this.transform.rotation, parentInventory.transform);
                     dropped.transform.localScale = Vector3.one;
                     Item droppedItem = dropped.GetComponent<Item>();
+                    droppedItem.currentInventory = currentInventory;
+
+                    //I need to find where the inventory is hovering and set the correct one.
+
+                    Inventory otherInv = currentInventory;
+
+                    Inventory[] invs = FindObjectsByType<Inventory>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+
+                    foreach (Inventory inv in invs)
+                    {
+                        if (inv != currentInventory)
+                            otherInv = inv;
+                    }
+
+                    if (droppedItem.transform.position.x > otherInv.inventoryPanel.gameObject.transform.position.x - otherInv.inventoryPanel.sizeDelta.x / 2
+                        && droppedItem.transform.position.x < otherInv.inventoryPanel.gameObject.transform.position.x + otherInv.inventoryPanel.sizeDelta.x / 2
+                        && droppedItem.transform.position.y > otherInv.inventoryPanel.gameObject.transform.position.y - otherInv.inventoryPanel.sizeDelta.y / 2
+                        && droppedItem.transform.position.y < otherInv.inventoryPanel.gameObject.transform.position.y + otherInv.inventoryPanel.sizeDelta.y / 2)
+                    {
+                        droppedItem.currentInventory = otherInv;
+                    }
+
                     droppedItem.SetStackAmount(1);
                     droppedItem.UpdateStackText();
                     if (droppedItem.SearchForNearestValidInventorySlot() == 1)
@@ -225,16 +247,44 @@ public class Item : MonoBehaviour, IPointerClickHandler
 
         if (nearestDistance > 125f) //if the item is really far away from the inventory slot, probably dont do anything
         {
+            Debug.Log(this.transform.position.x);
+            Debug.Log(currentInventory.inventoryPanel.gameObject.transform.position.x + currentInventory.inventoryPanel.sizeDelta.x / 2);
+
+            Inventory secondInv = currentInventory;
+
+            Inventory[] invs = FindObjectsByType<Inventory>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+
+            foreach (Inventory inv in invs)
+            {
+                if (inv != currentInventory)
+                {
+                    secondInv = inv;
+                }
+            }
+
+
             if (this.transform.position.x > currentInventory.inventoryPanel.gameObject.transform.position.x - currentInventory.inventoryPanel.sizeDelta.x / 2
                 && this.transform.position.x < currentInventory.inventoryPanel.gameObject.transform.position.x + currentInventory.inventoryPanel.sizeDelta.x / 2
                 && this.transform.position.y > currentInventory.inventoryPanel.gameObject.transform.position.y - currentInventory.inventoryPanel.sizeDelta.y / 2
                 && this.transform.position.y < currentInventory.inventoryPanel.gameObject.transform.position.y + currentInventory.inventoryPanel.sizeDelta.y / 2)
+            {
+
                 return 0;
+            }
+            else if (this.transform.position.x > secondInv.inventoryPanel.gameObject.transform.position.x - secondInv.inventoryPanel.sizeDelta.x / 2
+                && this.transform.position.x < secondInv.inventoryPanel.gameObject.transform.position.x + secondInv.inventoryPanel.sizeDelta.x / 2
+                && this.transform.position.y > secondInv.inventoryPanel.gameObject.transform.position.y - secondInv.inventoryPanel.sizeDelta.y / 2
+                && this.transform.position.y < secondInv.inventoryPanel.gameObject.transform.position.y + secondInv.inventoryPanel.sizeDelta.y / 2)
+            {
+                return 0;
+            }
             else
+            {
                 return 2;
+            }
         }
         else
-            return 1;
+             return 1;
     }
 
     public int SearchAndMoveToNearestInventorySlot()
