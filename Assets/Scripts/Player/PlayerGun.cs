@@ -59,7 +59,10 @@ public class PlayerGun : MonoBehaviour
     [SerializeField] private Inventory ammoInventory;
     [SerializeField] private Item ammo;
 
-    
+    public void ResetAmmo()
+    {
+        currentAmmo = maxAmmo;
+    }
 
     void Start()
     {

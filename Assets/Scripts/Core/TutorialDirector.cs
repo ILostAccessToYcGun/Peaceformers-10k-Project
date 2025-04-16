@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+//using UnityEngine.UIElements;
 
 public class TutorialDirector : MonoBehaviour
 {
@@ -54,13 +55,33 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] float moveTime;
     [SerializeField] GameObject tempTarget;
     [SerializeField] int tutoIndex = 0;
-
     [SerializeField] Vector3 onPos;
     [SerializeField] Vector3 offPos;
+
     [Space]
     [Header("Screens")]
     [SerializeField] RectTransform intro;
     [SerializeField] RectTransform controls;
+    [SerializeField] RectTransform boost;
+    [SerializeField] RectTransform battery;
+    [SerializeField] RectTransform time;
+    [SerializeField] RectTransform date;
+    [SerializeField] RectTransform camp;
+    [SerializeField] RectTransform materials;
+    [SerializeField] RectTransform inventory;
+    [SerializeField] RectTransform items;
+    [SerializeField] RectTransform itemsSize;
+    [SerializeField] RectTransform trash;
+    [SerializeField] RectTransform drop;
+    [SerializeField] RectTransform ammo;
+    [SerializeField] RectTransform navigation;
+    [SerializeField] RectTransform travel;
+    [SerializeField] RectTransform questBoard;
+    [SerializeField] RectTransform questDetails;
+    [SerializeField] RectTransform midgardInteract;
+    [SerializeField] RectTransform handInQuest;
+    [SerializeField] RectTransform settlementBars;
+    [SerializeField] RectTransform startGame;
 
     [Space]
     [Header("Controls")]
@@ -94,9 +115,44 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] TextMeshProUGUI qText;
     [SerializeField] bool qBool;
 
-
     #endregion
 
+
+    [Space]
+    [Header("Materials")]
+    [SerializeField] GameObject tutoNode;
+    [SerializeField] Image eKey;
+    [SerializeField] TextMeshProUGUI eText;
+    [SerializeField] bool eBool;
+
+    [Space]
+    [Header("Camp")]
+    [SerializeField] GameObject playerCamp;
+    [SerializeField] GameObject campHighlight;
+
+    [Space]
+    [Header("Inventory")]
+    [SerializeField] Image tabKey;
+    [SerializeField] TextMeshProUGUI tabText;
+
+    [Header("Ammo")]
+    [SerializeField] Image rKey;
+    [SerializeField] TextMeshProUGUI rText;
+
+    [Header("Navigation")]
+    [SerializeField] Button midgardNavigation;
+
+    [Header("QuestBoard")]
+    [SerializeField] Image fKey;
+    [SerializeField] TextMeshProUGUI fText;
+    
+    [Header("QuestDetails")]
+    [SerializeField] Image escKey;
+    [SerializeField] TextMeshProUGUI escText;
+    
+    [Header("Settlement Bars")]
+    [SerializeField] Image tKey;
+    [SerializeField] TextMeshProUGUI tText;
 
     [Space]
     [Header("Managers")]
@@ -104,8 +160,22 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] CalendarManger cm;
     [SerializeField] MapDirector md;
 
+    [Space]
+    [Header("Player")]
+    [SerializeField] PlayerMovement player;
+    [SerializeField] PlayerGun gun;
     [SerializeField] PlayerUIToggler ui;
+    [SerializeField] PlayerNavigation nav;
+    [SerializeField] Inventory playerInv;
 
+    [Space]
+    [Header("Quest")]
+    [SerializeField] QuestGiver qg;
+    [SerializeField] QuestObject tutoQuest;
+    [SerializeField] SettlementQuestBoard sqb;
+    [SerializeField] RectTransform sqbContent;
+
+    #region _Highlight_
     public void HighlightElement(GameObject focus, Vector2 highLightSize)
     {
         highlightFrame.LeanScale(highLightSize, moveTime).setEase(LeanTweenType.easeOutExpo);
@@ -123,6 +193,8 @@ public class TutorialDirector : MonoBehaviour
         LeanTween.move(highlightFrame, position, moveTime).setEase(LeanTweenType.easeOutExpo);
     }
 
+    #endregion
+
 
 
     #region _Toggle_Keys_
@@ -132,12 +204,12 @@ public class TutorialDirector : MonoBehaviour
         if (toggle)
         {
             LeanTween.color(key.rectTransform, Color.white, moveTime);
-            LeanTween.value(letter.gameObject, Wcallback, wText.color, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, Wcallback, wText.color, Color.black, 0.5f);
         }
         else
         {
             LeanTween.color(key.rectTransform, Color.black, moveTime);
-            LeanTween.value(letter.gameObject, Wcallback, wText.color, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, Wcallback, wText.color, Color.white, 0.5f);
         }
         wBool = toggle;
     }
@@ -151,12 +223,12 @@ public class TutorialDirector : MonoBehaviour
         if (toggle)
         {
             LeanTween.color(key.rectTransform, Color.white, moveTime);
-            LeanTween.value(letter.gameObject, Acallback, aText.color, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, Acallback, aText.color, Color.black, 0.5f);
         }
         else
         {
             LeanTween.color(key.rectTransform, Color.black, moveTime);
-            LeanTween.value(letter.gameObject, Acallback, aText.color, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, Acallback, aText.color, Color.white, 0.5f);
         }
         aBool = toggle;
     }
@@ -170,12 +242,12 @@ public class TutorialDirector : MonoBehaviour
         if (toggle)
         {
             LeanTween.color(key.rectTransform, Color.white, moveTime);
-            LeanTween.value(letter.gameObject, Scallback, sText.color, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, Scallback, sText.color, Color.black, 0.5f);
         }
         else
         {
             LeanTween.color(key.rectTransform, Color.black, moveTime);
-            LeanTween.value(letter.gameObject, Scallback, sText.color, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, Scallback, sText.color, Color.white, 0.5f);
         }
         sBool = toggle;
     }
@@ -189,12 +261,12 @@ public class TutorialDirector : MonoBehaviour
         if (toggle)
         {
             LeanTween.color(key.rectTransform, Color.white, moveTime);
-            LeanTween.value(letter.gameObject, Dcallback, dText.color, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, Dcallback, dText.color, Color.black, 0.5f);
         }
         else
         {
             LeanTween.color(key.rectTransform, Color.black, moveTime);
-            LeanTween.value(letter.gameObject, Dcallback, dText.color, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, Dcallback, dText.color, Color.white, 0.5f);
         }
         dBool = toggle;
     }
@@ -208,12 +280,12 @@ public class TutorialDirector : MonoBehaviour
         if (toggle)
         {
             LeanTween.color(key.rectTransform, Color.white, moveTime);
-            LeanTween.value(letter.gameObject, SPACEcallback, spaceText.color, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, SPACEcallback, spaceText.color, Color.black, 0.5f);
         }
         else
         {
             LeanTween.color(key.rectTransform, Color.black, moveTime);
-            LeanTween.value(letter.gameObject, SPACEcallback, spaceText.color, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, SPACEcallback, spaceText.color, Color.white, 0.5f);
         }
         spaceBool = toggle;
     }
@@ -227,12 +299,12 @@ public class TutorialDirector : MonoBehaviour
         if (toggle)
         {
             LeanTween.color(key.rectTransform, Color.white, moveTime);
-            LeanTween.value(letter.gameObject, SHIFTcallback, shiftText.color, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, SHIFTcallback, shiftText.color, Color.black, 0.5f);
         }
         else
         {
             LeanTween.color(key.rectTransform, Color.black, moveTime);
-            LeanTween.value(letter.gameObject, SHIFTcallback, shiftText.color, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, SHIFTcallback, shiftText.color, Color.white, 0.5f);
         }
         shiftBool = toggle;
     }
@@ -246,12 +318,12 @@ public class TutorialDirector : MonoBehaviour
         if (toggle)
         {
             LeanTween.color(key.rectTransform, Color.white, moveTime);
-            LeanTween.value(letter.gameObject, Qcallback, qText.color, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, Qcallback, qText.color, Color.black, 0.5f);
         }
         else
         {
             LeanTween.color(key.rectTransform, Color.black, moveTime);
-            LeanTween.value(letter.gameObject, Qcallback, qText.color, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, Qcallback, qText.color, Color.white, 0.5f);
         }
         qBool = toggle;
     }
@@ -261,6 +333,119 @@ public class TutorialDirector : MonoBehaviour
     }
 
 
+
+
+    public void ToggleE(Image key, TextMeshProUGUI letter, bool toggle)
+    {
+        if (toggle)
+        {
+            LeanTween.color(key.rectTransform, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, Ecallback, eText.color, Color.black, 0.5f);
+        }
+        else
+        {
+            LeanTween.color(key.rectTransform, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, Ecallback, eText.color, Color.white, 0.5f);
+        }
+        eBool = toggle;
+    }
+    public void Ecallback(Color val)
+    {
+        eText.color = val;
+    }
+
+
+
+
+    public void ToggleTAB(Image key, TextMeshProUGUI letter, bool toggle)
+    {
+        if (toggle)
+        {
+            LeanTween.color(key.rectTransform, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, TABcallback, tabText.color, Color.black, 0.5f);
+        }
+        else
+        {
+            LeanTween.color(key.rectTransform, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, TABcallback, tabText.color, Color.white, 0.5f);
+        }
+    }
+    public void TABcallback(Color val)
+    {
+        tabText.color = val;
+    }
+
+    public void ToggleR(Image key, TextMeshProUGUI letter, bool toggle)
+    {
+        if (toggle)
+        {
+            LeanTween.color(key.rectTransform, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, Rcallback, rText.color, Color.black, 0.5f);
+        }
+        else
+        {
+            LeanTween.color(key.rectTransform, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, Rcallback, rText.color, Color.white, 0.5f);
+        }
+    }
+    public void Rcallback(Color val)
+    {
+        rText.color = val;
+    }
+
+    public void ToggleF(Image key, TextMeshProUGUI letter, bool toggle)
+    {
+        if (toggle)
+        {
+            LeanTween.color(key.rectTransform, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, Fcallback, fText.color, Color.black, 0.5f);
+        }
+        else
+        {
+            LeanTween.color(key.rectTransform, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, Fcallback, fText.color, Color.white, 0.5f);
+        }
+    }
+    public void Fcallback(Color val)
+    {
+        fText.color = val;
+    }
+
+    public void ToggleESC(Image key, TextMeshProUGUI letter, bool toggle)
+    {
+        if (toggle)
+        {
+            LeanTween.color(key.rectTransform, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, ESCcallback, escText.color, Color.black, 0.5f);
+        }
+        else
+        {
+            LeanTween.color(key.rectTransform, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, ESCcallback, escText.color, Color.white, 0.5f);
+        }
+    }
+    public void ESCcallback(Color val)
+    {
+        escText.color = val;
+    }
+    
+    public void ToggleT(Image key, TextMeshProUGUI letter, bool toggle)
+    {
+        if (toggle)
+        {
+            LeanTween.color(key.rectTransform, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, Tcallback, tText.color, Color.black, 0.5f);
+        }
+        else
+        {
+            LeanTween.color(key.rectTransform, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, Tcallback, tText.color, Color.white, 0.5f);
+        }
+    }
+    public void Tcallback(Color val)
+    {
+        tText.color = val;
+    }
 
     #endregion
 
@@ -272,10 +457,10 @@ public class TutorialDirector : MonoBehaviour
         LeanTween.move(tuto, position, moveTime).setEase(LeanTweenType.easeOutExpo);
     }
 
-    public void ScriptedReasourceNode()
-    {
-        md.SpawnNode(0, this.transform.position);
-    }
+    //public void ScriptedReasourceNode()
+    //{
+    //    md.SpawnNode(0, this.transform.position);
+    //}
 
     public void AdvanceTutorial()
     {
@@ -284,27 +469,87 @@ public class TutorialDirector : MonoBehaviour
         switch (tutoIndex)
         {
             case 0:
-                Debug.Log("before");
                 MoveTutorialScreen(intro, offPos);
-                ui.SetUIOpenBool(false);
                 break;
 
             case 1:
-                Debug.Log("1--");
-                MoveTutorialScreen(controls, offPos + new Vector3(1300, 0, 0));
-                //controls.gameObject.SetActive(false);
+                MoveTutorialScreen(controls, offPos);
                 break;
 
             case 2:
-                Debug.Log("2--");
+                MoveTutorialScreen(boost, offPos);
                 break;
 
             case 3:
-                Debug.Log("3--");
+                MoveTutorialScreen(battery, offPos);
                 break;
 
             case 4:
-                Debug.Log("4--");
+                MoveTutorialScreen(time, offPos);
+                break;
+
+            case 5:
+                MoveTutorialScreen(date, offPos);
+                break;
+
+            case 6:
+                MoveTutorialScreen(camp, offPos);
+                ui.SetUIOpenBool(false);
+                campHighlight.SetActive(false);
+                break;
+
+            case 7:
+                MoveTutorialScreen(materials, offPos);
+                break;
+
+            case 8:
+                MoveTutorialScreen(inventory, offPos);
+                break;
+
+            case 9:
+                MoveTutorialScreen(items, offPos);
+                break;
+            case 10:
+                MoveTutorialScreen(itemsSize, offPos);
+                break;
+
+            case 11:
+                MoveTutorialScreen(trash, offPos);
+                break;
+            case 12:
+                MoveTutorialScreen(drop, offPos);
+                break;
+
+            case 13:
+                MoveTutorialScreen(ammo, offPos);
+                break;
+            
+            case 14:
+                MoveTutorialScreen(navigation, offPos);
+                break;
+
+            case 15:
+                MoveTutorialScreen(travel, offPos);
+                break;
+            
+            case 16:
+                MoveTutorialScreen(questBoard, offPos);
+                break;
+            
+            case 17:
+                MoveTutorialScreen(questDetails, offPos);
+                break;
+            
+            case 18:
+                MoveTutorialScreen(midgardInteract, offPos);
+                break;
+            
+            case 19:
+                MoveTutorialScreen(handInQuest, offPos);
+                break;
+            
+            case 20:
+                MoveTutorialScreen(settlementBars, offPos);
                 break;
         }
 
@@ -312,34 +557,120 @@ public class TutorialDirector : MonoBehaviour
 
         switch (tutoIndex)
         {
-            case 0:
-                Debug.Log("HUH");
-                break;
-
             case 1:
-                Debug.Log("1++");
                 MoveTutorialScreen(controls, onPos);
                 break;
 
             case 2:
-                Debug.Log("2++");
+                MoveTutorialScreen(boost, onPos);
                 break;
 
             case 3:
-                Debug.Log("3++");
+                MoveTutorialScreen(battery, onPos);
                 break;
 
             case 4:
-                Debug.Log("4++");
+                MoveTutorialScreen(time, onPos);
+                break;
+
+            case 5:
+                MoveTutorialScreen(date, onPos);
+                break;
+
+            case 6:
+                MoveTutorialScreen(camp, onPos);
+                nav.navigationTarget = playerCamp;
+                campHighlight.SetActive(true);
+                break;
+
+            case 7:
+                MoveTutorialScreen(materials, onPos);
+                nav.navigationTarget = tutoNode;
+                break;
+
+            case 8:
+                MoveTutorialScreen(inventory, onPos);
+                break;
+
+            case 9:
+                MoveTutorialScreen(items, onPos);
+                break;
+
+            case 10:
+                MoveTutorialScreen(itemsSize, onPos);
+                break;
+
+            case 11:
+                MoveTutorialScreen(trash, onPos);
+                break;
+
+            case 12:
+                MoveTutorialScreen(drop, onPos);
+                break;
+
+            case 13:
+                MoveTutorialScreen(ammo, onPos);
+                break;
+            
+            case 14:
+                midgardNavigation.onClick.AddListener(NavigationAdvance);
+                MoveTutorialScreen(navigation, onPos);
+                break;
+
+            case 15:
+                MoveTutorialScreen(travel, onPos);
+                break;
+
+            case 16:
+                MoveTutorialScreen(questBoard, onPos);
+                break;
+            
+            case 17:
+                MoveTutorialScreen(questDetails, onPos);
+                break;
+            
+            case 18:
+                MoveTutorialScreen(midgardInteract, onPos);
+                break;
+            
+            case 19:
+                MoveTutorialScreen(handInQuest, onPos);
+                //we need to somehow add an advance tutorial listener to the hand in button on the settlement quest UI
+                Button[] buttons = sqbContent.gameObject.GetComponentsInChildren<Button>();
+                foreach (Button button in buttons)
+                {
+                    if (button.gameObject.name == "HandInQuestButton")
+                        button.onClick.AddListener(AdvanceTutorial); 
+                }
+                break;
+            
+            case 20:
+                MoveTutorialScreen(settlementBars, onPos);
+                break;
+
+            case 21:
+                ui.ToggleSettlementUI();
+                MoveTutorialScreen(startGame, onPos);
                 break;
         }
     }
 
-    public void InitializeManagers()
+    public void StartGame()
     {
+        MoveTutorialScreen(startGame, offPos);
+        playerInv.ClearInventory();
+        player.ResetPos();
+        gun.ResetAmmo();
+        qg.gameObject.transform.position = new Vector3(-15.52f, 1.5f, 474);
         dm.InitializeManger();
         dm.ToggleTime(true);
         cm.InitializeManager();
+    }
+
+    public void NavigationAdvance()
+    {
+        midgardNavigation.onClick.RemoveListener(NavigationAdvance);
+        AdvanceTutorial();
     }
 
     private void Awake()
@@ -348,6 +679,8 @@ public class TutorialDirector : MonoBehaviour
         //InitializeManagers();
         //ScriptedReasourceNode();
         ui.SetUIOpenBool(true);
+        qg.gameObject.transform.position = new Vector3(-15.52f, 1.5f, 100);
+        qg.AddQuestToGiver(tutoQuest);
         //AdvanceTutorial();
     }
 
@@ -359,45 +692,92 @@ public class TutorialDirector : MonoBehaviour
             HighlightElement(tempTarget, new Vector3(3.36f, 1));
         }
 
-        if (tutoIndex == 1)
+        switch (tutoIndex)
         {
-            //check every frame for the inputs specific inputs
-            //once an input has been pressed, toggle a boolean and change the colour and text of the button
-            //after every input has been pressed, move on to the next stage after a bit
+            case 1:
+                if (Input.GetKey(KeyCode.W) && !wBool)
+                    ToggleW(wKey, wText, true);
+                if (Input.GetKey(KeyCode.A) && !aBool)
+                    ToggleA(aKey, aText, true);
+                if (Input.GetKey(KeyCode.S) && !sBool)
+                    ToggleS(sKey, sText, true);
+                if (Input.GetKey(KeyCode.D) && !dBool)
+                    ToggleD(dKey, dText, true);
+                if (Input.GetKey(KeyCode.Space) && !spaceBool)
+                    ToggleSPACE(spaceKey, spaceText, true);
+                if (Input.GetKey(KeyCode.LeftShift) && !shiftBool)
+                    ToggleSHIFT(shiftKey, shiftText, true);
+                if (Input.GetKey(KeyCode.Q) && !qBool)
+                    ToggleQ(qKey, qText, true);
 
-            if (Input.GetKey(KeyCode.W) && !wBool)
-            {
-                ToggleW(wKey, wText, true);
-            }
-            if (Input.GetKey(KeyCode.A) && !aBool)
-            {
-                ToggleA(aKey, aText, true);
-            }
-            if (Input.GetKey(KeyCode.S) && !sBool)
-            {
-                ToggleS(sKey, sText, true);
-            }
-            if (Input.GetKey(KeyCode.D) && !dBool)
-            {
-                ToggleD(dKey, dText, true);
-            }
-            if (Input.GetKey(KeyCode.Space) && !spaceBool)
-            {
-                ToggleSPACE(spaceKey, spaceText, true);
-            }
-            if (Input.GetKey(KeyCode.LeftShift) && !shiftBool)
-            {
-                ToggleSHIFT(shiftKey, shiftText, true);
-            }
-            if (Input.GetKey(KeyCode.Q) && !qBool)
-            {
-                ToggleQ(qKey, qText, true);
-            }
+                if (wBool && aBool && sBool && dBool && spaceBool && shiftBool && qBool && !IsInvoking())
+                {
+                    Invoke("AdvanceTutorial", 2f);
+                }
+                    
+                break;
+            case 7:
+                if (Input.GetKey(KeyCode.E) && !eBool)
+                    ToggleE(eKey, eText, true);
 
-            if (wBool && aBool && sBool && dBool && spaceBool && shiftBool && qBool)
-            {
-                Invoke("AdvanceTutorial", 2.5f);
-            }
+                if (playerInv.FindItemCountOfName(Item.Name.Wood) >= 10 && !IsInvoking())
+                    Invoke("AdvanceTutorial", 1f);
+                break;
+
+            case 8:
+                if (Input.GetKey(KeyCode.Tab) && !IsInvoking())
+                {
+                    ToggleTAB(tabKey, tabText, true);
+                    Invoke("AdvanceTutorial", 1f);
+                }  
+                break;
+
+            case 13:
+                if (Input.GetKey(KeyCode.R))
+                    ToggleR(rKey, rText, true);
+                break;
+
+            case 15:
+                if (Vector3.Distance(player.transform.position, qg.transform.position) <= 30f)
+                {
+                    AdvanceTutorial();
+                }
+                break;
+
+            case 16:
+                if (Input.GetKey(KeyCode.F) && !IsInvoking())
+                {
+                    ToggleF(fKey, fText, true);
+                    Invoke("AdvanceTutorial", 1f);
+                }
+                break;
+            
+            case 17:
+                if (Input.GetKey(KeyCode.Escape) && !IsInvoking())
+                {
+                    ToggleESC(escKey, escText, true);
+                    Invoke("AdvanceTutorial", 1f);
+                }
+                else if (Input.GetKey(KeyCode.F) && !IsInvoking())
+                {
+                    Invoke("AdvanceTutorial", 1f);
+                }
+                break;
+
+            case 18:
+                if (sqb.GetCurrentViewingQuestGiver() == qg)
+                {
+                    AdvanceTutorial();
+                }
+                break;
+
+            case 20:
+                if (Input.GetKey(KeyCode.T) && !IsInvoking())
+                {
+                    ToggleT(tKey, tText, true);
+                    Invoke("AdvanceTutorial", 3f);
+                }
+                break;
         }
     }
 }

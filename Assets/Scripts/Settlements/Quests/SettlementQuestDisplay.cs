@@ -59,7 +59,8 @@ public class SettlementQuestDisplay : QuestDisplay
         Debug.Log(questObject.GetResourceCount());
 
         parentQuestBoard.playerInventory.RemoveItemFromInventory(questObject.GetResource(), questObject.GetResourceCount());
-        Destroy(questObject);
+        if (questObject.name != "TuToQuest")
+            Destroy(questObject);
         
 
 

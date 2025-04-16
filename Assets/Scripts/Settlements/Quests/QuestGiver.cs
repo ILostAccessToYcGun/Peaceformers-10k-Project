@@ -34,10 +34,11 @@ public class QuestGiver : MonoBehaviour
         if (newObject == null)
         {
             newObject = Instantiate(baseQuestObject, this.transform);
-            newObject.SetParentSettlement(currentSettlement); //I wish there was a better way of setting it up but oh well
-            newObject.SetParentQuestGiver(this);
             //newObject.SetResourceCount(Random.Range(0, newObject.GetResourceRequirement()));
         }
+
+        newObject.SetParentSettlement(currentSettlement); //I wish there was a better way of setting it up but oh well
+        newObject.SetParentQuestGiver(this);
 
         Debug.Log("Quest accepted");
         newObject.SetState(QuestObject.QuestState.InProgress);

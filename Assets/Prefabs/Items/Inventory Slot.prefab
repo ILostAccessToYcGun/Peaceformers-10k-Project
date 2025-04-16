@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.59119487, g: 0.59119487, b: 0.59119487, a: 1}
+  m_Color: {r: 0.6862745, g: 0.6862745, b: 0.6862745, a: 0.39215687}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -88,4 +88,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68a6e191335823a4ab84e8bde8707e07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentInventory: {fileID: 0}
   currentHeldItem: {fileID: 0}
+  inventoryPosition: {x: 0, y: 0}
+  isTrashSlot: 0

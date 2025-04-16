@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -612,6 +613,12 @@ public class Item : MonoBehaviour, IPointerClickHandler
 
     #endregion
 
+
+    public void FixText()
+    {
+        stackText.GetComponent<Canvas>().sortingOrder = 1;
+    }
+
     private void Awake()
     {
         player = FindAnyObjectByType<PlayerMovement>();
@@ -623,6 +630,9 @@ public class Item : MonoBehaviour, IPointerClickHandler
         stackAmount = 1;
         if (itemComponents.Count < (itemWidth * itemHeight) - 1)
             GenerateItem();
+
+        stackText.GetComponent<Canvas>().sortingOrder = 2;
+        Invoke("FixText", 0.1f);
     }
 
 
