@@ -31,6 +31,8 @@ public class QuestObject : ScriptableObject
     [Space]
     [Header("QuestDisplay")]
     [SerializeField] string description;
+    [Space]
+    [SerializeField] bool isTuto = false;
 
 
     #region _Other_Objects_
@@ -199,6 +201,11 @@ public class QuestObject : ScriptableObject
         Debug.Log("Roo");
         SetTimeManager();
         SetCalenderManager();
-        SetUpQuest(1, 10);
+        if (!isTuto)
+        {
+            SetUpQuest(1, 10);
+        }
+        
+        
     }
 }
