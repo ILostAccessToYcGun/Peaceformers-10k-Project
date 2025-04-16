@@ -55,6 +55,7 @@ public class QuestBoard : MonoBehaviour
         GameObject questUI = Instantiate(baseQuestUI, scrollContent.transform);
         QuestDisplay newDisplay = questUI.GetComponent<QuestDisplay>();
 
+        Debug.Log(newDisplay);
         newObject.SetCorrespondingPlayerQuestDisplayUI(newDisplay);
 
         newDisplay.SetAbandonVerification(abandonVerification);
