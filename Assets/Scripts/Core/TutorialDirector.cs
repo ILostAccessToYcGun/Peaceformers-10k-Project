@@ -74,6 +74,14 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] RectTransform trash;
     [SerializeField] RectTransform drop;
     [SerializeField] RectTransform ammo;
+    [SerializeField] RectTransform navigation;
+    [SerializeField] RectTransform travel;
+    [SerializeField] RectTransform questBoard;
+    [SerializeField] RectTransform questDetails;
+    [SerializeField] RectTransform midgardInteract;
+    [SerializeField] RectTransform handInQuest;
+    [SerializeField] RectTransform settlementBars;
+    [SerializeField] RectTransform startGame;
 
     [Space]
     [Header("Controls")]
@@ -120,6 +128,7 @@ public class TutorialDirector : MonoBehaviour
     [Space]
     [Header("Camp")]
     [SerializeField] GameObject playerCamp;
+    [SerializeField] GameObject campHighlight;
 
     [Space]
     [Header("Inventory")]
@@ -130,6 +139,21 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] Image rKey;
     [SerializeField] TextMeshProUGUI rText;
 
+    [Header("Navigation")]
+    [SerializeField] Button midgardNavigation;
+
+    [Header("QuestBoard")]
+    [SerializeField] Image fKey;
+    [SerializeField] TextMeshProUGUI fText;
+    
+    [Header("QuestDetails")]
+    [SerializeField] Image escKey;
+    [SerializeField] TextMeshProUGUI escText;
+    
+    [Header("Settlement Bars")]
+    [SerializeField] Image tKey;
+    [SerializeField] TextMeshProUGUI tText;
+
     [Space]
     [Header("Managers")]
     [SerializeField] DayNightCycleManager dm;
@@ -138,6 +162,8 @@ public class TutorialDirector : MonoBehaviour
 
     [Space]
     [Header("Player")]
+    [SerializeField] PlayerMovement player;
+    [SerializeField] PlayerGun gun;
     [SerializeField] PlayerUIToggler ui;
     [SerializeField] PlayerNavigation nav;
     [SerializeField] Inventory playerInv;
@@ -146,6 +172,8 @@ public class TutorialDirector : MonoBehaviour
     [Header("Quest")]
     [SerializeField] QuestGiver qg;
     [SerializeField] QuestObject tutoQuest;
+    [SerializeField] SettlementQuestBoard sqb;
+    [SerializeField] RectTransform sqbContent;
 
     #region _Highlight_
     public void HighlightElement(GameObject focus, Vector2 highLightSize)
@@ -365,6 +393,60 @@ public class TutorialDirector : MonoBehaviour
         rText.color = val;
     }
 
+    public void ToggleF(Image key, TextMeshProUGUI letter, bool toggle)
+    {
+        if (toggle)
+        {
+            LeanTween.color(key.rectTransform, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, Fcallback, fText.color, Color.black, 0.5f);
+        }
+        else
+        {
+            LeanTween.color(key.rectTransform, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, Fcallback, fText.color, Color.white, 0.5f);
+        }
+    }
+    public void Fcallback(Color val)
+    {
+        fText.color = val;
+    }
+
+    public void ToggleESC(Image key, TextMeshProUGUI letter, bool toggle)
+    {
+        if (toggle)
+        {
+            LeanTween.color(key.rectTransform, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, ESCcallback, escText.color, Color.black, 0.5f);
+        }
+        else
+        {
+            LeanTween.color(key.rectTransform, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, ESCcallback, escText.color, Color.white, 0.5f);
+        }
+    }
+    public void ESCcallback(Color val)
+    {
+        escText.color = val;
+    }
+    
+    public void ToggleT(Image key, TextMeshProUGUI letter, bool toggle)
+    {
+        if (toggle)
+        {
+            LeanTween.color(key.rectTransform, Color.white, moveTime);
+            LeanTween.value(letter.gameObject, Tcallback, tText.color, Color.black, 0.5f);
+        }
+        else
+        {
+            LeanTween.color(key.rectTransform, Color.black, moveTime);
+            LeanTween.value(letter.gameObject, Tcallback, tText.color, Color.white, 0.5f);
+        }
+    }
+    public void Tcallback(Color val)
+    {
+        tText.color = val;
+    }
+
     #endregion
 
 
@@ -413,6 +495,7 @@ public class TutorialDirector : MonoBehaviour
             case 6:
                 MoveTutorialScreen(camp, offPos);
                 ui.SetUIOpenBool(false);
+                campHighlight.SetActive(false);
                 break;
 
             case 7:
@@ -439,6 +522,34 @@ public class TutorialDirector : MonoBehaviour
 
             case 13:
                 MoveTutorialScreen(ammo, offPos);
+                break;
+            
+            case 14:
+                MoveTutorialScreen(navigation, offPos);
+                break;
+
+            case 15:
+                MoveTutorialScreen(travel, offPos);
+                break;
+            
+            case 16:
+                MoveTutorialScreen(questBoard, offPos);
+                break;
+            
+            case 17:
+                MoveTutorialScreen(questDetails, offPos);
+                break;
+            
+            case 18:
+                MoveTutorialScreen(midgardInteract, offPos);
+                break;
+            
+            case 19:
+                MoveTutorialScreen(handInQuest, offPos);
+                break;
+            
+            case 20:
+                MoveTutorialScreen(settlementBars, offPos);
                 break;
         }
 
@@ -469,8 +580,8 @@ public class TutorialDirector : MonoBehaviour
             case 6:
                 MoveTutorialScreen(camp, onPos);
                 nav.navigationTarget = playerCamp;
+                campHighlight.SetActive(true);
                 break;
-
 
             case 7:
                 MoveTutorialScreen(materials, onPos);
@@ -500,15 +611,66 @@ public class TutorialDirector : MonoBehaviour
             case 13:
                 MoveTutorialScreen(ammo, onPos);
                 break;
+            
+            case 14:
+                midgardNavigation.onClick.AddListener(NavigationAdvance);
+                MoveTutorialScreen(navigation, onPos);
+                break;
+
+            case 15:
+                MoveTutorialScreen(travel, onPos);
+                break;
+
+            case 16:
+                MoveTutorialScreen(questBoard, onPos);
+                break;
+            
+            case 17:
+                MoveTutorialScreen(questDetails, onPos);
+                break;
+            
+            case 18:
+                MoveTutorialScreen(midgardInteract, onPos);
+                break;
+            
+            case 19:
+                MoveTutorialScreen(handInQuest, onPos);
+                //we need to somehow add an advance tutorial listener to the hand in button on the settlement quest UI
+                Button[] buttons = sqbContent.gameObject.GetComponentsInChildren<Button>();
+                foreach (Button button in buttons)
+                {
+                    if (button.gameObject.name == "HandInQuestButton")
+                        button.onClick.AddListener(AdvanceTutorial); 
+                }
+                break;
+            
+            case 20:
+                MoveTutorialScreen(settlementBars, onPos);
+                break;
+
+            case 21:
+                ui.ToggleSettlementUI();
+                MoveTutorialScreen(startGame, onPos);
+                break;
         }
     }
 
-    public void InitializeManagers()
+    public void StartGame()
     {
+        MoveTutorialScreen(startGame, offPos);
+        playerInv.ClearInventory();
+        player.ResetPos();
+        gun.ResetAmmo();
         qg.gameObject.transform.position = new Vector3(-15.52f, 1.5f, 474);
         dm.InitializeManger();
         dm.ToggleTime(true);
         cm.InitializeManager();
+    }
+
+    public void NavigationAdvance()
+    {
+        midgardNavigation.onClick.RemoveListener(NavigationAdvance);
+        AdvanceTutorial();
     }
 
     private void Awake()
@@ -550,7 +712,7 @@ public class TutorialDirector : MonoBehaviour
 
                 if (wBool && aBool && sBool && dBool && spaceBool && shiftBool && qBool && !IsInvoking())
                 {
-                    Invoke("AdvanceTutorial", 2.5f);
+                    Invoke("AdvanceTutorial", 2f);
                 }
                     
                 break;
@@ -571,8 +733,50 @@ public class TutorialDirector : MonoBehaviour
                 break;
 
             case 13:
-                if (Input.GetKey(KeyCode.R) && !IsInvoking())
+                if (Input.GetKey(KeyCode.R))
                     ToggleR(rKey, rText, true);
+                break;
+
+            case 15:
+                if (Vector3.Distance(player.transform.position, qg.transform.position) <= 30f)
+                {
+                    AdvanceTutorial();
+                }
+                break;
+
+            case 16:
+                if (Input.GetKey(KeyCode.F) && !IsInvoking())
+                {
+                    ToggleF(fKey, fText, true);
+                    Invoke("AdvanceTutorial", 1f);
+                }
+                break;
+            
+            case 17:
+                if (Input.GetKey(KeyCode.Escape) && !IsInvoking())
+                {
+                    ToggleESC(escKey, escText, true);
+                    Invoke("AdvanceTutorial", 1f);
+                }
+                else if (Input.GetKey(KeyCode.F) && !IsInvoking())
+                {
+                    Invoke("AdvanceTutorial", 1f);
+                }
+                break;
+
+            case 18:
+                if (sqb.GetCurrentViewingQuestGiver() == qg)
+                {
+                    AdvanceTutorial();
+                }
+                break;
+
+            case 20:
+                if (Input.GetKey(KeyCode.T) && !IsInvoking())
+                {
+                    ToggleT(tKey, tText, true);
+                    Invoke("AdvanceTutorial", 3f);
+                }
                 break;
         }
     }
