@@ -159,6 +159,7 @@ public class TutorialDirector : MonoBehaviour
     [SerializeField] DayNightCycleManager dm;
     [SerializeField] CalendarManger cm;
     [SerializeField] MapDirector md;
+    [SerializeField] Settings settings;
 
     [Space]
     [Header("Player")]
@@ -650,6 +651,7 @@ public class TutorialDirector : MonoBehaviour
 
             case 21:
                 ui.ToggleSettlementUI();
+                ui.SetUIOpenBool(true);
                 MoveTutorialScreen(startGame, onPos);
                 break;
         }
@@ -658,6 +660,7 @@ public class TutorialDirector : MonoBehaviour
     public void StartGame()
     {
         MoveTutorialScreen(startGame, offPos);
+        tutoNode.SetActive(false);
         playerInv.ClearInventory();
         player.ResetPos();
         gun.ResetAmmo();
@@ -665,6 +668,7 @@ public class TutorialDirector : MonoBehaviour
         dm.InitializeManger();
         dm.ToggleTime(true);
         cm.InitializeManager();
+        ui.SetUIOpenBool(false);
     }
 
     public void NavigationAdvance()
@@ -675,15 +679,53 @@ public class TutorialDirector : MonoBehaviour
 
     private void Awake()
     {
-        ui.SetUIOpenBool(true);
-        qg.gameObject.transform.position = new Vector3(-15.52f, 1.5f, 100);
+        settings = FindAnyObjectByType<Settings>();
+        if (settings.playTutorial)
+        {
+            ui.SetUIOpenBool(true);
+            qg.gameObject.transform.position = new Vector3(-15.52f, 1.5f, 100);
+        }
+        else
+        {
+            intro.gameObject.SetActive(false);
+            controls.gameObject.SetActive(false);
+            boost.gameObject.SetActive(false);
+            battery.gameObject.SetActive(false);
+            time.gameObject.SetActive(false);
+            date.gameObject.SetActive(false);
+            camp.gameObject.SetActive(false);
+            materials.gameObject.SetActive(false);
+            inventory.gameObject.SetActive(false);
+            items.gameObject.SetActive(false);
+            itemsSize.gameObject.SetActive(false);
+            trash.gameObject.SetActive(false);
+            drop.gameObject.SetActive(false);
+            ammo.gameObject.SetActive(false);
+            navigation.gameObject.SetActive(false);
+            travel.gameObject.SetActive(false);
+            questBoard.gameObject.SetActive(false);
+            questDetails.gameObject.SetActive(false);
+            midgardInteract.gameObject.SetActive(false);
+            handInQuest.gameObject.SetActive(false);
+            settlementBars.gameObject.SetActive(false);
+            startGame.gameObject.SetActive(false);
+        }
+            
+        
     }
 
     private void Start()
     {
-        tutoQuest.SetCalenderManager();
-        tutoQuest.SetTimeManager();
-        qg.AddQuestToGiver(tutoQuest);
+        if (settings.playTutorial)
+        {
+            tutoQuest.SetCalenderManager();
+            tutoQuest.SetTimeManager();
+            qg.AddQuestToGiver(tutoQuest);
+        }
+        else
+            StartGame();
+
+
     }
 
     private void Update()

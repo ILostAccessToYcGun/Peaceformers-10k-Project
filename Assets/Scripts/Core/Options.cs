@@ -15,6 +15,8 @@ public class Options : MonoBehaviour
     [SerializeField] TextMeshProUGUI sfxAmount;
     [SerializeField] TextMeshProUGUI musicAmount;
 
+    [SerializeField] Toggle tutorialToggle;
+
     public Settings settings;
     public AudioManager audioManager;
 
@@ -32,6 +34,19 @@ public class Options : MonoBehaviour
         Screen.fullScreen = fullscreenToggle.isOn;
         Debug.Log("Fullscreen: " + fullscreenToggle.isOn);
         settings.fullScreen = fullscreenToggle.isOn;
+    }
+
+    public void Tutorial()
+    {
+        settings.playTutorial = tutorialToggle.isOn;
+        Debug.Log("Tutorial: " + settings.playTutorial);
+    }
+
+    public void Tutorial(bool toggle)
+    {
+        fullscreenToggle.isOn = toggle;
+        settings.playTutorial = fullscreenToggle.isOn;
+        Debug.Log("Tutorial: " + fullscreenToggle.isOn);
     }
 
     public void SetSFX()

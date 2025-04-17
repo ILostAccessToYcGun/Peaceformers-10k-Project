@@ -14,6 +14,8 @@ public class Settings : MonoBehaviour
     public Options options;
     public AudioManager audioManager;
 
+    public bool playTutorial;
+
     public static Settings instance;
     private void Awake()
     {
