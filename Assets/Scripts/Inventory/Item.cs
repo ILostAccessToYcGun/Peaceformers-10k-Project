@@ -247,9 +247,6 @@ public class Item : MonoBehaviour, IPointerClickHandler
 
         if (nearestDistance > 125f) //if the item is really far away from the inventory slot, probably dont do anything
         {
-            Debug.Log(this.transform.position.x);
-            Debug.Log(currentInventory.inventoryPanel.gameObject.transform.position.x + currentInventory.inventoryPanel.sizeDelta.x / 2);
-
             Inventory secondInv = currentInventory;
 
             Inventory[] invs = FindObjectsByType<Inventory>(FindObjectsInactive.Include, FindObjectsSortMode.None);

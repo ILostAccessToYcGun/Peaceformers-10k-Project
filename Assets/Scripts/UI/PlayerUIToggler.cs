@@ -307,9 +307,10 @@ public class PlayerUIToggler : MonoBehaviour
     }
 
 
-    public void SaveAndQuit()
+    public void Quit()
     {
         //save a file
+        Time.timeScale = 1;
         SceneManager.LoadScene(0);
     }
 }
