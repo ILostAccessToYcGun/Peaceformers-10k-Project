@@ -130,6 +130,7 @@ public class PlayerUpgrades : MonoBehaviour
         Debug.Log("Battery Upgrade");
         battery.M_maxBattery = Mathf.Clamp(battery.M_maxBattery + 10f, 100f, 200f);
         battery.M_passiveLossRate = Mathf.Clamp(battery.M_passiveLossRate - 0.025f, 0.25f, 0.5f);
+        battery.GainBattery(300f);
     }
     public void BatterySelect()
     {

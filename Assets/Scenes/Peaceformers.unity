@@ -2599,7 +2599,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &155447951
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9395,6 +9395,7 @@ MonoBehaviour:
   dm: {fileID: 1676149430}
   cm: {fileID: 1012667614}
   md: {fileID: 1703625640}
+  settings: {fileID: 0}
   player: {fileID: 1678360442}
   gun: {fileID: 833486680}
   ui: {fileID: 10167185}
@@ -16699,7 +16700,9 @@ MonoBehaviour:
   music: {fileID: 295416356}
   sfxAmount: {fileID: 1670702554}
   musicAmount: {fileID: 750231802}
+  tutorialToggle: {fileID: 0}
   settings: {fileID: 0}
+  audioManager: {fileID: 0}
 --- !u!1 &904199892
 GameObject:
   m_ObjectHideFlags: 0
@@ -25968,7 +25971,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Hold to Confirm
+  m_text: Confirm
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ebcf30964bc8fdd4d8255b662e39a350, type: 2}
   m_sharedMaterial: {fileID: 5627060112372618412, guid: ebcf30964bc8fdd4d8255b662e39a350, type: 2}
@@ -31144,7 +31147,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Hold to Confirm
+  m_text: Confirm
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ebcf30964bc8fdd4d8255b662e39a350, type: 2}
   m_sharedMaterial: {fileID: 5627060112372618412, guid: ebcf30964bc8fdd4d8255b662e39a350, type: 2}
@@ -36222,7 +36225,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1972416445
 RectTransform:
   m_ObjectHideFlags: 0

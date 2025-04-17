@@ -21,6 +21,7 @@ public class DayNightCycleManager : MonoBehaviour
     [SerializeField] EnemyDirector ed;
     [SerializeField] PlayerUIToggler ui;
     [SerializeField] PlayerUpgrades up;
+    [SerializeField] PlayerBattery bt;
 
     public enum twelveHour { AM, PM }
     
@@ -178,6 +179,7 @@ public class DayNightCycleManager : MonoBehaviour
         md.GenerateNodes();
         ed.GenerateEnemies();
         CampEnemySpawnCheck();
+        bt.GainBattery(300f);
     }
 
     public void EndOfDayCheck()
@@ -343,6 +345,7 @@ public class DayNightCycleManager : MonoBehaviour
         ed.ResetDifficulty();
         ui = FindAnyObjectByType<PlayerUIToggler>();
         up = FindAnyObjectByType<PlayerUpgrades>();
+        bt = FindAnyObjectByType<PlayerBattery>();
 
         md.GenerateCamps();
         BeginDay();
