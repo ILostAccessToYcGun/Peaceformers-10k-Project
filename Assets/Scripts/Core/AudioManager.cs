@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-
+    public Settings settings;
     public Sound[] sounds;
     
     public static AudioManager instance;
@@ -19,14 +19,17 @@ public class AudioManager : MonoBehaviour
             return;
         }
 
-            DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(gameObject);
 
         foreach(Sound s in sounds)
         {
             s.source = gameObject.AddComponent<AudioSource>();
             s.source.clip = s.clip;
 
-            s.source.volume = s.volume;
+            if (s.isMusic)
+                s.source.volume = s.volume * settings.music;
+            else
+                s.source.volume = s.volume * settings.sfx;
             s.source.pitch = s.pitch;
             s.source.loop = s.loop;
         }
@@ -41,5 +44,17 @@ public class AudioManager : MonoBehaviour
             return;
         }
         s.source.Play();
+    }
+
+    public void UpdateVolumes()
+    {
+        foreach (Sound s in sounds)
+        {
+            if (s.source == null) return;
+            if (s.isMusic)
+                s.source.volume = s.volume * settings.music;
+            else
+                s.source.volume = s.volume * settings.sfx;
+        }
     }
 }

@@ -15,4 +15,5 @@ public class Sound
     public AudioSource source;
 
     public bool loop;
+    public bool isMusic; //if this is false, then it is a SFX
 }
