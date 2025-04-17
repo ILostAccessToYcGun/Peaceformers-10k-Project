@@ -65,24 +65,17 @@ public class ResourceNode : MonoBehaviour
                     int spawnedStackAmount = Random.Range(1, resourceCount - resourceCountReleased + 1); //can be optimized
                     newWorldItem.InitializeWorldObject(spawnedStackAmount);
 
-
                     resourceCountReleased += spawnedStackAmount;
                     nodeReleaseTimer = nodeReleaseDelay;
                 }
                 else
-                {
                     nodeReleaseTimer -= Time.deltaTime;
-                }
             }
             else
             {
                 --md.nodesAlive;
                 Destroy(gameObject);
             }
-            
-
         }
-
-        
     }
 }

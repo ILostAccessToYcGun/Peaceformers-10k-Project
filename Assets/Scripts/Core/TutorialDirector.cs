@@ -660,7 +660,8 @@ public class TutorialDirector : MonoBehaviour
     public void StartGame()
     {
         MoveTutorialScreen(startGame, offPos);
-        tutoNode.SetActive(false);
+        if (tutoNode != null)
+            tutoNode.SetActive(false);
         playerInv.ClearInventory();
         player.ResetPos();
         gun.ResetAmmo();
@@ -723,7 +724,7 @@ public class TutorialDirector : MonoBehaviour
             qg.AddQuestToGiver(tutoQuest);
         }
         else
-            StartGame();
+            Invoke("StartGame", 0.01f);
 
 
     }

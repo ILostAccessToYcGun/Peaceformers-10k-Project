@@ -1,4 +1,6 @@
+using Mono.Cecil;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using static QuestBoard;
@@ -27,6 +29,10 @@ public class QuestGiver : MonoBehaviour
     [SerializeField] QuestObject baseQuestObject;
 
     [SerializeField] PlayerUIToggler playerUIToggler;
+
+    [SerializeField] GameObject ammo;
+    [SerializeField] int ammoReleased;
+    [SerializeField] int ammoLimit;
 
     public void AddQuestToGiver(QuestObject newObject = null)
     {   
@@ -73,9 +79,20 @@ public class QuestGiver : MonoBehaviour
             case RemoveType.Hand_In:
                 if ((float)removeObject.GetResourceCount() / (float)removeObject.GetResourceRequirement() > 0f)
                 {
-                    currentSettlement.GainMeter(removeObject.GetUpKeepGain() * removeObject.GetResourceCount() / removeObject.GetResourceRequirement());
+
+                    float completePercent = (float)removeObject.GetResourceCount() / (float)removeObject.GetResourceRequirement();
+
+                    ammoLimit = Mathf.CeilToInt(60f * completePercent);
+                    Debug.Log(ammoLimit);
+                    StartCoroutine(GiveAmmo());
+
+                    currentSettlement.GainMeter(removeObject.GetUpKeepGain() * completePercent);
                     quests.Remove(removeObject);
                     //Destroy(removeObject); //huh 
+
+                    //spit out ammo scaling with the comepletion percentage
+
+                    
                 }
                 else
                 {
@@ -112,6 +129,28 @@ public class QuestGiver : MonoBehaviour
         }
             
     }
+
+    IEnumerator GiveAmmo()
+    {
+        Vector3 playerPos = FindAnyObjectByType<PlayerMovement>().transform.position;
+        while (ammoReleased < ammoLimit)
+        {
+            GameObject newDroppedItem = Instantiate(ammo.gameObject, playerPos + new Vector3(0, 5f, 0), transform.rotation);
+            WorldItem newWorldItem = newDroppedItem.GetComponent<WorldItem>();
+
+            int spawnedStackAmount = Random.Range(1, ammoLimit - ammoReleased + 1); //can be optimized
+            newWorldItem.InitializeWorldObject(spawnedStackAmount);
+
+            ammoReleased += spawnedStackAmount;
+
+            yield return new WaitForSeconds(0.4f);
+        }
+
+        ammoReleased = 0;
+
+    }
+
+
 
     private void Start()
     {
