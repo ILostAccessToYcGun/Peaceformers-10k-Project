@@ -18,6 +18,11 @@ public class Options : MonoBehaviour
     public Settings settings;
     public AudioManager audioManager;
 
+    public void Awake()
+    {
+        audioManager = GameObject.FindObjectOfType<AudioManager>();
+    }
+
 
     public void FullScreen()
     {
