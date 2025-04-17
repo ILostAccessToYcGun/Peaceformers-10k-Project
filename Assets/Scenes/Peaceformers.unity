@@ -2599,7 +2599,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &155447951
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7703,6 +7703,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 429828249}
   m_CullTransparentMesh: 1
+--- !u!114 &430374112 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6888968492099206291, guid: 1363d539c8509554f99d94f67c68bc10, type: 3}
+  m_PrefabInstance: {fileID: 2066458995}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31fd5b1aad457c44db6fa5b87fd15e65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &431790267
 GameObject:
   m_ObjectHideFlags: 0
@@ -9297,6 +9308,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &534305674 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7863422580253388187, guid: bf8c4fb62afe38d4db149df832edebb5, type: 3}
+  m_PrefabInstance: {fileID: 8240146831281584169}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b2bd24bcf082ed4ab9771a54aaefd5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &537790595
 GameObject:
   m_ObjectHideFlags: 0
@@ -21755,9 +21777,9 @@ RectTransform:
   - {fileID: 22893019}
   m_Father: {fileID: 865860179}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 150, y: -50}
   m_SizeDelta: {x: 300, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1188601806
@@ -27047,9 +27069,9 @@ RectTransform:
   - {fileID: 850209065}
   m_Father: {fileID: 865860179}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 950, y: -50}
   m_SizeDelta: {x: 300, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1526777606
@@ -29113,18 +29135,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1001539039}
-        m_TargetAssemblyTypeName: PlayerBattery, Assembly-CSharp
-        m_MethodName: GainBattery
-        m_Mode: 4
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 222
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &1608145831
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30296,6 +30306,7 @@ MonoBehaviour:
   ed: {fileID: 0}
   ui: {fileID: 0}
   up: {fileID: 0}
+  bt: {fileID: 0}
   updateTime: 0
   twelveHourClock: 0
   time: 0
@@ -31970,9 +31981,9 @@ RectTransform:
   - {fileID: 1800785570}
   m_Father: {fileID: 865860179}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 550, y: -50}
   m_SizeDelta: {x: 300, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1747216921
@@ -36225,7 +36236,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1972416445
 RectTransform:
   m_ObjectHideFlags: 0
@@ -38076,6 +38087,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: AudioManager
       objectReference: {fileID: 0}
+    - target: {fileID: 6888968492099206291, guid: 1363d539c8509554f99d94f67c68bc10, type: 3}
+      propertyPath: settings
+      value: 
+      objectReference: {fileID: 534305674}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -41885,6 +41900,14 @@ PrefabInstance:
     - target: {fileID: 885793826949793588, guid: bf8c4fb62afe38d4db149df832edebb5, type: 3}
       propertyPath: m_Name
       value: Settings
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863422580253388187, guid: bf8c4fb62afe38d4db149df832edebb5, type: 3}
+      propertyPath: audioManager
+      value: 
+      objectReference: {fileID: 430374112}
+    - target: {fileID: 7863422580253388187, guid: bf8c4fb62afe38d4db149df832edebb5, type: 3}
+      propertyPath: playTutorial
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8818954983714545536, guid: bf8c4fb62afe38d4db149df832edebb5, type: 3}
       propertyPath: m_LocalPosition.x
