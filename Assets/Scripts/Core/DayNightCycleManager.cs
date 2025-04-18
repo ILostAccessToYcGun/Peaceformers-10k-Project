@@ -28,7 +28,7 @@ public class DayNightCycleManager : MonoBehaviour
     [Space]
     [Header("Time")]
     [SerializeField] bool updateTime = true;
-    [SerializeField] twelveHour twelveHourClock = twelveHour.AM;
+    [SerializeField] public twelveHour twelveHourClock = twelveHour.AM;
     [SerializeField] float time;
     [SerializeField] float totalTime;
     [SerializeField] public int hour = 6;

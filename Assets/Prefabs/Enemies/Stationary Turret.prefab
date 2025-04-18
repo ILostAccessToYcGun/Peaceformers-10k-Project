@@ -104,6 +104,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ed: {fileID: 0}
   healthBar: {fileID: 3966007659544706363}
+  md: {fileID: 0}
   modelTransform: {fileID: 5140852886422253725}
   shootingPoints:
   - {fileID: 606029580797111747}
@@ -111,17 +112,25 @@ MonoBehaviour:
   bulletTrailMaterial: {fileID: 2100000, guid: 00e59bddd4cf1eb409be6f48b2ba4233, type: 2}
   muzzleFlash: {fileID: 100008, guid: 2580b1fe15543884aaf8621b6080330a, type: 3}
   bulletPrefab: {fileID: 7141802491186774219, guid: 3dfb1062e4a35f54c9df97167bff0018, type: 3}
-  target: {fileID: 0}
+  gameObjectToDestory: {fileID: 0}
+  parentSettlement: {fileID: 0}
+  enemyCamp: {fileID: 0}
+  targets: []
+  currentTarget: {fileID: 0}
   detectionRange: 20
   rotationSpeed: 10
   maxAmmo: 25
   currentAmmo: 0
   baseDmg: 1
-  bulletForce: 60
+  modDmg: 0
+  fireForce: 60
   timeBetweenShots: 0.1
   reloadTime: 3
   bulletSpread: 0.1
+  isReloading: 0
   alive: 1
+  isPrioSettlements: 0
+  isCampEnemy: 0
 --- !u!1 &4788418911674833517
 GameObject:
   m_ObjectHideFlags: 0
@@ -473,6 +482,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7667689206835063330, guid: a6442e5bdaf45494283be8778fa220e8, type: 3}
       propertyPath: maxHealth
+      value: 160
+      objectReference: {fileID: 0}
+    - target: {fileID: 7667689206835063330, guid: a6442e5bdaf45494283be8778fa220e8, type: 3}
+      propertyPath: M_maxHealth
       value: 160
       objectReference: {fileID: 0}
     - target: {fileID: 8884201070040849761, guid: a6442e5bdaf45494283be8778fa220e8, type: 3}
