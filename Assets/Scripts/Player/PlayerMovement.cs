@@ -37,6 +37,7 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
     [SerializeField] private Transform playerLegs;
     [SerializeField] private float legRotationSpeed = 8f;
     [SerializeField] private GameObject[] boostVisuals;
+    [SerializeField] private ParticleSystem[] boostParticles;
     [SerializeField] private float frequency = 5f;
     [SerializeField] private float scaleOffset = 0.05f;
     [SerializeField] private float baseScale = 0.95f;
@@ -203,12 +204,24 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
                 float scale = baseScale + Mathf.Sin(Time.time * frequency) * scaleOffset;
                 booster.transform.localScale = new Vector3(scale, scale, scale);
             }
+
+            foreach(ParticleSystem p in boostParticles)
+            {
+                if (!p.isPlaying)
+                    p.Play();
+            }
         }
         else
         {
             foreach (GameObject booster in boostVisuals)
             {
                 booster.SetActive(false);
+            }
+
+            foreach (ParticleSystem p in boostParticles)
+            {
+                if (p.isPlaying)
+                    p.Stop();
             }
         }
 
