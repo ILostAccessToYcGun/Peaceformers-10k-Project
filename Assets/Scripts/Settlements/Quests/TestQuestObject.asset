@@ -20,10 +20,11 @@ MonoBehaviour:
   correspondingSettlementQuestDisplayUI: {fileID: 0}
   state: 0
   resourceCount: 0
-  resourcesRequired: 2
+  resourcesRequired: 5
   completionPercentage: 0
-  desiredResourceName: 2
-  upKeepGain: 13.3
+  desiredResourceName: 0
+  upKeepGain: 15
   dayDue: 0
   timeDue: {x: 0, y: 0}
   description: 
+  isTuto: 0

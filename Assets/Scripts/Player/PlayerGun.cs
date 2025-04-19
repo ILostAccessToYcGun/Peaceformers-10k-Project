@@ -22,6 +22,7 @@ public class PlayerGun : MonoBehaviour
     [SerializeField] private Transform shootingPoint;
     [SerializeField] private Material bulletTrailMaterial;
     [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private ParticleSystem bulletSpit;
     [Space]
     [Header("Current Weapon")]
     [SerializeField] private int maxAmmo = 25;
@@ -179,6 +180,8 @@ public class PlayerGun : MonoBehaviour
         b.GetComponent<Rigidbody>().linearVelocity = direction * M_bulletForce;
         b.GetComponent<Bullet>().baseDmg = M_baseDmg;
         b.GetComponent<Bullet>().source = GetComponentInParent<PlayerMovement>().transform;
+
+        bulletSpit.Play();
 
         Destroy(b, 5f);
 
