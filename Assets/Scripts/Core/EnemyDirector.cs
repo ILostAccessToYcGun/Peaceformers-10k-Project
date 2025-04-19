@@ -48,12 +48,33 @@ public class EnemyDirector : MonoBehaviour
     public Vector3 CheckForValidSpawn(float radius = 10f)
     {
         RaycastHit hit;
-        whiteListMasks = LayerMask.GetMask("Ground");
-        bool rayHit = Physics.SphereCast(transform.position, radius, -transform.up, out hit, 100f, whiteListMasks);
+        LayerMask whiteListMasks = LayerMask.GetMask("Ground", "SpawnBlackList", "Default"); //i think this is a white list
+        bool rayHit = Physics.SphereCast(transform.position, radius, -transform.up, out hit, 400f, whiteListMasks);
         // Does the ray intersect any objects excluding the player layer
+        //if (rayHit)
+        //    return hit.point;
+        //return new Vector3(0, 100, 0);
+        if (hit.transform != null)
+        {
+            if (hit.transform.gameObject.layer == LayerMask.NameToLayer("SpawnBlackList") || hit.transform.gameObject.layer == LayerMask.NameToLayer("Default"))
+            {
+                return new Vector3(0, -1, 0);
+            }
+        }
+        else
+        {
+            return new Vector3(0, -1, 0);
+        }
+
         if (rayHit)
             return hit.point;
-        return new Vector3(0, 100, 0);
+
+        return new Vector3(0, -1, 0);
+
+
+
+
+
     }
 
     private void SelectRandomLocation()
@@ -63,9 +84,9 @@ public class EnemyDirector : MonoBehaviour
         {
             int posX = Random.Range(-600, 601);
             int posZ = Random.Range(-600, 601);
-            transform.position = new Vector3(posX, 25, posZ);
+            transform.position = new Vector3(posX, 200, posZ);
 
-            if (CheckForValidSpawn() != new Vector3(0, 100, 0))
+            if (CheckForValidSpawn() != new Vector3(0, -1, 0))
                 isValidLocation = true; break;
         }
     }
@@ -90,7 +111,7 @@ public class EnemyDirector : MonoBehaviour
     {
         GameObject randomEnemy = SelectRandomEnemy();
         Vector3 location = CheckForValidSpawn();
-        if (randomEnemy == null || location == new Vector3(0, 100, 0)) { return false; }
+        if (randomEnemy == null || location == new Vector3(0, -1, 0)) { return false; }
 
         GameObject newEnemy = Instantiate(randomEnemy, location, Quaternion.identity, enemyParent);
         if (enemyCamp != null)
