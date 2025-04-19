@@ -155,7 +155,7 @@ public class QuestObject : ScriptableObject
         RandomizeResource();
         RandomizeResourceRequirement(minResource, maxResource);
         RandomizeDayDue(3, 4);
-        RandomizeGain(10, 30);  
+        RandomizeGain(15, 30);  
         SetDescription(); //kinda pointless here
     }
 
@@ -203,7 +203,7 @@ public class QuestObject : ScriptableObject
         SetCalenderManager();
         if (!isTuto)
         {
-            SetUpQuest(1, 10);
+            SetUpQuest(5, 13);
         }
         
         
