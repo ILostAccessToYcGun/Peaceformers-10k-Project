@@ -93,6 +93,7 @@ public class StationaryEnemy : MonoBehaviour
                 --enemyCamp.GetComponent<EnemyCamp>().campEnemiesAlive;
             }
 
+            Debug.Log("Deade");
             md.SpawnNode(2, this.transform.position);
 
             Destroy((gameObjectToDestory != null ? gameObjectToDestory : this.gameObject));

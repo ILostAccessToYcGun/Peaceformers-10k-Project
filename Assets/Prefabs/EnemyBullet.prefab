@@ -158,6 +158,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseDmg: 0
+  source: {fileID: 0}
+  p: {fileID: 2616458621356047437, guid: 01b42e5a713089e41b71e7ad6e0daff7, type: 3}
 --- !u!54 &-5081816190590763258
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -48,6 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ed: {fileID: 0}
   healthBar: {fileID: 7803260804521373312}
+  md: {fileID: 0}
   modelTransform: {fileID: 472228054713533311}
   shootingPoints:
   - {fileID: 3619184829404240586}
@@ -56,6 +57,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 7141802491186774219, guid: 3dfb1062e4a35f54c9df97167bff0018, type: 3}
   gameObjectToDestory: {fileID: 6964937787662241260}
   parentSettlement: {fileID: 0}
+  enemyCamp: {fileID: 0}
   targets: []
   currentTarget: {fileID: 0}
   detectionRange: 30
@@ -64,13 +66,14 @@ MonoBehaviour:
   currentAmmo: 0
   baseDmg: 12
   modDmg: 0
-  bulletForce: 320
+  fireForce: 60
   timeBetweenShots: 2
   reloadTime: 4
   bulletSpread: 0.01
   isReloading: 0
-  isPrioSettlements: 1
   alive: 1
+  isPrioSettlements: 1
+  isCampEnemy: 0
 --- !u!1 &1669974749897174219
 GameObject:
   m_ObjectHideFlags: 0
@@ -873,6 +876,7 @@ MonoBehaviour:
   healthbarLoss: {fileID: 6004132725073480650}
   lossLerpSpeed: 2
   maxHealth: 400
+  M_maxHealth: 400
   goodHealthColor: {r: 1, g: 1, b: 1, a: 1}
   watchOutColor: {r: 0.9843138, g: 0.41960788, b: 0.1137255, a: 1}
   criticalColor: {r: 1, g: 0.25, b: 0.25, a: 1}
