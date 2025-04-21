@@ -146,6 +146,7 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
         pb = GetComponentInParent<PlayerBattery>();
 
         audioManager = GameObject.FindObjectOfType<AudioManager>();
+        audioManager.Play("Engine_Hum");
 
         M_walkSpeed = walkSpeed;
         M_sprintMultiplier = sprintMultiplier;
@@ -184,7 +185,6 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
         {
             _timeSinceJumpRequest = 0f;
         }
-
 
         _requestedSustainedJump = input.JumpSustain;
 

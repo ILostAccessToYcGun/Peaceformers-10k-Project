@@ -45,6 +45,8 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
+        GameObject.FindObjectOfType<AudioManager>().Play("Menu_Music");
+
         //if (check for save)
         //continueButton.interactable = false;
         //else

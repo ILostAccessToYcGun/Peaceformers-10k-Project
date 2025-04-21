@@ -27423,7 +27423,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Welcome to Arrival
+  m_text: Welcome, Gallant One
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f600ea7cbb052d74ea90e2f5d1d13414, type: 2}
   m_sharedMaterial: {fileID: 2474360421565255639, guid: f600ea7cbb052d74ea90e2f5d1d13414, type: 2}
@@ -30572,8 +30572,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: You are the guardian mech tasked with forming the peace between the settlements
-    during the harsh winter
+  m_text: 'Gallant One: Guardian Mech
+
+    Task: form peace between the settlements
+    preparing for the harsh winter'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f600ea7cbb052d74ea90e2f5d1d13414, type: 2}
   m_sharedMaterial: {fileID: 2474360421565255639, guid: f600ea7cbb052d74ea90e2f5d1d13414, type: 2}
@@ -38073,10 +38075,6 @@ PrefabInstance:
     - target: {fileID: 6818786718430069980, guid: 1363d539c8509554f99d94f67c68bc10, type: 3}
       propertyPath: m_Name
       value: AudioManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 6888968492099206291, guid: 1363d539c8509554f99d94f67c68bc10, type: 3}
-      propertyPath: sounds.Array.data[9].volume
-      value: 0.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

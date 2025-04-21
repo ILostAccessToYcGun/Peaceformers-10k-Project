@@ -116,3 +116,24 @@ MonoBehaviour:
     source: {fileID: 0}
     loop: 0
     isMusic: 0
+  - name: Engine_Hum
+    clip: {fileID: 8300000, guid: 5d0b374fd20c55340a8780d07bd67692, type: 3}
+    volume: 0.05
+    pitch: 1
+    source: {fileID: 0}
+    loop: 1
+    isMusic: 0
+  - name: Menu_Music
+    clip: {fileID: 8300000, guid: 5e6e03a6e7e1e65488dcd62fa9aec03e, type: 3}
+    volume: 0.2
+    pitch: 1
+    source: {fileID: 0}
+    loop: 1
+    isMusic: 1
+  - name: Game_Music
+    clip: {fileID: 8300000, guid: 1b04df9626844c44382d77cdbce113ac, type: 3}
+    volume: 0.2
+    pitch: 1
+    source: {fileID: 0}
+    loop: 1
+    isMusic: 1

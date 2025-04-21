@@ -357,5 +357,6 @@ public class DayNightCycleManager : MonoBehaviour
         //InitializeManger();
 
         GameObject.FindObjectOfType<AudioManager>().Play("Ambience");
+        GameObject.FindObjectOfType<AudioManager>().Play("Game_Music");
     }
 }
