@@ -9,8 +9,11 @@ public class PlayerHealthBar : Healthbar
     [SerializeField] public float M_damageToEnergyLoss;
     [SerializeField] public bool dead = false;
 
+    AudioManager audioManager;
+
     public override void Start()
     {
+        audioManager = GameObject.FindObjectOfType<AudioManager>();
         base.Start();
         M_damageToEnergyLoss = damageToEnergyLoss;
     }
@@ -25,6 +28,7 @@ public class PlayerHealthBar : Healthbar
         {
             if (!dead)
             {
+                audioManager.Play("Death_Base");
                 dead = true;
                 Debug.Log("die");
                 pb.dayNightCycleManager.EndDay();

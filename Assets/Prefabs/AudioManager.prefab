@@ -49,6 +49,69 @@ MonoBehaviour:
   - name: Shot
     clip: {fileID: 8300000, guid: f907dc8e60a328f4fbf233da67a728df, type: 3}
     volume: 0.3
+    pitch: 0.9
+    source: {fileID: 0}
+    loop: 0
+    isMusic: 0
+  - name: Dash
+    clip: {fileID: 8300000, guid: 8f50ff506c845a942ac111d047f2ad19, type: 3}
+    volume: 0.1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    isMusic: 0
+  - name: Death_Base
+    clip: {fileID: 8300000, guid: 000c4c665a4fb7b4ab6d646d9c115fcb, type: 3}
+    volume: 0.5
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    isMusic: 0
+  - name: Kill_Enemy
+    clip: {fileID: 8300000, guid: bf3459acbce76a04196d85b4007d266a, type: 3}
+    volume: 0.5
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    isMusic: 0
+  - name: Hit_Tree
+    clip: {fileID: 8300000, guid: a7a3b37dd09db454aac6998bbbb4b227, type: 3}
+    volume: 0.5
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    isMusic: 0
+  - name: Ambience
+    clip: {fileID: 8300000, guid: 047dc90472b673c47bca1a36cf479948, type: 3}
+    volume: 0.5
+    pitch: 1
+    source: {fileID: 0}
+    loop: 1
+    isMusic: 0
+  - name: Enemy_Fire
+    clip: {fileID: 8300000, guid: 3e0ef26a3c115ad4882e0842d83426fe, type: 3}
+    volume: 0.4
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    isMusic: 0
+  - name: UI_Click
+    clip: {fileID: 8300000, guid: 7dd456af834ab69409b469f532311e68, type: 3}
+    volume: 0.4
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    isMusic: 0
+  - name: Menu_Select
+    clip: {fileID: 8300000, guid: a52001ba05c7ae24bb7b3b4754a90668, type: 3}
+    volume: 0.4
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    isMusic: 0
+  - name: UI_Pop
+    clip: {fileID: 8300000, guid: 278e81eecc494c6499019fe9ad4a473d, type: 3}
+    volume: 0.05
     pitch: 1
     source: {fileID: 0}
     loop: 0

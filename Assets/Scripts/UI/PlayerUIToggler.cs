@@ -74,6 +74,7 @@ public class PlayerUIToggler : MonoBehaviour
 
     public void ToggleSettlementUI()
     {
+        GameObject.FindObjectOfType<AudioManager>().Play("UI_Pop");
         BackOutOfCurrentUI(0);
         if (settlementIsShowing)
             LeanTween.move(settlementUI, hiddenPos, timeToMove).setEase(LeanTweenType.easeOutCubic);
@@ -85,6 +86,7 @@ public class PlayerUIToggler : MonoBehaviour
 
     public void ToggleInventoryUI()
     {
+        GameObject.FindObjectOfType<AudioManager>().Play("UI_Pop");
         if (secondaryInventoryIsShowing)
         {
             LeanTween.move(secondaryInventoryUI, hiddenPos_Sinv, timeToMove).setEase(LeanTweenType.easeOutCubic);
@@ -113,6 +115,7 @@ public class PlayerUIToggler : MonoBehaviour
 
     public void ToggleSecondaryInventoryUI()
     {
+        GameObject.FindObjectOfType<AudioManager>().Play("UI_Pop");
         BackOutOfCurrentUI(2);
         if (secondaryInventoryIsShowing)
         {
@@ -133,6 +136,7 @@ public class PlayerUIToggler : MonoBehaviour
 
     public void ToggleInventoryUIs()
     {
+
         if (settlementIsShowing) { ToggleSettlementUI(); }
         if (playerQuestIsShowing) { TogglePlayerQuestUI(); }
         if (settlementQuestIsShowing) { ToggleSettlementQuestUI(); }
@@ -169,6 +173,7 @@ public class PlayerUIToggler : MonoBehaviour
 
     public void TogglePlayerQuestUI()
     {
+        GameObject.FindObjectOfType<AudioManager>().Play("UI_Pop");
         BackOutOfCurrentUI(3);
         if (playerQuestIsShowing)
         {
@@ -185,6 +190,7 @@ public class PlayerUIToggler : MonoBehaviour
 
     public void ToggleSettlementQuestUI()
     {
+        GameObject.FindObjectOfType<AudioManager>().Play("UI_Pop");
         BackOutOfCurrentUI(4);
 
         if (settlementQuestIsShowing)
@@ -204,7 +210,7 @@ public class PlayerUIToggler : MonoBehaviour
 
     public void TogglePauseUI()
     {
-        
+        GameObject.FindObjectOfType<AudioManager>().Play("UI_Pop");
         BackOutOfCurrentUI(5);
         
         if (pauseIsShowing)
@@ -226,6 +232,7 @@ public class PlayerUIToggler : MonoBehaviour
 
     public void ToggleOptionsUI()
     {
+        GameObject.FindObjectOfType<AudioManager>().Play("UI_Pop");
         BackOutOfCurrentUI(6);
 
         if (optionsIsShowing)

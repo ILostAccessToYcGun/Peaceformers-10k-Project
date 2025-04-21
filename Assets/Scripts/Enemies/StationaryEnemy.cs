@@ -49,6 +49,8 @@ public class StationaryEnemy : MonoBehaviour
     [SerializeField] public bool isPrioSettlements = false;
     [SerializeField] public bool isCampEnemy = false;
 
+    AudioManager audioManager;
+
     void Start()
     {
         ////currentTarget = FindAnyObjectByType<PlayerMovement>().transform;
@@ -59,7 +61,7 @@ public class StationaryEnemy : MonoBehaviour
         SetModDmg(ed.damageMultiplier);
         healthBar.SetMaxHealth(healthBar.GetMaxHealth() * ed.healthMultiplier);
         healthBar.ScaleUI(); //
-
+        audioManager = GameObject.FindObjectOfType<AudioManager>();
         targets = ed.targetList;
         if (isCampEnemy)
           ++enemyCamp.campEnemiesAlive;
@@ -94,6 +96,8 @@ public class StationaryEnemy : MonoBehaviour
             }
 
             md.SpawnNode(2, this.transform.position);
+
+            audioManager.Play("Kill_Enemy");
 
             Destroy((gameObjectToDestory != null ? gameObjectToDestory : this.gameObject));
         }
@@ -206,6 +210,8 @@ public class StationaryEnemy : MonoBehaviour
 
     private void FireBullet()
     {
+        GameObject.FindObjectOfType<AudioManager>().Play("Enemy_Fire");
+
         foreach (Transform barrel in shootingPoints)
         {
             Vector3 spread = new Vector3(

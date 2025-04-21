@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fullScreen: 0
-  sfx: 0
+  sfx: 0.5
   music: 0
   options: {fileID: 0}
+  audioManager: {fileID: 0}

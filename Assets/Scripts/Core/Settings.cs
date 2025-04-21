@@ -7,9 +7,9 @@ public class Settings : MonoBehaviour
     public bool fullScreen;
 
     [Range(0f, 1f)]
-    public float sfx;
+    public float sfx = 0.5f;
     [Range(0f, 1f)]
-    public float music;
+    public float music = 0.5f;
 
     public Options options;
     public AudioManager audioManager;

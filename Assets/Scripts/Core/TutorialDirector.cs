@@ -465,6 +465,7 @@ public class TutorialDirector : MonoBehaviour
     public void AdvanceTutorial()
     {
         //this should increment the index by 1 and then perform actions based on what index we are at
+        GameObject.FindObjectOfType<AudioManager>().Play("UI_Click");
 
         switch (tutoIndex)
         {

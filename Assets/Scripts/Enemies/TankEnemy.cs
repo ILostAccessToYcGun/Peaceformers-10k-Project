@@ -37,10 +37,12 @@ public class TankEnemy : MonoBehaviour, ICharacterController
     [SerializeField] public EnemyDirector ed;
     [SerializeField] private GameObject parentSettlement;
 
+    AudioManager audioManager;
+
     void Start()
     {
         //player = FindAnyObjectByType<PlayerMovement>().transform;
-
+        audioManager = GameObject.FindObjectOfType<AudioManager>();
         ed = FindAnyObjectByType<EnemyDirector>();
         //destination = transform.position;
         motor.CharacterController = this;
