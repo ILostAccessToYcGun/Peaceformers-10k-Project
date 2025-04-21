@@ -19,6 +19,7 @@ public class StationaryEnemy : MonoBehaviour
     [SerializeField] private GameObject gameObjectToDestory;
     [SerializeField] public GameObject parentSettlement;
     [SerializeField] public EnemyCamp enemyCamp;
+    [SerializeField] ParticleSystem[] bulletSpit;
     [Space]
     [Header("Detection")]
     [SerializeField] private List<Transform> targets;
@@ -226,6 +227,11 @@ public class StationaryEnemy : MonoBehaviour
             b.GetComponent<Rigidbody>().linearVelocity = barrel.right * fireForce;
             b.GetComponent<Bullet>().baseDmg = modDmg;
             b.GetComponent<Bullet>().source = transform;
+
+            if (barrel == shootingPoints[0])
+                bulletSpit[0].Play();
+            else
+                bulletSpit[1].Play();
 
             Destroy(b, 5f);
 

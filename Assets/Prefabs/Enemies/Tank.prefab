@@ -58,6 +58,8 @@ MonoBehaviour:
   gameObjectToDestory: {fileID: 6964937787662241260}
   parentSettlement: {fileID: 0}
   enemyCamp: {fileID: 0}
+  bulletSpit:
+  - {fileID: 1843408026325367965}
   targets: []
   currentTarget: {fileID: 0}
   detectionRange: 30
@@ -260,6 +262,7 @@ Transform:
   m_Children:
   - {fileID: 3680510674098624147}
   - {fileID: 3619184829404240586}
+  - {fileID: 5105048651072568986}
   m_Father: {fileID: 1122169181169961168}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3076118870750862366
@@ -880,3 +883,70 @@ MonoBehaviour:
   goodHealthColor: {r: 1, g: 1, b: 1, a: 1}
   watchOutColor: {r: 0.9843138, g: 0.41960788, b: 0.1137255, a: 1}
   criticalColor: {r: 1, g: 0.25, b: 0.25, a: 1}
+--- !u!1001 &5362978150302889947
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 472228054713533311}
+    m_Modifications:
+    - target: {fileID: 915891562216966465, guid: 5abdc633607bd854aa2c43ee0c1b40fc, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 915891562216966465, guid: 5abdc633607bd854aa2c43ee0c1b40fc, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.45
+      objectReference: {fileID: 0}
+    - target: {fileID: 915891562216966465, guid: 5abdc633607bd854aa2c43ee0c1b40fc, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.961
+      objectReference: {fileID: 0}
+    - target: {fileID: 915891562216966465, guid: 5abdc633607bd854aa2c43ee0c1b40fc, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 915891562216966465, guid: 5abdc633607bd854aa2c43ee0c1b40fc, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 915891562216966465, guid: 5abdc633607bd854aa2c43ee0c1b40fc, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 915891562216966465, guid: 5abdc633607bd854aa2c43ee0c1b40fc, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 915891562216966465, guid: 5abdc633607bd854aa2c43ee0c1b40fc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 915891562216966465, guid: 5abdc633607bd854aa2c43ee0c1b40fc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 915891562216966465, guid: 5abdc633607bd854aa2c43ee0c1b40fc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6313729995482173172, guid: 5abdc633607bd854aa2c43ee0c1b40fc, type: 3}
+      propertyPath: m_Name
+      value: BulletSpit
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5abdc633607bd854aa2c43ee0c1b40fc, type: 3}
+--- !u!198 &1843408026325367965 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6050649750448245574, guid: 5abdc633607bd854aa2c43ee0c1b40fc, type: 3}
+  m_PrefabInstance: {fileID: 5362978150302889947}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5105048651072568986 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 915891562216966465, guid: 5abdc633607bd854aa2c43ee0c1b40fc, type: 3}
+  m_PrefabInstance: {fileID: 5362978150302889947}
+  m_PrefabAsset: {fileID: 0}

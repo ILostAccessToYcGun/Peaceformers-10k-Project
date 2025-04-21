@@ -45,7 +45,7 @@ public class EnemyCamp : MonoBehaviour
                     }
                     else
                     {
-                        if (ed.CheckForValidSpawn(2f) == new Vector3(0, 100, 0))
+                        if (ed.CheckForValidSpawn(2f) == new Vector3(0, -1, 0))
                             ++spawnAttemps;
                         else
                         {

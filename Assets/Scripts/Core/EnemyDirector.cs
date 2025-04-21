@@ -107,10 +107,10 @@ public class EnemyDirector : MonoBehaviour
         return randomEnemySelection[choice];
     }
 
-    public bool SpawnEnemy(EnemyCamp enemyCamp = null)
+    public bool SpawnEnemy(EnemyCamp enemyCamp = null, float radius = 10f)
     {
         GameObject randomEnemy = SelectRandomEnemy();
-        Vector3 location = CheckForValidSpawn();
+        Vector3 location = CheckForValidSpawn(radius);
         if (randomEnemy == null || location == new Vector3(0, -1, 0)) { return false; }
 
         GameObject newEnemy = Instantiate(randomEnemy, location, Quaternion.identity, enemyParent);
