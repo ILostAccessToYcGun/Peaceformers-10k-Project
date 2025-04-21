@@ -261,6 +261,7 @@ MonoBehaviour:
   nodeMaxHealth: 120
   nodeReleaseDelay: 0.5
   md: {fileID: 0}
+  canvas: {fileID: 7662970176791130181}
 --- !u!1 &4775773403124767851
 GameObject:
   m_ObjectHideFlags: 0
