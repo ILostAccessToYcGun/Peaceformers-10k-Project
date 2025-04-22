@@ -198,6 +198,10 @@ public class PlayerGun : MonoBehaviour
             StartCoroutine(CreateBulletTrail(muzzlePoint.position + direction * M_range)); 
         }
 
+        if (audioManager == null)
+        {
+            audioManager = FindAnyObjectByType<AudioManager>();
+        }
         audioManager.Play("Shot");
         pb.LoseBattery(0.05f);
     }
