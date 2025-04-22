@@ -22,7 +22,7 @@ public class Options : MonoBehaviour
 
     public void Awake()
     {
-        audioManager = GameObject.FindObjectOfType<AudioManager>();
+        audioManager = GameObject.FindAnyObjectByType<AudioManager>();
     }
 
 

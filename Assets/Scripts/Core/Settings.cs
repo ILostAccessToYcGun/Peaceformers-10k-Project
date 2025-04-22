@@ -46,6 +46,11 @@ public class Settings : MonoBehaviour
         options.audioManager = audioManager;
 
         UpdateSettingsUI();
+
+        if (scene.name == "MainMenu")
+        {
+            playTutorial = true;
+        }
     }
 
     private void OnEnable()
