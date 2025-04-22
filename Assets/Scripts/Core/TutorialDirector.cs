@@ -725,7 +725,7 @@ public class TutorialDirector : MonoBehaviour
             qg.AddQuestToGiver(tutoQuest);
         }
         else
-            Invoke("StartGame", 0.1f);
+            Invoke("StartGame", 0.5f);
 
 
     }

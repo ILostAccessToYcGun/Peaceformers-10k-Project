@@ -2,6 +2,7 @@ using UnityEngine;
 using KinematicCharacterController;
 using UnityEngine.UI;
 using System.Collections;
+using Unity.VisualScripting;
 
 
 public struct CharacterState
@@ -145,6 +146,7 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
 
         motor.CharacterController = this;
         pb = GetComponentInParent<PlayerBattery>();
+
 
         audioManager = FindAnyObjectByType<AudioManager>();
         audioManager.Play("Engine_Hum");
@@ -413,6 +415,10 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
                 _requestedDash = false;
                 pb.LoseBattery(M_dashBoostLoss * 0.025f);
 
+                if (audioManager == null)
+                {
+                    audioManager = FindAnyObjectByType<AudioManager>();
+                }
                 audioManager.Play("Dash");
 
                 var dashDirection = _requestedMovement.normalized;
