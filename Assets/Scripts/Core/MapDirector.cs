@@ -73,7 +73,8 @@ public class MapDirector : MonoBehaviour
         Vector3 location = CheckForValidSpawn();
         if (randomNode == null || location == new Vector3(0, -1, 0)) { return false; }
 
-        GameObject newNode = Instantiate(randomNode, location, Quaternion.identity, nodeParent);
+        float rot = Random.Range(0f, 359.9f);
+        GameObject newNode = Instantiate(randomNode, location, Quaternion.AngleAxis(rot, transform.up), nodeParent);
 
         currentSpawnAttempts = 0;
         return true;
@@ -84,7 +85,8 @@ public class MapDirector : MonoBehaviour
         GameObject randomNode = resourceNodeSelection[node];
         if (randomNode == null || location == new Vector3(0, -1, 0)) { return false; }
 
-        GameObject newNode = Instantiate(randomNode, location, Quaternion.identity, nodeParent);
+        float rot = Random.Range(0f, 359.9f);
+        GameObject newNode = Instantiate(randomNode, location, Quaternion.AngleAxis(rot, transform.up), nodeParent);
 
         currentSpawnAttempts = 0;
         return true;
@@ -137,7 +139,8 @@ public class MapDirector : MonoBehaviour
         Vector3 location = CheckForValidSpawn();
         if (randomCamp == null || location == new Vector3(0, -1, 0)) { return false; }
 
-        GameObject newCamp = Instantiate(randomCamp, location, Quaternion.identity);
+        float rot = Random.Range(0f, 359.9f);
+        GameObject newCamp = Instantiate(randomCamp, location, Quaternion.AngleAxis(rot, transform.up));
 
         currentSpawnAttempts = 0;
         return true;

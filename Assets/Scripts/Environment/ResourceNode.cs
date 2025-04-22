@@ -18,6 +18,8 @@ public class ResourceNode : MonoBehaviour
     [Space]
     [Header("Other Objects")]
     [SerializeField] MapDirector md;
+    [SerializeField] GameObject canvas;
+
 
 
 
@@ -39,6 +41,8 @@ public class ResourceNode : MonoBehaviour
         if (resourceCount == 0)
             RandomizeResourceCount(7, 14);
         SetResourceNodeTitle(resourceType.GetComponent<WorldItem>().inventoryItem.itemName.ToString() + " Node");
+
+        canvas.transform.rotation = Quaternion.identity;
     }
 
     private void Start()

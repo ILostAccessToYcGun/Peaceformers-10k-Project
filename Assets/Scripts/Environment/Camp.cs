@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 public class Camp : BaseInteractable
 {
     [SerializeField] private GameObject campPrompt;
+    [SerializeField] private PlayerUIToggler ui;
 
     protected override void Update()
     {
@@ -14,8 +15,17 @@ public class Camp : BaseInteractable
 
     protected override void OpenPrompt()
     {
-        print("Open camp prompt");
-        campPrompt.SetActive(true);
+        if (campPrompt.activeSelf == true)
+        {
+            ClosePrompt();
+            ui.SetUIOpenBool(false);
+        }
+        else
+        {
+            print("Open camp prompt");
+            campPrompt.SetActive(true);
+            ui.SetUIOpenBool(true);
+        }
     }
 
     public void ClosePrompt()
