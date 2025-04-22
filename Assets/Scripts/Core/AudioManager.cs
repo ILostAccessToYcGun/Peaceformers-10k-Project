@@ -19,7 +19,7 @@ public class AudioManager : MonoBehaviour
             return;
         }
 
-        settings = GameObject.FindObjectOfType<Settings>();
+        settings = GameObject.FindAnyObjectByType<Settings>();
 
         DontDestroyOnLoad(gameObject);
 
@@ -45,8 +45,14 @@ public class AudioManager : MonoBehaviour
             Debug.LogWarning("Sound " + name + " was not found!");
             return;
         }
-        Debug.Log(s.source.volume);
-        s.source.Play();
+        Debug.Log(name);
+
+        if (s.source != null)
+            s.source.Play();
+        else
+            Invoke("s.source.Play", 0.1f);
+
+
     }
 
     public void UpdateVolumes()

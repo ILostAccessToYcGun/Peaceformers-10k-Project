@@ -126,7 +126,7 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
     [SerializeField] public float M_sprintBoostLoss;
     [SerializeField] public float M_jumpBoostLoss;
 
-    AudioManager audioManager;
+    [SerializeField] AudioManager audioManager;
 
     public void ResetPos()
     {
@@ -146,7 +146,7 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
         motor.CharacterController = this;
         pb = GetComponentInParent<PlayerBattery>();
 
-        audioManager = GameObject.FindObjectOfType<AudioManager>();
+        audioManager = FindAnyObjectByType<AudioManager>();
         audioManager.Play("Engine_Hum");
 
         M_walkSpeed = walkSpeed;

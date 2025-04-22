@@ -13,7 +13,7 @@ public class PlayerHealthBar : Healthbar
 
     public override void Start()
     {
-        audioManager = GameObject.FindObjectOfType<AudioManager>();
+        audioManager = GameObject.FindAnyObjectByType<AudioManager>();
         base.Start();
         M_damageToEnergyLoss = damageToEnergyLoss;
     }

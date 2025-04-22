@@ -42,7 +42,7 @@ public class TankEnemy : MonoBehaviour, ICharacterController
     void Start()
     {
         //player = FindAnyObjectByType<PlayerMovement>().transform;
-        audioManager = GameObject.FindObjectOfType<AudioManager>();
+        audioManager = GameObject.FindAnyObjectByType<AudioManager>();
         ed = FindAnyObjectByType<EnemyDirector>();
         //destination = transform.position;
         motor.CharacterController = this;

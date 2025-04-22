@@ -71,7 +71,7 @@ public class PlayerGun : MonoBehaviour
     {
         currentAmmo = maxAmmo;
         pb = GetComponentInParent<PlayerBattery>();
-        audioManager = GameObject.FindObjectOfType<AudioManager>();
+        audioManager = GameObject.FindAnyObjectByType<AudioManager>();
         ResetStats();
     }
 
