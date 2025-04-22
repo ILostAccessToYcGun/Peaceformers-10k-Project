@@ -60,6 +60,8 @@ public class PlayerGun : MonoBehaviour
     [SerializeField] private Inventory ammoInventory;
     [SerializeField] private Item ammo;
 
+    AudioManager audioManager;
+
     public void ResetAmmo()
     {
         currentAmmo = maxAmmo;
@@ -69,6 +71,7 @@ public class PlayerGun : MonoBehaviour
     {
         currentAmmo = maxAmmo;
         pb = GetComponentInParent<PlayerBattery>();
+        audioManager = GameObject.FindObjectOfType<AudioManager>();
         ResetStats();
     }
 
@@ -195,6 +198,7 @@ public class PlayerGun : MonoBehaviour
             StartCoroutine(CreateBulletTrail(muzzlePoint.position + direction * M_range)); 
         }
 
+        audioManager.Play("Shot");
         pb.LoseBattery(0.05f);
     }
 

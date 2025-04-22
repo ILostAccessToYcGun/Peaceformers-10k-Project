@@ -126,6 +126,7 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
     [SerializeField] public float M_sprintBoostLoss;
     [SerializeField] public float M_jumpBoostLoss;
 
+    AudioManager audioManager;
 
     public void ResetPos()
     {
@@ -145,7 +146,8 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
         motor.CharacterController = this;
         pb = GetComponentInParent<PlayerBattery>();
 
-
+        audioManager = GameObject.FindObjectOfType<AudioManager>();
+        audioManager.Play("Engine_Hum");
 
         M_walkSpeed = walkSpeed;
         M_sprintMultiplier = sprintMultiplier;
@@ -184,7 +186,6 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
         {
             _timeSinceJumpRequest = 0f;
         }
-
 
         _requestedSustainedJump = input.JumpSustain;
 
@@ -412,6 +413,7 @@ public class PlayerMovement : MonoBehaviour, ICharacterController
                 _requestedDash = false;
                 pb.LoseBattery(M_dashBoostLoss * 0.025f);
 
+                audioManager.Play("Dash");
 
                 var dashDirection = _requestedMovement.normalized;
 

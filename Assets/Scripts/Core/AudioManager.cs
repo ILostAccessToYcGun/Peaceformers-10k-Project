@@ -19,6 +19,8 @@ public class AudioManager : MonoBehaviour
             return;
         }
 
+        settings = GameObject.FindObjectOfType<Settings>();
+
         DontDestroyOnLoad(gameObject);
 
         foreach(Sound s in sounds)
@@ -43,6 +45,7 @@ public class AudioManager : MonoBehaviour
             Debug.LogWarning("Sound " + name + " was not found!");
             return;
         }
+        Debug.Log(s.source.volume);
         s.source.Play();
     }
 

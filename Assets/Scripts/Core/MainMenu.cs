@@ -45,6 +45,8 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
+        GameObject.FindObjectOfType<AudioManager>().Play("Menu_Music");
+
         //if (check for save)
         //continueButton.interactable = false;
         //else
@@ -58,6 +60,8 @@ public class MainMenu : MonoBehaviour
         //ToggleOverwriteSave();
         //ToggleTitle();
         //else
+        GameObject.FindObjectOfType<AudioManager>().Play("Menu_Select");
+
         fade.SetActive(true);
         LeanTween.value(fade, 0, 1f, 1.5f).setOnUpdate((float val) =>
         {
@@ -71,12 +75,14 @@ public class MainMenu : MonoBehaviour
 
     public void StartGame()
     {
+        GameObject.FindObjectOfType<AudioManager>().Play("Menu_Select");
         Time.timeScale = 1f;
         SceneManager.LoadScene(1);
     }
 
     public void ReturnToMainMenu()
     {
+        GameObject.FindObjectOfType<AudioManager>().Play("Menu_Select");
         Time.timeScale = 1f;
         SceneManager.LoadScene(0);
     }
@@ -113,6 +119,7 @@ public class MainMenu : MonoBehaviour
 
     public void ExitYes()
     {
+        GameObject.FindObjectOfType<AudioManager>().Play("Menu_Select");
         Application.Quit();
             Debug.Log("Quit");
     }
@@ -121,6 +128,7 @@ public class MainMenu : MonoBehaviour
 
     public void ToggleTitle()
     {
+        GameObject.FindObjectOfType<AudioManager>().Play("Menu_Select");
         if (titleIsShowing)
             LeanTween.move(titlePanel, T_hiddenPos, 0.5f).setEase(LeanTweenType.easeOutCubic);
         else
@@ -131,6 +139,7 @@ public class MainMenu : MonoBehaviour
 
     public void ToggleExitConfirm()
     {
+        GameObject.FindObjectOfType<AudioManager>().Play("Menu_Select");
         T_hiddenPos = -E_hiddenPos;
         if (exitConfirmIsShowing)
             LeanTween.move(exitConfirmPanel, E_hiddenPos, 0.5f).setEase(LeanTweenType.easeOutCubic);
@@ -142,6 +151,7 @@ public class MainMenu : MonoBehaviour
 
     public void ToggleOptions()
     {
+        GameObject.FindObjectOfType<AudioManager>().Play("Menu_Select");
         T_hiddenPos = -O_hiddenPos;
         if (optionsIsShowing)
             LeanTween.move(optionsPanel, O_hiddenPos, 0.5f).setEase(LeanTweenType.easeOutCubic);
@@ -153,6 +163,7 @@ public class MainMenu : MonoBehaviour
 
     public void ToggleCredits()
     {
+        GameObject.FindObjectOfType<AudioManager>().Play("Menu_Select");
         T_hiddenPos = -C_hiddenPos;
         if (creditsIsShowing)
             LeanTween.move(creditsPanel, C_hiddenPos, 0.5f).setEase(LeanTweenType.easeOutCubic);
@@ -164,6 +175,7 @@ public class MainMenu : MonoBehaviour
 
     public void ToggleOverwriteSave()
     {
+        GameObject.FindObjectOfType<AudioManager>().Play("Menu_Select");
         T_hiddenPos = -W_hiddenPos;
         if (overwriteIsShowing)
             LeanTween.move(overwritePanel, W_hiddenPos, 0.5f).setEase(LeanTweenType.easeOutCubic);

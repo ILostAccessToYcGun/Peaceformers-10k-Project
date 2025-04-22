@@ -372,7 +372,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Departure
+  m_text: Gallant One
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ebcf30964bc8fdd4d8255b662e39a350, type: 2}
   m_sharedMaterial: {fileID: 5627060112372618412, guid: ebcf30964bc8fdd4d8255b662e39a350, type: 2}
@@ -1368,54 +1368,6 @@ PrefabInstance:
     - target: {fileID: 6818786718430069980, guid: 1363d539c8509554f99d94f67c68bc10, type: 3}
       propertyPath: m_Name
       value: AudioManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 6888968492099206291, guid: 1363d539c8509554f99d94f67c68bc10, type: 3}
-      propertyPath: settings
-      value: 
-      objectReference: {fileID: 1493911386}
-    - target: {fileID: 6888968492099206291, guid: 1363d539c8509554f99d94f67c68bc10, type: 3}
-      propertyPath: sounds.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6888968492099206291, guid: 1363d539c8509554f99d94f67c68bc10, type: 3}
-      propertyPath: sounds.Array.data[0].clip
-      value: 
-      objectReference: {fileID: 8300000, guid: 62814af8d7a5c974da6c4e80d1666f56, type: 3}
-    - target: {fileID: 6888968492099206291, guid: 1363d539c8509554f99d94f67c68bc10, type: 3}
-      propertyPath: sounds.Array.data[0].name
-      value: oof
-      objectReference: {fileID: 0}
-    - target: {fileID: 6888968492099206291, guid: 1363d539c8509554f99d94f67c68bc10, type: 3}
-      propertyPath: sounds.Array.data[1].clip
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6888968492099206291, guid: 1363d539c8509554f99d94f67c68bc10, type: 3}
-      propertyPath: sounds.Array.data[1].name
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6888968492099206291, guid: 1363d539c8509554f99d94f67c68bc10, type: 3}
-      propertyPath: sounds.Array.data[0].pitch
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6888968492099206291, guid: 1363d539c8509554f99d94f67c68bc10, type: 3}
-      propertyPath: sounds.Array.data[1].pitch
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6888968492099206291, guid: 1363d539c8509554f99d94f67c68bc10, type: 3}
-      propertyPath: sounds.Array.data[0].volume
-      value: 0.524
-      objectReference: {fileID: 0}
-    - target: {fileID: 6888968492099206291, guid: 1363d539c8509554f99d94f67c68bc10, type: 3}
-      propertyPath: sounds.Array.data[1].volume
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6888968492099206291, guid: 1363d539c8509554f99d94f67c68bc10, type: 3}
-      propertyPath: sounds.Array.data[0].isMusic
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6888968492099206291, guid: 1363d539c8509554f99d94f67c68bc10, type: 3}
-      propertyPath: sounds.Array.data[1].isMusic
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5308,11 +5260,44 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'The B-Listers
+  m_text: '| The B-Listers |
 
     Ethan "Bambi" Davis
 
-    Yoga Gunawan'
+    Yoga Gunawan
+
+
+    | Music
+    |
+
+    Filaments - Scott Buckley
+
+    Ephemera - Scott Buckley
+
+
+    | SFX |
+
+    UnderPixel1475
+
+    Ahmed_Abdulaal
+
+    freesound_community
+
+    u_xjrmmgxfru
+
+    Traian1984
+
+    adh.dreaming
+
+    R0T0R
+
+    floraphonic
+
+    joseegn
+
+    zimbot
+
+    qubodup'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ebcf30964bc8fdd4d8255b662e39a350, type: 2}
   m_sharedMaterial: {fileID: 5627060112372618412, guid: ebcf30964bc8fdd4d8255b662e39a350, type: 2}
@@ -5339,8 +5324,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 5
-  m_fontSizeBase: 5
+  m_fontSize: 2
+  m_fontSizeBase: 2
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -6163,17 +6148,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1441068995}
   m_CullTransparentMesh: 1
---- !u!114 &1493911386 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7863422580253388187, guid: bf8c4fb62afe38d4db149df832edebb5, type: 3}
-  m_PrefabInstance: {fileID: 1992879761}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b2bd24bcf082ed4ab9771a54aaefd5e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1501553839
 GameObject:
   m_ObjectHideFlags: 0

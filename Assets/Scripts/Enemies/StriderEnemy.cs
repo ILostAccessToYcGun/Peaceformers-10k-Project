@@ -30,8 +30,11 @@ public class StriderEnemy : MonoBehaviour, ICharacterController
     private Vector3 _requestedMovement;
     private Quaternion _requestedRotation;
 
+    AudioManager audioManager;
+
     void Start()
     {
+        audioManager = GameObject.FindObjectOfType<AudioManager>();
         player = FindAnyObjectByType<PlayerMovement>().transform;
         spawnPos = transform.position;
         motor.CharacterController = this;
